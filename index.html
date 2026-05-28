@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>My Diet Coke Addiction</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Diet Coke" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#b3262e" />
+<style>
+:root{--red:#b3262e;--dark:#211b1b;--cream:#f6efe6;--card:#fffaf4;--muted:#786b67;--line:#eadbd0;--green:#136f4b}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#fff7ef,#f3e6dc);color:var(--dark);padding:env(safe-area-inset-top) 14px 28px}.app{max-width:760px;margin:0 auto}.hero{padding:20px 4px 10px;display:flex;gap:14px;align-items:center}.logo{width:62px;height:62px;border-radius:18px;box-shadow:0 8px 25px #0002}.title{font-size:28px;font-weight:900;line-height:1.03}.subtitle{color:var(--muted);font-weight:600;margin-top:4px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin:14px 0;box-shadow:0 8px 25px #51301f12}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px}.stat b{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px;font-weight:700}label{font-weight:800;font-size:14px;margin:10px 0 6px;display:block}input,select,button{width:100%;font:inherit;border-radius:14px;border:1px solid var(--line);padding:12px;background:#fff;color:var(--dark)}button{border:0;background:var(--red);color:white;font-weight:900;cursor:pointer;box-shadow:0 5px 14px #b3262e35}.button-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.sizeBtn{background:#fff;color:var(--dark);border:1px solid var(--line);box-shadow:none}.sizeBtn.active{background:var(--red);color:#fff;border-color:var(--red)}.toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.toggle{background:#fff;color:var(--dark);border:1px solid var(--line);box-shadow:none}.toggle.yes{background:#211b1b;color:#fff}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.secondary{background:#fff;color:var(--red);border:1px solid var(--red);box-shadow:none}.danger{background:#fff;color:#8a1b21;border:1px solid #8a1b21;box-shadow:none}.progress{height:16px;background:#eadbd0;border-radius:99px;overflow:hidden}.bar{height:100%;background:var(--red);width:0%;transition:.2s}.bar.good{background:var(--green)}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tab{background:#fff;color:var(--dark);border:1px solid var(--line);box-shadow:none;padding:10px}.tab.active{background:var(--dark);color:#fff}.logItem{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.logItem:last-child{border-bottom:0}.pill{display:inline-block;background:#f1dfd3;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800;margin-left:4px}canvas{width:100%;height:260px;border-radius:16px;background:#fff;border:1px solid var(--line)}.tiny{font-size:12px;color:var(--muted);line-height:1.35}.notice{display:none;background:#fff1b8;border:1px solid #e9c856;color:#5f4b00;border-radius:14px;padding:12px;font-weight:800;margin-top:10px}@media(max-width:430px){.title{font-size:25px}.grid{grid-template-columns:1fr 1fr}.button-row{grid-template-columns:repeat(4,1fr)}body{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero"><img class="logo" src="icons/icon-192.png" alt="App icon"><div><div class="title">My Diet Coke Addiction</div><div class="subtitle">Private soda tracker</div></div></div>
+
+  <section class="card">
+    <div class="grid">
+      <div class="stat"><b id="todayOz">0</b><span>ounces today</span></div>
+      <div class="stat"><b id="todaySodas">0</b><span>12 oz sodas today</span></div>
+      <div class="stat"><b id="todayCount">0</b><span>drinks logged</span></div>
+      <div class="stat"><b id="limitText">—</b><span>daily limit</span></div>
+    </div>
+    <label>Daily limit</label>
+    <div class="actions"><input id="dailyLimit" type="number" min="0" step="1" placeholder="Example: 40"><button id="saveLimit" class="secondary">Save Limit</button></div>
+    <div style="margin-top:12px" class="progress"><div id="limitBar" class="bar"></div></div>
+    <div id="limitNotice" class="notice">Daily limit reached.</div>
+  </section>
+
+  <section class="card">
+    <label>Soda name</label>
+    <input id="sodaName" list="savedSodas" placeholder="Diet Coke, Sprite Zero, etc.">
+    <datalist id="savedSodas"></datalist>
+
+    <label>Size</label>
+    <div class="button-row" id="sizes"></div>
+
+    <div class="toggle-row">
+      <div><label>Caffeinated?</label><button id="cafToggle" class="toggle yes">Yes</button></div>
+      <div><label>Clear?</label><button id="clearToggle" class="toggle">No</button></div>
+    </div>
+    <div style="margin-top:14px"><button id="addBtn">Add Soda</button></div>
+  </section>
+
+  <section class="card">
+    <div class="tabs"><button class="tab active" data-range="week">Week</button><button class="tab" data-range="month">Month</button><button class="tab" data-range="quarter">Quarter</button><button class="tab" data-range="year">Year</button></div>
+    <div style="height:12px"></div><canvas id="chart" width="700" height="320"></canvas>
+    <p class="tiny">Chart shows total ounces by day. Caffeinated and clear totals are tracked in the data and export.</p>
+  </section>
+
+  <section class="card">
+    <h3 style="margin:0 0 8px">Today’s Log</h3>
+    <div id="logList"></div>
+  </section>
+
+  <section class="card">
+    <div class="actions"><button id="exportBtn" class="secondary">Export Backup</button><button id="importBtn" class="secondary">Import Backup</button></div>
+    <input id="importFile" type="file" accept="application/json" style="display:none">
+    <div style="height:10px"></div><button id="clearAll" class="danger">Clear All Data</button>
+    <p class="tiny">Your data is saved in this browser on this phone. Use Export Backup before switching phones or clearing Safari data.</p>
+  </section>
+</div>
+<script>
+const sizes=[8,12,16,20];let selectedSize=12, caffeinated=true, clear=false, range='week';
+const $=id=>document.getElementById(id);const todayKey=()=>new Date().toISOString().slice(0,10);
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)) ?? d}catch{return d}};const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let entries=load('mdca_entries',[]), sodas=load('mdca_sodas',[]), limit=load('mdca_limit',40), lastAlert=load('mdca_lastAlert','');
+function init(){ $('dailyLimit').value=limit||''; renderSizes(); renderSodas(); bind(); update(); if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(()=>{}); }
+function bind(){ $('cafToggle').onclick=()=>{caffeinated=!caffeinated; renderToggles()}; $('clearToggle').onclick=()=>{clear=!clear; renderToggles()}; $('saveLimit').onclick=()=>{limit=Number($('dailyLimit').value)||0; save('mdca_limit',limit); update()}; $('addBtn').onclick=addEntry; document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{range=b.dataset.range; document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); drawChart()}); $('exportBtn').onclick=exportBackup; $('importBtn').onclick=()=>$('importFile').click(); $('importFile').onchange=importBackup; $('clearAll').onclick=()=>{if(confirm('Clear all soda data?')){entries=[];sodas=[];save('mdca_entries',entries);save('mdca_sodas',sodas);update();}}; }
+function renderSizes(){ $('sizes').innerHTML=sizes.map(s=>`<button class="sizeBtn ${s===selectedSize?'active':''}" data-size="${s}">${s} oz</button>`).join(''); document.querySelectorAll('.sizeBtn').forEach(b=>b.onclick=()=>{selectedSize=Number(b.dataset.size);renderSizes()}); }
+function renderToggles(){ $('cafToggle').textContent=caffeinated?'Yes':'No'; $('cafToggle').classList.toggle('yes',caffeinated); $('clearToggle').textContent=clear?'Yes':'No'; $('clearToggle').classList.toggle('yes',clear); }
+function renderSodas(){ $('savedSodas').innerHTML=sodas.map(s=>`<option value="${escapeHtml(s)}"></option>`).join(''); }
+function addEntry(){ const name=$('sodaName').value.trim()||'Unnamed Soda'; if(!sodas.includes(name)){ if(confirm(`Add “${name}” to your saved soda list?`)){sodas.push(name);sodas.sort();save('mdca_sodas',sodas);renderSodas();} }
+ entries.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name,ounces:selectedSize,caffeinated,clear,date:new Date().toISOString()}); save('mdca_entries',entries); $('sodaName').value=''; update(); }
+function update(){ const today=entries.filter(e=>e.date.slice(0,10)===todayKey()); const oz=sum(today,'ounces'); $('todayOz').textContent=oz; $('todaySodas').textContent=(oz/12).toFixed(1); $('todayCount').textContent=today.length; $('limitText').textContent=limit?limit+' oz':'None'; const pct=limit?Math.min(100,oz/limit*100):0; $('limitBar').style.width=pct+'%'; $('limitBar').classList.toggle('good',limit && oz<limit); $('limitNotice').style.display=limit&&oz>=limit?'block':'none'; if(limit&&oz>=limit&&lastAlert!==todayKey()){ lastAlert=todayKey(); save('mdca_lastAlert',lastAlert); setTimeout(()=>alert('Daily soda limit reached.'),100); } renderLog(); drawChart(); }
+function renderLog(){ const list=entries.filter(e=>e.date.slice(0,10)===todayKey()).reverse(); $('logList').innerHTML=list.length?list.map(e=>`<div class="logItem"><div><b>${escapeHtml(e.name)}</b><br><span class="tiny">${new Date(e.date).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}</span></div><div style="text-align:right"><b>${e.ounces} oz</b><br><span class="pill">Caf: ${e.caffeinated?'Y':'N'}</span><span class="pill">Clear: ${e.clear?'Y':'N'}</span></div></div>`).join(''):'<p class="tiny">No sodas logged today.</p>'; }
+function drawChart(){ const canvas=$('chart'), ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); const days=rangeDays(range); const vals=days.map(d=>sum(entries.filter(e=>e.date.slice(0,10)===d),'ounces')); const max=Math.max(24,limit||0,...vals); const pad=42, w=canvas.width-pad-12, h=canvas.height-pad-20; ctx.strokeStyle='#eadbd0'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad,10); ctx.lineTo(pad,10+h); ctx.lineTo(pad+w,10+h); ctx.stroke(); ctx.fillStyle='#786b67'; ctx.font='18px -apple-system'; ctx.fillText(range[0].toUpperCase()+range.slice(1)+' intake',pad,24); const barW=Math.max(3,w/days.length-3); vals.forEach((v,i)=>{ const x=pad+i*(w/days.length)+1; const bh=(v/max)*(h-30); ctx.fillStyle='#b3262e'; ctx.fillRect(x,10+h-bh,barW,bh); }); if(limit){ const y=10+h-(limit/max)*(h-30); ctx.strokeStyle='#136f4b'; ctx.setLineDash([7,5]); ctx.beginPath(); ctx.moveTo(pad,y);ctx.lineTo(pad+w,y);ctx.stroke();ctx.setLineDash([]); } ctx.fillStyle='#786b67'; ctx.font='13px -apple-system'; ctx.fillText('0',12,10+h); ctx.fillText(max+' oz',6,18); ctx.fillText(days[0].slice(5),pad,canvas.height-8); ctx.fillText(days[days.length-1].slice(5),pad+w-38,canvas.height-8); }
+function rangeDays(r){ const n={week:7,month:31,quarter:92,year:365}[r]; const arr=[]; const d=new Date(); for(let i=n-1;i>=0;i--){ const x=new Date(d); x.setDate(d.getDate()-i); arr.push(x.toISOString().slice(0,10)); } return arr; }
+function sum(arr,key){return arr.reduce((a,e)=>a+(Number(e[key])||0),0)}
+function exportBackup(){ const blob=new Blob([JSON.stringify({entries,sodas,limit,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='my-diet-coke-addiction-backup.json'; a.click(); URL.revokeObjectURL(a.href); }
+function importBackup(ev){ const file=ev.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{try{const data=JSON.parse(reader.result); entries=data.entries||[]; sodas=data.sodas||[]; limit=data.limit||0; save('mdca_entries',entries);save('mdca_sodas',sodas);save('mdca_limit',limit); $('dailyLimit').value=limit||'';renderSodas();update();}catch{alert('Could not import that backup file.')}}; reader.readAsText(file); }
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+init();
+</script>
+</body>
+</html>
