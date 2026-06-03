@@ -53,7 +53,7 @@ input[type=file]{font-size:14px;padding:11px}
 <div id="homePage" class="page active"><div class="app">
 <header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><h1>My Diet Coke Addiction</h1><div class="subtitle">Private drink tracker saved on this device</div></header>
 <div class="card"><div class="section-title">Today</div><div class="summary">
-<div class="summary-box"><strong id="homeOz">0</strong><span>oz</span></div><div class="summary-box"><strong id="homeEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="homeCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="homeCafOz">0</strong><span>caf oz</span></div>
+<div class="summary-box"><strong id="homeOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="homeEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="homeCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="homeCafOz">0</strong><span>caf oz</span></div>
 </div><div class="mg-card"><strong>Today’s Caffeine</strong><div><span id="homeMg">0</span> / 400 mg</div><div class="progress"><div id="homeMgProgress"></div></div></div></div>
 <button class="report-main" id="viewReportsBtn">View Reports</button>
 <div class="card"><div class="section-title">Beverages</div><div id="beverageGrid" class="beverage-grid"></div><div class="hint">Tap a beverage to log it. Long-press a saved beverage to edit it.</div></div>
@@ -62,8 +62,9 @@ input[type=file]{font-size:14px;padding:11px}
 
 <div id="entryPage" class="page"><div class="app">
 <button class="back-btn" id="backToHomeFromEntry">← Back</button><header><h1 id="entryTitle">Log Beverage</h1><div class="subtitle" id="entrySubtitle">Quick Entry</div></header>
+<div id="changesSavedNotice" class="card" style="display:none;background:#eefaf1;border-color:#b9e4c5;color:#087d36;font-weight:800;text-align:center;">✓ Changes Saved</div>
 <div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary">
-<div class="summary-box"><strong id="dateOz">0</strong><span>oz</span></div><div class="summary-box"><strong id="dateEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="dateCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="dateCafOz">0</strong><span>caf oz</span></div>
+<div class="summary-box"><strong id="dateOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="dateEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="dateCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="dateCafOz">0</strong><span>caf oz</span></div>
 </div><div class="mg-card"><strong>Caffeine</strong><div><span id="dateMg">0</span> mg</div></div></div>
 <div class="card">
 <label for="entryDate">Entry Date</label><input id="entryDate" type="date">
@@ -107,7 +108,7 @@ input[type=file]{font-size:14px;padding:11px}
 <div id="reportDetailPage" class="page"><div class="app">
 <button class="back-btn" id="backToReportsHome">← Back</button><header><h1 id="reportTitle">Report</h1><div class="subtitle" id="reportSubtitle"></div></header>
 <div class="card" id="customControls" style="display:none;"><div id="customDayControl" style="display:none;"><label for="customDayInput">Select Day</label><input id="customDayInput" type="date"></div><div id="customWeekControl" style="display:none;"><label for="customWeekInput">Select Week</label><input id="customWeekInput" type="week"></div><div id="customMonthControl" style="display:none;"><label for="customMonthInput">Select Month</label><input id="customMonthInput" type="month"></div></div>
-<div class="card"><div class="section-title">Totals</div><div class="report-results"><div class="report-box"><strong id="reportOz">0</strong><span>oz</span></div><div class="report-box"><strong id="reportEntries">0</strong><span>entries</span></div><div class="report-box"><strong id="reportCaf">0</strong><span>caf</span></div><div class="report-box"><strong id="reportCafOz">0</strong><span>caf oz</span></div></div><div class="mg-card"><strong>Total Caffeine</strong><div><span id="reportMg">0</span> mg</div></div><div class="two-col" style="margin-top:10px;"><div class="summary-box"><strong id="reportCarbonated">0</strong><span>carbonated</span></div><div class="summary-box"><strong id="reportClear">0</strong><span>clear</span></div></div></div>
+<div class="card"><div class="section-title">Totals</div><div class="report-results"><div class="report-box"><strong id="reportOz">0</strong><span>carb oz</span></div><div class="report-box"><strong id="reportEntries">0</strong><span>entries</span></div><div class="report-box"><strong id="reportCaf">0</strong><span>caf</span></div><div class="report-box"><strong id="reportCafOz">0</strong><span>caf oz</span></div></div><div class="mg-card"><strong>Total Caffeine</strong><div><span id="reportMg">0</span> mg</div></div><div class="two-col" style="margin-top:10px;"><div class="summary-box"><strong id="reportCarbonated">0</strong><span>carbonated</span></div><div class="summary-box"><strong id="reportClear">0</strong><span>clear</span></div></div></div>
 <div class="card"><div class="section-title">Caffeine Stats</div><div class="breakdown-row"><strong>Average Daily Caffeine</strong><span id="averageDailyCaffeine">0 mg</span></div><div class="breakdown-row"><strong>Highest Caffeine Day</strong><span id="highestCaffeineDay">0 mg</span></div></div>
 <div class="card"><div class="section-title">Drink Breakdown</div><div id="drinkBreakdown"></div></div>
 <div class="card"><div class="section-title"><span>Report Entries</span><span id="reportEntryCount">(0)</span></div><button class="collapse-btn" id="toggleReportEntries">▶ Show Report Entries</button><div id="reportEntriesList" style="display:none;"></div></div>
@@ -220,6 +221,11 @@ function calculateTotals(list){
     clear: list.filter(e=>e.clear==="Yes").length
   };
 }
+
+function carbonatedOunces(list){
+  return round2(list.filter(e=>e.carbonated==="Yes").reduce((s,e)=>s+Number(e.ounces),0));
+}
+
 function entriesForDate(dateValue){
   const day = new Date(dateValue+"T00:00:00").toLocaleDateString();
   return entries.filter(e=>new Date(e.createdAt).toLocaleDateString() === day);
@@ -245,7 +251,7 @@ function updateCalculatedCaffeine(){
 
 function renderHome(){
   const totals = calculateTotals(entriesForDate(localDateString(new Date())));
-  el("homeOz").textContent = totals.oz;
+  el("homeOz").textContent = carbonatedOunces(entriesForDate(localDateString(new Date())));
   el("homeEntries").textContent = totals.entries;
   el("homeCaf").textContent = totals.caf;
   el("homeCafOz").textContent = totals.cafOz;
@@ -327,6 +333,32 @@ function openEntry(bev, existing=null){
   renderSelectedDatePanel();
   showPage("entryPage");
 }
+
+function resetEntryFormToBlank(){
+  activeBeverage = null;
+  editingEntryId = null;
+  selectedOz = null;
+  el("entryDate").value = localDateString(new Date());
+  el("entryTime").value = timeStringFromDate(new Date());
+  el("entryName").value = "";
+  el("manualOz").value = "";
+  document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
+  ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>{
+    document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected"));
+  });
+  el("entryCaffeineMg").value = "";
+  el("entryTitle").textContent = "Log Beverage";
+  el("entrySubtitle").textContent = "Quick Entry";
+  el("saveEntryBtn").textContent = "Save Entry";
+  el("cancelEntryEditBtn").style.display = "none";
+}
+function showChangesSavedNotice(){
+  const notice = el("changesSavedNotice");
+  if(!notice) return;
+  notice.style.display = "block";
+  setTimeout(()=>{ notice.style.display = "none"; }, 1200);
+}
+
 function saveEntry(){
   const name = el("entryName").value.trim();
   const oz = currentEntryOunces();
@@ -348,12 +380,22 @@ function saveEntry(){
 
   entries = existing ? entries.map(e=>e.id===entry.id ? entry : e) : [...entries, entry];
   saveAll();
-  editingEntryId = null;
   renderHome();
-  renderSelectedDatePanel();
   renderReport();
-  el("saveEntryBtn").textContent = "Save Entry";
-  el("cancelEntryEditBtn").style.display = "none";
+
+  if(existing){
+    const savedDate = el("entryDate").value || localDateString(new Date(entry.createdAt));
+    resetEntryFormToBlank();
+    el("entryDate").value = savedDate;
+    entryDateEntriesExpanded = true;
+    renderSelectedDatePanel();
+    showChangesSavedNotice();
+    showPage("entryPage");
+  } else {
+    resetEntryFormToBlank();
+    renderSelectedDatePanel();
+    showPage("homePage");
+  }
 }
 function copyEntry(id){
   const entry = entries.find(e=>e.id===id);
@@ -363,6 +405,7 @@ function copyEntry(id){
   saveAll();
   renderHome();
   renderReport();
+  entryDateEntriesExpanded = true;
   openEntry(beverages.find(b=>b.id===copied.beverageId) || null, copied);
 }
 function editEntry(id){
@@ -387,7 +430,7 @@ function renderSelectedDatePanel(){
   const totals = calculateTotals(list);
   const label = new Date(value+"T00:00:00").toLocaleDateString();
   el("selectedDateTotalsTitle").textContent = `Totals for ${label}`;
-  el("dateOz").textContent = totals.oz;
+  el("dateOz").textContent = carbonatedOunces(list);
   el("dateEntries").textContent = totals.entries;
   el("dateCaf").textContent = totals.caf;
   el("dateCafOz").textContent = totals.cafOz;
@@ -561,7 +604,7 @@ function renderReport(){
 
   el("reportTitle").textContent = title;
   el("reportSubtitle").textContent = subtitle;
-  el("reportOz").textContent = totals.oz;
+  el("reportOz").textContent = carbonatedOunces(list);
   el("reportEntries").textContent = totals.entries;
   el("reportCaf").textContent = totals.caf;
   el("reportCafOz").textContent = totals.cafOz;
@@ -592,7 +635,7 @@ function updateDataToolsStatus(){
   el("dataToolsStatus").innerHTML = `<div class="breakdown-row"><strong>Total Entries</strong><span>${entries.length}</span></div><div class="breakdown-row"><strong>Saved Beverages</strong><span>${beverages.length}</span></div>`;
 }
 function exportData(){
-  const data = {app:"My Diet Coke Addiction", version:"2.0.4", exportedAt:new Date().toISOString(), entries, beverages};
+  const data = {app:"My Diet Coke Addiction", version:"2.0.5", exportedAt:new Date().toISOString(), entries, beverages};
   const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
