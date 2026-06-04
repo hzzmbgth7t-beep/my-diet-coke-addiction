@@ -7,15 +7,15 @@
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="My Diet Coke Addiction">
-<meta name="theme-color" content="#b30000">
 <style>
-:root{--red:#b30000;--blue:#075aaa;--dark:#222;--muted:#666;--border:#ddd;--bg:#f6f6f6;--card:#fff;--orange:#c96b00}
+:root{--red:#b30000;--blue:#075aaa;--dark:#222;--muted:#666;--border:#ddd;--bg:#f6f6f6;--card:#fff;--orange:#c96b00;--green:#087d36}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--dark);padding:18px 14px 40px}
 .app{max-width:520px;margin:0 auto}.page{display:none}.page.active{display:block}
 header{text-align:center;margin-bottom:14px}.logo{width:112px;height:112px;border-radius:28px;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.2)}
 h1{margin:12px 0 4px;font-size:30px;color:var(--red);line-height:1.05}.subtitle,.hint{font-size:13px;color:var(--muted);line-height:1.35}
 .card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+.notice{display:none;background:#eefaf1;border-color:#b9e4c5;color:var(--green);font-weight:800;text-align:center}
 .section-title{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .summary,.report-results{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .summary-box,.report-box{background:#fafafa;border:1px solid var(--border);border-radius:16px;padding:12px 4px;text-align:center;min-width:0}
@@ -52,8 +52,9 @@ input[type=file]{font-size:14px;padding:11px}
 
 <div id="homePage" class="page active"><div class="app">
 <header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><h1>My Diet Coke Addiction</h1><div class="subtitle">Private drink tracker saved on this device</div></header>
+<div id="saveCompleteNotice" class="card notice">✓ Save Complete</div>
 <div class="card"><div class="section-title">Today</div><div class="summary">
-<div class="summary-box"><strong id="homeOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="homeEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="homeCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="homeCafOz">0</strong><span>caf oz</span></div>
+<div class="summary-box"><strong id="homeCarbOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="homeEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="homeCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="homeCafOz">0</strong><span>caf oz</span></div>
 </div><div class="mg-card"><strong>Today’s Caffeine</strong><div><span id="homeMg">0</span> / 400 mg</div><div class="progress"><div id="homeMgProgress"></div></div></div></div>
 <button class="report-main" id="viewReportsBtn">View Reports</button>
 <div class="card"><div class="section-title">Beverages</div><div id="beverageGrid" class="beverage-grid"></div><div class="hint">Tap a beverage to log it. Long-press a saved beverage to edit it.</div></div>
@@ -62,9 +63,9 @@ input[type=file]{font-size:14px;padding:11px}
 
 <div id="entryPage" class="page"><div class="app">
 <button class="back-btn" id="backToHomeFromEntry">← Back</button><header><h1 id="entryTitle">Log Beverage</h1><div class="subtitle" id="entrySubtitle">Quick Entry</div></header>
-<div id="changesSavedNotice" class="card" style="display:none;background:#eefaf1;border-color:#b9e4c5;color:#087d36;font-weight:800;text-align:center;">✓ Changes Saved</div>
+<div id="changesSavedNotice" class="card notice">✓ Changes Saved</div>
 <div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary">
-<div class="summary-box"><strong id="dateOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="dateEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="dateCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="dateCafOz">0</strong><span>caf oz</span></div>
+<div class="summary-box"><strong id="dateCarbOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="dateEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="dateCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="dateCafOz">0</strong><span>caf oz</span></div>
 </div><div class="mg-card"><strong>Caffeine</strong><div><span id="dateMg">0</span> mg</div></div></div>
 <div class="card">
 <label for="entryDate">Entry Date</label><input id="entryDate" type="date">
@@ -108,7 +109,7 @@ input[type=file]{font-size:14px;padding:11px}
 <div id="reportDetailPage" class="page"><div class="app">
 <button class="back-btn" id="backToReportsHome">← Back</button><header><h1 id="reportTitle">Report</h1><div class="subtitle" id="reportSubtitle"></div></header>
 <div class="card" id="customControls" style="display:none;"><div id="customDayControl" style="display:none;"><label for="customDayInput">Select Day</label><input id="customDayInput" type="date"></div><div id="customWeekControl" style="display:none;"><label for="customWeekInput">Select Week</label><input id="customWeekInput" type="week"></div><div id="customMonthControl" style="display:none;"><label for="customMonthInput">Select Month</label><input id="customMonthInput" type="month"></div></div>
-<div class="card"><div class="section-title">Totals</div><div class="report-results"><div class="report-box"><strong id="reportOz">0</strong><span>carb oz</span></div><div class="report-box"><strong id="reportEntries">0</strong><span>entries</span></div><div class="report-box"><strong id="reportCaf">0</strong><span>caf</span></div><div class="report-box"><strong id="reportCafOz">0</strong><span>caf oz</span></div></div><div class="mg-card"><strong>Total Caffeine</strong><div><span id="reportMg">0</span> mg</div></div><div class="two-col" style="margin-top:10px;"><div class="summary-box"><strong id="reportCarbonated">0</strong><span>carbonated</span></div><div class="summary-box"><strong id="reportClear">0</strong><span>clear</span></div></div></div>
+<div class="card"><div class="section-title">Totals</div><div class="report-results"><div class="report-box"><strong id="reportCarbOz">0</strong><span>carb oz</span></div><div class="report-box"><strong id="reportEntries">0</strong><span>entries</span></div><div class="report-box"><strong id="reportCaf">0</strong><span>caf</span></div><div class="report-box"><strong id="reportCafOz">0</strong><span>caf oz</span></div></div><div class="mg-card"><strong>Total Caffeine</strong><div><span id="reportMg">0</span> mg</div></div><div class="two-col" style="margin-top:10px;"><div class="summary-box"><strong id="reportCarbonated">0</strong><span>carbonated</span></div><div class="summary-box"><strong id="reportClear">0</strong><span>clear</span></div></div></div>
 <div class="card"><div class="section-title">Caffeine Stats</div><div class="breakdown-row"><strong>Average Daily Caffeine</strong><span id="averageDailyCaffeine">0 mg</span></div><div class="breakdown-row"><strong>Highest Caffeine Day</strong><span id="highestCaffeineDay">0 mg</span></div></div>
 <div class="card"><div class="section-title">Drink Breakdown</div><div id="drinkBreakdown"></div></div>
 <div class="card"><div class="section-title"><span>Report Entries</span><span id="reportEntryCount">(0)</span></div><button class="collapse-btn" id="toggleReportEntries">▶ Show Report Entries</button><div id="reportEntriesList" style="display:none;"></div></div>
@@ -124,608 +125,31 @@ input[type=file]{font-size:14px;padding:11px}
 
 <script>
 "use strict";
-
-const ENTRY_KEYS = ["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"];
-const BEVERAGE_KEY = "dietCokeBeveragesV2";
-const LAST_BACKUP_KEY = "myDietCokeLastBackup";
-const MAX_BEVERAGE_SLOTS = 6;
-
-let entries = loadEntries();
-let beverages = loadBeverages();
-let activeBeverage = null;
-let editingEntryId = null;
-let editingBeverageId = null;
-let selectedOz = null;
-let entryDateEntriesExpanded = false;
-let reportEntriesExpanded = false;
-let currentReportType = "yesterday";
-let currentPageBeforeBeverageEdit = "homePage";
-let pendingBeverageImage = "";
-let longPressTimer = null;
-let longPressTriggered = false;
-
-function el(id){ return document.getElementById(id); }
-function pad(n){ return String(n).padStart(2,"0"); }
-function round2(value){ return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100; }
-function localDateString(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
-function timeStringFromDate(d){ return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
-function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
-function endOfDay(d){ const x=new Date(d); x.setHours(23,59,59,999); return x; }
-function getYesterday(){ const d=new Date(); d.setDate(d.getDate()-1); return d; }
-function escapeHtml(text){ return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
-
-function loadEntries(){
-  for(const key of ENTRY_KEYS){
-    try{
-      const saved = JSON.parse(localStorage.getItem(key) || "[]");
-      if(Array.isArray(saved) && saved.length) return saved.map(normalizeEntry);
-    }catch(error){}
-  }
-  return [];
-}
-function normalizeEntry(e){
-  return {
-    id: e.id || Date.now() + Math.floor(Math.random()*1000000),
-    beverageId: e.beverageId || null,
-    name: e.name || e.drinkName || "Unnamed Drink",
-    ounces: Number(e.ounces || e.oz || 0),
-    caffeinated: e.caffeinated || e.caffeine || "No",
-    caffeineMg: round2(e.caffeineMg || e.mg || 0),
-    carbonated: e.carbonated || "No",
-    clear: e.clear || e.clearDrink || "No",
-    createdAt: e.createdAt || e.date || new Date().toISOString()
-  };
-}
-function loadBeverages(){
-  try{
-    const saved = JSON.parse(localStorage.getItem(BEVERAGE_KEY) || "[]");
-    if(Array.isArray(saved)) return saved;
-  }catch(error){}
-  return [];
-}
-function saveAll(){
-  localStorage.setItem("dietCokeEntriesV2", JSON.stringify(entries));
-  localStorage.setItem("dietCokeTracker", JSON.stringify(entries));
-  localStorage.setItem("myDietCokeAddictionEntries", JSON.stringify(entries));
-  localStorage.setItem(BEVERAGE_KEY, JSON.stringify(beverages));
-}
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  el(id).classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function setupToggle(id){
-  document.querySelectorAll(`#${id} button`).forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected"));
-      btn.classList.add("selected");
-    });
-  });
-}
-function setToggle(id, value){
-  document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle("selected", b.dataset.value === value));
-}
-function getToggle(id){
-  const selected = document.querySelector(`#${id} button.selected`);
-  return selected ? selected.dataset.value : "";
-}
-function calculateTotals(list){
-  const caf = list.filter(e=>e.caffeinated === "Yes");
-  return {
-    oz: round2(list.reduce((s,e)=>s+Number(e.ounces),0)),
-    entries: list.length,
-    caf: caf.length,
-    cafOz: round2(caf.reduce((s,e)=>s+Number(e.ounces),0)),
-    mg: round2(list.reduce((s,e)=>s+Number(e.caffeineMg||0),0)),
-    carbonated: list.filter(e=>e.carbonated==="Yes").length,
-    clear: list.filter(e=>e.clear==="Yes").length
-  };
-}
-
-function carbonatedOunces(list){
-  return round2(list.filter(e=>e.carbonated==="Yes").reduce((s,e)=>s+Number(e.ounces),0));
-}
-
-function entriesForDate(dateValue){
-  const day = new Date(dateValue+"T00:00:00").toLocaleDateString();
-  return entries.filter(e=>new Date(e.createdAt).toLocaleDateString() === day);
-}
-function getEntryDateTime(existingAt){
-  const dateValue = el("entryDate").value || localDateString(new Date());
-  const timeValue = el("entryTime").value || timeStringFromDate(existingAt ? new Date(existingAt) : new Date());
-  return `${dateValue}T${timeValue}:00`;
-}
-function currentEntryOunces(){
-  return el("manualOz").value ? Number(el("manualOz").value) : selectedOz;
-}
-function calculateScaledCaffeine(bev, ounces){
-  if(!bev || !bev.defaultOz || !bev.caffeineMg || !ounces) return round2(el("entryCaffeineMg").value || 0);
-  return round2((Number(ounces) / Number(bev.defaultOz)) * Number(bev.caffeineMg));
-}
-function updateCalculatedCaffeine(){
-  if(!activeBeverage || !activeBeverage.defaultOz) return;
-  const oz = currentEntryOunces();
-  if(!oz) return;
-  el("entryCaffeineMg").value = calculateScaledCaffeine(activeBeverage, oz);
-}
-
-function renderHome(){
-  const totals = calculateTotals(entriesForDate(localDateString(new Date())));
-  el("homeOz").textContent = carbonatedOunces(entriesForDate(localDateString(new Date())));
-  el("homeEntries").textContent = totals.entries;
-  el("homeCaf").textContent = totals.caf;
-  el("homeCafOz").textContent = totals.cafOz;
-  el("homeMg").textContent = totals.mg;
-  el("homeMgProgress").style.width = `${Math.min(100,(totals.mg/400)*100)}%`;
-  renderBeverageGrid();
-}
-function beverageHTML(bev){
-  if(bev.image) return `<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;
-  if(bev.name.length > 12 && bev.initials) return `<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;
-  return `<span>${escapeHtml(bev.name)}</span>`;
-}
-function renderBeverageGrid(){
-  let html = "";
-  beverages.slice(0,MAX_BEVERAGE_SLOTS).forEach(bev=>{
-    html += `<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`;
-  });
-  for(let i=0;i<Math.max(0,MAX_BEVERAGE_SLOTS-beverages.length);i++){
-    html += `<button class="bev-btn add" data-add="true" type="button"><div class="plus">+</div><div>Add Beverage</div></button>`;
-  }
-  html += `<button class="bev-btn quick" id="quickEntryBtn" type="button"><div class="plus">✎</div><div>Quick Entry</div></button>`;
-  el("beverageGrid").innerHTML = html;
-
-  document.querySelectorAll("[data-add]").forEach(btn=>btn.addEventListener("click",()=>openBeverageEditor(null)));
-  el("quickEntryBtn").addEventListener("click",()=>openEntry(null));
-  document.querySelectorAll("[data-bev]").forEach(btn=>{
-    const id = btn.dataset.bev;
-    btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});
-    btn.addEventListener("touchend",endLongPress);
-    btn.addEventListener("touchcancel",cancelLongPress);
-    btn.addEventListener("mousedown",()=>startLongPress(id));
-    btn.addEventListener("mouseup",endLongPress);
-    btn.addEventListener("mouseleave",cancelLongPress);
-    btn.addEventListener("click",event=>{
-      if(longPressTriggered){ event.preventDefault(); longPressTriggered=false; return; }
-      openEntry(beverages.find(b=>b.id===id));
-    });
-  });
-}
-function startLongPress(id){
-  longPressTriggered = false;
-  clearTimeout(longPressTimer);
-  longPressTimer = setTimeout(()=>{
-    longPressTriggered = true;
-    openBeverageEditor(beverages.find(b=>b.id===id));
-  },650);
-}
-function endLongPress(){ clearTimeout(longPressTimer); }
-function cancelLongPress(){ clearTimeout(longPressTimer); }
-
-function openEntry(bev, existing=null){
-  activeBeverage = bev || null;
-  editingEntryId = existing ? existing.id : null;
-  selectedOz = null;
-  document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
-  el("manualOz").value = "";
-
-  const savedDate = existing ? new Date(existing.createdAt) : new Date();
-  el("entryDate").value = localDateString(savedDate);
-  el("entryTime").value = timeStringFromDate(savedDate);
-  el("entryName").value = existing ? existing.name : (bev ? bev.name : "");
-
-  const oz = existing ? Number(existing.ounces) : (bev ? Number(bev.defaultOz || 0) : 0);
-  const ozBtn = document.querySelector(`.oz-btn[data-oz="${oz}"]`);
-  if(ozBtn){ ozBtn.classList.add("selected"); selectedOz = oz; }
-  else if(oz){ el("manualOz").value = oz; }
-
-  setToggle("entryCaffeinatedToggle", existing ? existing.caffeinated : (bev ? bev.caffeinated : ""));
-  setToggle("entryCarbonatedToggle", existing ? existing.carbonated : (bev ? bev.carbonated : ""));
-  setToggle("entryClearToggle", existing ? existing.clear : (bev ? bev.clear : ""));
-  el("entryCaffeineMg").value = existing ? round2(existing.caffeineMg) : (bev ? calculateScaledCaffeine(bev, oz) : "");
-
-  el("entryTitle").textContent = existing ? "Edit Entry" : (bev ? bev.name : "Quick Entry");
-  el("entrySubtitle").textContent = bev ? "Pre-populated from saved beverage" : "One-time entry";
-  el("saveEntryBtn").textContent = existing ? "Save Changes" : "Save Entry";
-  el("cancelEntryEditBtn").style.display = existing ? "block" : "none";
-
-  entryDateEntriesExpanded = false;
-  renderSelectedDatePanel();
-  showPage("entryPage");
-}
-
-function resetEntryFormToBlank(){
-  activeBeverage = null;
-  editingEntryId = null;
-  selectedOz = null;
-  el("entryDate").value = localDateString(new Date());
-  el("entryTime").value = timeStringFromDate(new Date());
-  el("entryName").value = "";
-  el("manualOz").value = "";
-  document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
-  ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>{
-    document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected"));
-  });
-  el("entryCaffeineMg").value = "";
-  el("entryTitle").textContent = "Log Beverage";
-  el("entrySubtitle").textContent = "Quick Entry";
-  el("saveEntryBtn").textContent = "Save Entry";
-  el("cancelEntryEditBtn").style.display = "none";
-}
-function showChangesSavedNotice(){
-  const notice = el("changesSavedNotice");
-  if(!notice) return;
-  notice.style.display = "block";
-  setTimeout(()=>{ notice.style.display = "none"; }, 1200);
-}
-
-function saveEntry(){
-  const name = el("entryName").value.trim();
-  const oz = currentEntryOunces();
-  if(!name){ alert("Please enter a drink name."); return; }
-  if(!oz){ alert("Please select or enter ounces."); return; }
-
-  const existing = editingEntryId ? entries.find(e=>e.id===editingEntryId) : null;
-  const entry = {
-    id: editingEntryId || Date.now(),
-    beverageId: activeBeverage ? activeBeverage.id : (existing ? existing.beverageId : null),
-    name,
-    ounces: round2(oz),
-    caffeinated: getToggle("entryCaffeinatedToggle") || "No",
-    carbonated: getToggle("entryCarbonatedToggle") || "No",
-    clear: getToggle("entryClearToggle") || "No",
-    caffeineMg: round2(el("entryCaffeineMg").value || 0),
-    createdAt: getEntryDateTime(existing ? existing.createdAt : null)
-  };
-
-  entries = existing ? entries.map(e=>e.id===entry.id ? entry : e) : [...entries, entry];
-  saveAll();
-  renderHome();
-  renderReport();
-
-  if(existing){
-    const savedDate = el("entryDate").value || localDateString(new Date(entry.createdAt));
-    resetEntryFormToBlank();
-    el("entryDate").value = savedDate;
-    entryDateEntriesExpanded = true;
-    renderSelectedDatePanel();
-    showChangesSavedNotice();
-    showPage("entryPage");
-  } else {
-    resetEntryFormToBlank();
-    renderSelectedDatePanel();
-    showPage("homePage");
-  }
-}
-function copyEntry(id){
-  const entry = entries.find(e=>e.id===id);
-  if(!entry) return;
-  const copied = {...entry, id: Date.now(), createdAt: new Date().toISOString()};
-  entries.push(copied);
-  saveAll();
-  renderHome();
-  renderReport();
-  entryDateEntriesExpanded = true;
-  openEntry(beverages.find(b=>b.id===copied.beverageId) || null, copied);
-}
-function editEntry(id){
-  const entry = entries.find(e=>e.id===id);
-  if(entry) openEntry(beverages.find(b=>b.id===entry.beverageId) || null, entry);
-}
-function deleteEntry(id){
-  if(!confirm("Delete this entry?")) return;
-  entries = entries.filter(e=>e.id!==id);
-  saveAll();
-  renderHome();
-  renderSelectedDatePanel();
-  renderReport();
-}
-window.editEntry = editEntry;
-window.copyEntry = copyEntry;
-window.deleteEntry = deleteEntry;
-
-function renderSelectedDatePanel(){
-  const value = el("entryDate").value || localDateString(new Date());
-  const list = entriesForDate(value).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  const totals = calculateTotals(list);
-  const label = new Date(value+"T00:00:00").toLocaleDateString();
-  el("selectedDateTotalsTitle").textContent = `Totals for ${label}`;
-  el("dateOz").textContent = carbonatedOunces(list);
-  el("dateEntries").textContent = totals.entries;
-  el("dateCaf").textContent = totals.caf;
-  el("dateCafOz").textContent = totals.cafOz;
-  el("dateMg").textContent = totals.mg;
-  el("dateEntryListTitle").textContent = `Entries for ${label}`;
-  el("dateEntryCount").textContent = `(${list.length})`;
-  el("dateEntriesList").innerHTML = renderEntryList(list);
-  el("dateEntriesList").style.display = entryDateEntriesExpanded ? "block" : "none";
-  el("toggleDateEntries").textContent = entryDateEntriesExpanded ? "▼ Hide Entries" : "▶ Show Entries";
-}
-function renderEntryList(list){
-  if(!list.length) return '<div class="empty">No entries found.</div>';
-  return list.map(e=>`
-    <div class="entry"><div class="entry-top"><div>
-      <div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div>
-      <div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg || 0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div>
-    </div><div class="entry-actions">
-      <button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button>
-      <button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button>
-      <button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button>
-    </div></div></div>
-  `).join("");
-}
-
-function openBeverageEditor(bev){
-  currentPageBeforeBeverageEdit = document.querySelector(".page.active").id || "homePage";
-  editingBeverageId = bev ? bev.id : null;
-  pendingBeverageImage = bev ? (bev.image || "") : "";
-  el("bevEditTitle").textContent = bev ? "Edit Beverage" : "Add Beverage";
-  el("bevName").value = bev ? bev.name : "";
-  el("bevInitials").value = bev ? (bev.initials || "") : "";
-  el("bevDefaultOz").value = bev ? (bev.defaultOz || "") : "";
-  el("bevCaffeineMg").value = bev ? (bev.caffeineMg || "") : "";
-  setToggle("bevCaffeinatedToggle", bev ? bev.caffeinated : "");
-  setToggle("bevCarbonatedToggle", bev ? bev.carbonated : "");
-  setToggle("bevClearToggle", bev ? bev.clear : "");
-  el("bevImage").value = "";
-  renderBeverageImagePreview();
-  el("deleteBeverageBtn").style.display = bev ? "block" : "none";
-  el("historicalUpdateOptions").style.display = bev ? "block" : "none";
-  const futureRadio = document.querySelector('input[name="historicalUpdate"][value="future"]');
-  if(futureRadio) futureRadio.checked = true;
-  renderBeverageStats(bev);
-  showPage("beverageEditPage");
-}
-function renderBeverageImagePreview(){
-  el("bevImagePreview").innerHTML = pendingBeverageImage ? `<img src="${pendingBeverageImage}" alt="">` : "No Image";
-}
-function saveBeverage(){
-  const name = el("bevName").value.trim();
-  if(!name){ alert("Please enter a beverage name."); return; }
-  const existing = editingBeverageId ? beverages.find(b=>b.id===editingBeverageId) : null;
-  const bev = {
-    id: existing ? existing.id : "bev_" + Date.now(),
-    name,
-    image: pendingBeverageImage,
-    initials: el("bevInitials").value.trim(),
-    defaultOz: round2(el("bevDefaultOz").value || 0),
-    caffeinated: getToggle("bevCaffeinatedToggle") || "No",
-    caffeineMg: round2(el("bevCaffeineMg").value || 0),
-    carbonated: getToggle("bevCarbonatedToggle") || "No",
-    clear: getToggle("bevClearToggle") || "No"
-  };
-
-  if(existing){
-    beverages = beverages.map(b=>b.id===bev.id ? bev : b);
-    const mode = document.querySelector('input[name="historicalUpdate"]:checked')?.value || "future";
-    if(mode === "all"){
-      entries = entries.map(e=>{
-        if(e.beverageId !== bev.id) return e;
-        const scaled = bev.defaultOz ? round2((Number(e.ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg || 0)) : e.caffeineMg;
-        return {...e, name:bev.name, caffeinated:bev.caffeinated, caffeineMg:scaled, carbonated:bev.carbonated, clear:bev.clear};
-      });
-    }
-  } else {
-    beverages.push(bev);
-  }
-  saveAll();
-  renderHome();
-  showPage(currentPageBeforeBeverageEdit || "homePage");
-}
-function deleteBeverage(){
-  if(!editingBeverageId) return;
-  if(!confirm("Delete this beverage button? Existing logged entries will stay.")) return;
-  beverages = beverages.filter(b=>b.id!==editingBeverageId);
-  saveAll();
-  renderHome();
-  showPage("homePage");
-}
-function renderBeverageStats(bev){
-  if(!bev){ el("beverageStatsCard").style.display = "none"; return; }
-  const list = entries.filter(e=>e.beverageId===bev.id || e.name===bev.name);
-  const totals = calculateTotals(list);
-  const sorted = [...list].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
-  el("beverageStatsCard").style.display = "block";
-  el("beverageStats").innerHTML = `
-    <div class="breakdown-row"><strong>Total Entries</strong><span>${totals.entries}</span></div>
-    <div class="breakdown-row"><strong>Total Ounces</strong><span>${totals.oz} oz</span></div>
-    <div class="breakdown-row"><strong>Total Caffeine</strong><span>${totals.mg} mg</span></div>
-    <div class="breakdown-row"><strong>First Logged</strong><span>${sorted.length ? new Date(sorted[0].createdAt).toLocaleDateString() : "Never"}</span></div>
-  `;
-}
-
-function getStartOfWeekSunday(d){ const x=new Date(d); x.setDate(x.getDate()-x.getDay()); x.setHours(0,0,0,0); return x; }
-function getEndOfWeekSunday(d){ const s=getStartOfWeekSunday(d); const e=new Date(s); e.setDate(s.getDate()+6); e.setHours(23,59,59,999); return e; }
-function getPreviousWeekRange(){ const d=new Date(); d.setDate(d.getDate()-7); return [getStartOfWeekSunday(d), getEndOfWeekSunday(d)]; }
-function getPreviousMonthRange(){ const d=new Date(); d.setMonth(d.getMonth()-1); return [new Date(d.getFullYear(),d.getMonth(),1), new Date(d.getFullYear(),d.getMonth()+1,0,23,59,59,999)]; }
-function getWeekNumber(date){
-  const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
-  const day=d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate()+4-day);
-  const start=new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  const week=Math.ceil((((d-start)/86400000)+1)/7);
-  return `${d.getUTCFullYear()}-W${pad(week)}`;
-}
-function getRangeForWeekValue(value){
-  const [year,week]=value.split("-W").map(Number);
-  const jan4=new Date(year,0,4);
-  const start=getStartOfWeekSunday(jan4);
-  start.setDate(start.getDate()+(week-1)*7);
-  const end=new Date(start);
-  end.setDate(start.getDate()+6);
-  end.setHours(23,59,59,999);
-  return [start,end];
-}
-function formatRange(s,e){ return s.toDateString()===e.toDateString() ? s.toLocaleDateString() : `${s.toLocaleDateString()} - ${e.toLocaleDateString()}`; }
-function openReport(type){ currentReportType=type; reportEntriesExpanded=false; renderReport(); showPage("reportDetailPage"); }
-function getDailyCaffeineStats(list){
-  const byDay = {};
-  list.forEach(e=>{
-    const day = new Date(e.createdAt).toLocaleDateString();
-    byDay[day] = (byDay[day] || 0) + Number(e.caffeineMg || 0);
-  });
-  const days = Object.keys(byDay);
-  if(!days.length) return {average:0, highest:"0 mg"};
-  const total = Object.values(byDay).reduce((s,v)=>s+v,0);
-  const highestDay = days.sort((a,b)=>byDay[b]-byDay[a])[0];
-  return {average:round2(total/days.length), highest:`${round2(byDay[highestDay])} mg on ${highestDay}`};
-}
-function renderReport(){
-  let start,end,title,subtitle;
-  el("customControls").style.display = "none";
-  el("customDayControl").style.display = "none";
-  el("customWeekControl").style.display = "none";
-  el("customMonthControl").style.display = "none";
-
-  if(currentReportType==="yesterday"){ const y=getYesterday(); start=startOfDay(y); end=endOfDay(y); title="Yesterday"; subtitle=start.toLocaleDateString(); }
-  else if(currentReportType==="lastWeek"){ [start,end]=getPreviousWeekRange(); title="Last Week"; subtitle=formatRange(start,end); }
-  else if(currentReportType==="lastMonth"){ [start,end]=getPreviousMonthRange(); title="Last Month"; subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"}); }
-  else if(currentReportType==="customDay"){
-    el("customControls").style.display="block"; el("customDayControl").style.display="block";
-    const v=el("customDayInput").value || localDateString(getYesterday());
-    el("customDayInput").value = v; start=new Date(v+"T00:00:00"); end=new Date(v+"T23:59:59"); title="Custom Day"; subtitle=start.toLocaleDateString();
-  }
-  else if(currentReportType==="customWeek"){
-    el("customControls").style.display="block"; el("customWeekControl").style.display="block";
-    const v=el("customWeekInput").value || getWeekNumber(new Date());
-    el("customWeekInput").value = v; [start,end]=getRangeForWeekValue(v); title="Custom Week"; subtitle=formatRange(start,end);
-  }
-  else {
-    el("customControls").style.display="block"; el("customMonthControl").style.display="block";
-    const now=new Date(); const def=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-    const v=el("customMonthInput").value || def;
-    el("customMonthInput").value = v; const [year,month]=v.split("-").map(Number);
-    start=new Date(year,month-1,1); end=new Date(year,month,0,23,59,59,999); title="Custom Month"; subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"});
-  }
-
-  const list = entries.filter(e=>{ const d=new Date(e.createdAt); return d>=start && d<=end; }).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  const totals = calculateTotals(list);
-  const dailyStats = getDailyCaffeineStats(list);
-
-  el("reportTitle").textContent = title;
-  el("reportSubtitle").textContent = subtitle;
-  el("reportOz").textContent = carbonatedOunces(list);
-  el("reportEntries").textContent = totals.entries;
-  el("reportCaf").textContent = totals.caf;
-  el("reportCafOz").textContent = totals.cafOz;
-  el("reportMg").textContent = totals.mg;
-  el("reportCarbonated").textContent = totals.carbonated;
-  el("reportClear").textContent = totals.clear;
-  el("averageDailyCaffeine").textContent = `${dailyStats.average} mg`;
-  el("highestCaffeineDay").textContent = dailyStats.highest;
-  el("reportEntryCount").textContent = `(${list.length})`;
-  el("reportEntriesList").innerHTML = renderEntryList(list);
-  el("reportEntriesList").style.display = reportEntriesExpanded ? "block" : "none";
-  el("toggleReportEntries").textContent = reportEntriesExpanded ? "▼ Hide Report Entries" : "▶ Show Report Entries";
-
-  const byDrink = {};
-  list.forEach(e=>{
-    if(!byDrink[e.name]) byDrink[e.name] = {oz:0,entries:0,mg:0};
-    byDrink[e.name].oz += Number(e.ounces);
-    byDrink[e.name].entries += 1;
-    byDrink[e.name].mg += Number(e.caffeineMg || 0);
-  });
-  const rows = Object.entries(byDrink).sort((a,b)=>b[1].oz-a[1].oz);
-  el("drinkBreakdown").innerHTML = rows.length ? rows.map(([name,v])=>`<div class="breakdown-row"><strong>${escapeHtml(name)}</strong><span>${round2(v.oz)} oz · ${v.entries} entries · ${round2(v.mg)} mg</span></div>`).join("") : '<div class="empty">No drink data for this report.</div>';
-}
-
-function updateLastBackupDisplay(){ el("lastBackupDisplay").textContent = localStorage.getItem(LAST_BACKUP_KEY) || "Never"; }
-function updateDataToolsStatus(){
-  updateLastBackupDisplay();
-  el("dataToolsStatus").innerHTML = `<div class="breakdown-row"><strong>Total Entries</strong><span>${entries.length}</span></div><div class="breakdown-row"><strong>Saved Beverages</strong><span>${beverages.length}</span></div>`;
-}
-function exportData(){
-  const data = {app:"My Diet Coke Addiction", version:"2.0.5", exportedAt:new Date().toISOString(), entries, beverages};
-  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "my-diet-coke-addiction-backup.json";
-  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  localStorage.setItem(LAST_BACKUP_KEY,new Date().toLocaleString());
-  updateLastBackupDisplay();
-}
-function importDataFile(file){
-  const reader = new FileReader();
-  reader.onload = event=>{
-    try{
-      const parsed = JSON.parse(event.target.result);
-      const importedEntries = Array.isArray(parsed) ? parsed : (parsed.entries || []);
-      const importedBeverages = parsed.beverages || [];
-      const signatures = {};
-      entries.forEach(x=>signatures[`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`]=true);
-      let added = 0;
-      importedEntries.map(normalizeEntry).forEach(x=>{
-        const sig = `${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`;
-        if(!signatures[sig]){ entries.push(x); signatures[sig]=true; added++; }
-      });
-      const bevIds = new Set(beverages.map(b=>b.id));
-      importedBeverages.forEach(b=>{ if(b && b.id && !bevIds.has(b.id)){ beverages.push(b); bevIds.add(b.id); }});
-      saveAll(); renderHome(); renderReport(); updateDataToolsStatus();
-      alert(`Import complete. Added ${added} entries.`);
-    }catch(error){ alert("Could not import this file."); }
-  };
-  reader.readAsText(file);
-}
-
+const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup",MAX_BEVERAGE_SLOTS=6;
+let entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",currentPageBeforeBeverageEdit="homePage",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false;
+function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function loadEntries(){for(const key of ENTRY_KEYS){try{const saved=JSON.parse(localStorage.getItem(key)||"[]");if(Array.isArray(saved)&&saved.length)return saved.map(normalizeEntry)}catch(e){}}return[]}function normalizeEntry(e){return{id:e.id||Date.now()+Math.floor(Math.random()*1000000),beverageId:e.beverageId||null,name:e.name||e.drinkName||"Unnamed Drink",ounces:Number(e.ounces||e.oz||0),caffeinated:e.caffeinated||e.caffeine||"No",caffeineMg:round2(e.caffeineMg||e.mg||0),carbonated:e.carbonated||"No",clear:e.clear||e.clearDrink||"No",createdAt:e.createdAt||e.date||new Date().toISOString()}}function loadBeverages(){try{const saved=JSON.parse(localStorage.getItem(BEVERAGE_KEY)||"[]");if(Array.isArray(saved))return saved}catch(e){}return[]}function saveAll(){localStorage.setItem("dietCokeEntriesV2",JSON.stringify(entries));localStorage.setItem("dietCokeTracker",JSON.stringify(entries));localStorage.setItem("myDietCokeAddictionEntries",JSON.stringify(entries));localStorage.setItem(BEVERAGE_KEY,JSON.stringify(beverages))}
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));el(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}function showNotice(id,callback){const n=el(id);if(!n){if(callback)callback();return}n.style.display="block";setTimeout(()=>{n.style.display="none";if(callback)callback()},900)}
+function setupToggle(id){document.querySelectorAll(`#${id} button`).forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected"));btn.classList.add("selected")}))}function setToggle(id,v){document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle("selected",b.dataset.value===v))}function getToggle(id){const s=document.querySelector(`#${id} button.selected`);return s?s.dataset.value:""}
+function calculateTotals(list){const caf=list.filter(e=>e.caffeinated==="Yes");return{oz:round2(list.reduce((s,e)=>s+Number(e.ounces),0)),carbOz:round2(list.filter(e=>e.carbonated==="Yes").reduce((s,e)=>s+Number(e.ounces),0)),entries:list.length,caf:caf.length,cafOz:round2(caf.reduce((s,e)=>s+Number(e.ounces),0)),mg:round2(list.reduce((s,e)=>s+Number(e.caffeineMg||0),0)),carbonated:list.filter(e=>e.carbonated==="Yes").length,clear:list.filter(e=>e.clear==="Yes").length}}function entriesForDate(v){const day=new Date(v+"T00:00:00").toLocaleDateString();return entries.filter(e=>new Date(e.createdAt).toLocaleDateString()===day)}function getEntryDateTime(existingAt){const date=el("entryDate").value||localDateString(new Date()),time=el("entryTime").value||timeStringFromDate(existingAt?new Date(existingAt):new Date());return`${date}T${time}:00`}function currentEntryOunces(){return el("manualOz").value?Number(el("manualOz").value):selectedOz}function calculateScaledCaffeine(bev,ounces){if(!bev||!bev.defaultOz||!bev.caffeineMg||!ounces)return round2(el("entryCaffeineMg").value||0);return round2((Number(ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg))}function updateCalculatedCaffeine(){if(!activeBeverage||!activeBeverage.defaultOz)return;const oz=currentEntryOunces();if(oz)el("entryCaffeineMg").value=calculateScaledCaffeine(activeBeverage,oz)}
+function resetEntryForm(){activeBeverage=null;editingEntryId=null;selectedOz=null;el("entryDate").value=localDateString(new Date());el("entryTime").value=timeStringFromDate(new Date());el("entryName").value="";el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));el("entryCaffeineMg").value="";el("entryTitle").textContent="Log Beverage";el("entrySubtitle").textContent="Quick Entry";el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"}
+function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=totals.carbOz;el("homeEntries").textContent=totals.entries;el("homeCaf").textContent=totals.caf;el("homeCafOz").textContent=totals.cafOz;el("homeMg").textContent=totals.mg;el("homeMgProgress").style.width=`${Math.min(100,(totals.mg/400)*100)}%`;renderBeverageGrid()}
+function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
+function renderBeverageGrid(){let h="";beverages.slice(0,MAX_BEVERAGE_SLOTS).forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);for(let i=0;i<Math.max(0,MAX_BEVERAGE_SLOTS-beverages.length);i++)h+=`<button class="bev-btn add" data-add="true" type="button"><div class="plus">+</div><div>Add Beverage</div></button>`;h+=`<button class="bev-btn quick" id="quickEntryBtn" type="button"><div class="plus">✎</div><div>Quick Entry</div></button>`;el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>openBeverageEditor(null)));el("quickEntryBtn").addEventListener("click",()=>openEntry(null));document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
+function openEntry(bev,existing=null){activeBeverage=bev||null;editingEntryId=existing?existing.id:null;selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));el("manualOz").value="";const saved=existing?new Date(existing.createdAt):new Date();el("entryDate").value=localDateString(saved);el("entryTime").value=timeStringFromDate(saved);el("entryName").value=existing?existing.name:(bev?bev.name:"");const oz=existing?Number(existing.ounces):(bev?Number(bev.defaultOz||0):0);const ozBtn=document.querySelector(`.oz-btn[data-oz="${oz}"]`);if(ozBtn){ozBtn.classList.add("selected");selectedOz=oz}else if(oz){el("manualOz").value=oz}setToggle("entryCaffeinatedToggle",existing?existing.caffeinated:(bev?bev.caffeinated:""));setToggle("entryCarbonatedToggle",existing?existing.carbonated:(bev?bev.carbonated:""));setToggle("entryClearToggle",existing?existing.clear:(bev?bev.clear:""));el("entryCaffeineMg").value=existing?round2(existing.caffeineMg):(bev?calculateScaledCaffeine(bev,oz):"");el("entryTitle").textContent=existing?"Edit Entry":(bev?bev.name:"Quick Entry");el("entrySubtitle").textContent=bev?"Pre-populated from saved beverage":"One-time entry";el("saveEntryBtn").textContent=existing?"Save Changes":"Save Entry";el("cancelEntryEditBtn").style.display=existing?"block":"none";entryDateEntriesExpanded=false;renderSelectedDatePanel();showPage("entryPage")}
+function saveEntry(){const name=el("entryName").value.trim(),oz=currentEntryOunces();if(!name){alert("Please enter a drink name.");return}if(!oz){alert("Please select or enter ounces.");return}const existing=editingEntryId?entries.find(e=>e.id===editingEntryId):null;const selectedDate=el("entryDate").value||localDateString(new Date());const entry={id:editingEntryId||Date.now(),beverageId:activeBeverage?activeBeverage.id:(existing?existing.beverageId:null),name,ounces:round2(oz),caffeinated:getToggle("entryCaffeinatedToggle")||"No",carbonated:getToggle("entryCarbonatedToggle")||"No",clear:getToggle("entryClearToggle")||"No",caffeineMg:round2(el("entryCaffeineMg").value||0),createdAt:getEntryDateTime(existing?existing.createdAt:null)};entries=existing?entries.map(e=>e.id===entry.id?entry:e):[...entries,entry];saveAll();renderHome();renderReport();if(existing){resetEntryForm();el("entryDate").value=selectedDate;entryDateEntriesExpanded=true;renderSelectedDatePanel();showPage("entryPage");showNotice("changesSavedNotice")}else{resetEntryForm();renderSelectedDatePanel();showPage("homePage");showNotice("saveCompleteNotice")}}
+function copyEntry(id){const entry=entries.find(e=>e.id===id);if(!entry)return;const copied={...entry,id:Date.now(),createdAt:new Date().toISOString()};entries.push(copied);saveAll();renderHome();renderReport();entryDateEntriesExpanded=true;openEntry(beverages.find(b=>b.id===copied.beverageId)||null,copied)}function editEntry(id){const entry=entries.find(e=>e.id===id);if(entry)openEntry(beverages.find(b=>b.id===entry.beverageId)||null,entry)}function deleteEntry(id){if(!confirm("Delete this entry?"))return;entries=entries.filter(e=>e.id!==id);saveAll();renderHome();renderSelectedDatePanel();renderReport()}window.editEntry=editEntry;window.copyEntry=copyEntry;window.deleteEntry=deleteEntry;
+function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=totals.carbOz;el("dateEntries").textContent=totals.entries;el("dateCaf").textContent=totals.caf;el("dateCafOz").textContent=totals.cafOz;el("dateMg").textContent=totals.mg;el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
+function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg||0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div></div><div class="entry-actions"><button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button><button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button><button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button></div></div></div>`).join("")}
+function openBeverageEditor(bev){currentPageBeforeBeverageEdit=document.querySelector(".page.active").id||"homePage";editingBeverageId=bev?bev.id:null;pendingBeverageImage=bev?(bev.image||""):"";el("bevEditTitle").textContent=bev?"Edit Beverage":"Add Beverage";el("bevName").value=bev?bev.name:"";el("bevInitials").value=bev?(bev.initials||""):"";el("bevDefaultOz").value=bev?(bev.defaultOz||""):"";el("bevCaffeineMg").value=bev?(bev.caffeineMg||""):"";setToggle("bevCaffeinatedToggle",bev?bev.caffeinated:"");setToggle("bevCarbonatedToggle",bev?bev.carbonated:"");setToggle("bevClearToggle",bev?bev.clear:"");el("bevImage").value="";renderBeverageImagePreview();el("deleteBeverageBtn").style.display=bev?"block":"none";el("historicalUpdateOptions").style.display=bev?"block":"none";const future=document.querySelector('input[name="historicalUpdate"][value="future"]');if(future)future.checked=true;renderBeverageStats(bev);showPage("beverageEditPage")}function renderBeverageImagePreview(){el("bevImagePreview").innerHTML=pendingBeverageImage?`<img src="${pendingBeverageImage}" alt="">`:"No Image"}function saveBeverage(){const name=el("bevName").value.trim();if(!name){alert("Please enter a beverage name.");return}const existing=editingBeverageId?beverages.find(b=>b.id===editingBeverageId):null;const bev={id:existing?existing.id:"bev_"+Date.now(),name,image:pendingBeverageImage,initials:el("bevInitials").value.trim(),defaultOz:round2(el("bevDefaultOz").value||0),caffeinated:getToggle("bevCaffeinatedToggle")||"No",caffeineMg:round2(el("bevCaffeineMg").value||0),carbonated:getToggle("bevCarbonatedToggle")||"No",clear:getToggle("bevClearToggle")||"No"};if(existing){beverages=beverages.map(b=>b.id===bev.id?bev:b);const mode=document.querySelector('input[name="historicalUpdate"]:checked')?.value||"future";if(mode==="all"){entries=entries.map(e=>{if(e.beverageId!==bev.id)return e;const scaled=bev.defaultOz?round2((Number(e.ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg||0)):e.caffeineMg;return{...e,name:bev.name,caffeinated:bev.caffeinated,caffeineMg:scaled,carbonated:bev.carbonated,clear:bev.clear}})}}else{beverages.push(bev)}saveAll();renderHome();showPage(currentPageBeforeBeverageEdit||"homePage")}function deleteBeverage(){if(!editingBeverageId)return;if(!confirm("Delete this beverage button? Existing logged entries will stay."))return;beverages=beverages.filter(b=>b.id!==editingBeverageId);saveAll();renderHome();showPage("homePage")}function renderBeverageStats(bev){if(!bev){el("beverageStatsCard").style.display="none";return}const list=entries.filter(e=>e.beverageId===bev.id||e.name===bev.name),totals=calculateTotals(list),sorted=[...list].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));el("beverageStatsCard").style.display="block";el("beverageStats").innerHTML=`<div class="breakdown-row"><strong>Total Entries</strong><span>${totals.entries}</span></div><div class="breakdown-row"><strong>Total Ounces</strong><span>${totals.oz} oz</span></div><div class="breakdown-row"><strong>Total Caffeine</strong><span>${totals.mg} mg</span></div><div class="breakdown-row"><strong>First Logged</strong><span>${sorted.length?new Date(sorted[0].createdAt).toLocaleDateString():"Never"}</span></div>`}
+function getStartOfWeekSunday(d){const x=new Date(d);x.setDate(x.getDate()-x.getDay());x.setHours(0,0,0,0);return x}function getEndOfWeekSunday(d){const s=getStartOfWeekSunday(d),e=new Date(s);e.setDate(s.getDate()+6);e.setHours(23,59,59,999);return e}function getPreviousWeekRange(){const d=new Date();d.setDate(d.getDate()-7);return[getStartOfWeekSunday(d),getEndOfWeekSunday(d)]}function getPreviousMonthRange(){const d=new Date();d.setMonth(d.getMonth()-1);return[new Date(d.getFullYear(),d.getMonth(),1),new Date(d.getFullYear(),d.getMonth()+1,0,23,59,59,999)]}function getWeekNumber(date){const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())),day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()+4-day);const start=new Date(Date.UTC(d.getUTCFullYear(),0,1));return`${d.getUTCFullYear()}-W${pad(Math.ceil((((d-start)/86400000)+1)/7))}`}function getRangeForWeekValue(v){const [year,week]=v.split("-W").map(Number),jan4=new Date(year,0,4),start=getStartOfWeekSunday(jan4);start.setDate(start.getDate()+(week-1)*7);const end=new Date(start);end.setDate(start.getDate()+6);end.setHours(23,59,59,999);return[start,end]}function formatRange(s,e){return s.toDateString()===e.toDateString()?s.toLocaleDateString():`${s.toLocaleDateString()} - ${e.toLocaleDateString()}`}function openReport(type){currentReportType=type;reportEntriesExpanded=false;renderReport();showPage("reportDetailPage")}function getDailyCaffeineStats(list){const byDay={};list.forEach(e=>{const day=new Date(e.createdAt).toLocaleDateString();byDay[day]=(byDay[day]||0)+Number(e.caffeineMg||0)});const days=Object.keys(byDay);if(!days.length)return{average:0,highest:"0 mg"};const total=Object.values(byDay).reduce((s,v)=>s+v,0),highestDay=days.sort((a,b)=>byDay[b]-byDay[a])[0];return{average:round2(total/days.length),highest:`${round2(byDay[highestDay])} mg on ${highestDay}`}}
+function renderReport(){let start,end,title,subtitle;el("customControls").style.display="none";el("customDayControl").style.display="none";el("customWeekControl").style.display="none";el("customMonthControl").style.display="none";if(currentReportType==="yesterday"){const y=getYesterday();start=startOfDay(y);end=endOfDay(y);title="Yesterday";subtitle=start.toLocaleDateString()}else if(currentReportType==="lastWeek"){[start,end]=getPreviousWeekRange();title="Last Week";subtitle=formatRange(start,end)}else if(currentReportType==="lastMonth"){[start,end]=getPreviousMonthRange();title="Last Month";subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"})}else if(currentReportType==="customDay"){el("customControls").style.display="block";el("customDayControl").style.display="block";const v=el("customDayInput").value||localDateString(getYesterday());el("customDayInput").value=v;start=new Date(v+"T00:00:00");end=new Date(v+"T23:59:59");title="Custom Day";subtitle=start.toLocaleDateString()}else if(currentReportType==="customWeek"){el("customControls").style.display="block";el("customWeekControl").style.display="block";const v=el("customWeekInput").value||getWeekNumber(new Date());el("customWeekInput").value=v;[start,end]=getRangeForWeekValue(v);title="Custom Week";subtitle=formatRange(start,end)}else{el("customControls").style.display="block";el("customMonthControl").style.display="block";const now=new Date(),def=`${now.getFullYear()}-${pad(now.getMonth()+1)}`,v=el("customMonthInput").value||def;el("customMonthInput").value=v;const [year,month]=v.split("-").map(Number);start=new Date(year,month-1,1);end=new Date(year,month,0,23,59,59,999);title="Custom Month";subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"})}const list=entries.filter(e=>{const d=new Date(e.createdAt);return d>=start&&d<=end}).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),dailyStats=getDailyCaffeineStats(list);el("reportTitle").textContent=title;el("reportSubtitle").textContent=subtitle;el("reportCarbOz").textContent=totals.carbOz;el("reportEntries").textContent=totals.entries;el("reportCaf").textContent=totals.caf;el("reportCafOz").textContent=totals.cafOz;el("reportMg").textContent=totals.mg;el("reportCarbonated").textContent=totals.carbonated;el("reportClear").textContent=totals.clear;el("averageDailyCaffeine").textContent=`${dailyStats.average} mg`;el("highestCaffeineDay").textContent=dailyStats.highest;el("reportEntryCount").textContent=`(${list.length})`;el("reportEntriesList").innerHTML=renderEntryList(list);el("reportEntriesList").style.display=reportEntriesExpanded?"block":"none";el("toggleReportEntries").textContent=reportEntriesExpanded?"▼ Hide Report Entries":"▶ Show Report Entries";const byDrink={};list.forEach(e=>{if(!byDrink[e.name])byDrink[e.name]={oz:0,entries:0,mg:0};byDrink[e.name].oz+=Number(e.ounces);byDrink[e.name].entries+=1;byDrink[e.name].mg+=Number(e.caffeineMg||0)});const rows=Object.entries(byDrink).sort((a,b)=>b[1].oz-a[1].oz);el("drinkBreakdown").innerHTML=rows.length?rows.map(([name,v])=>`<div class="breakdown-row"><strong>${escapeHtml(name)}</strong><span>${round2(v.oz)} oz · ${v.entries} entries · ${round2(v.mg)} mg</span></div>`).join(""):'<div class="empty">No drink data for this report.</div>'}
+function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStorage.getItem(LAST_BACKUP_KEY)||"Never"}function updateDataToolsStatus(){updateLastBackupDisplay();el("dataToolsStatus").innerHTML=`<div class="breakdown-row"><strong>Total Entries</strong><span>${entries.length}</span></div><div class="breakdown-row"><strong>Saved Beverages</strong><span>${beverages.length}</span></div>`}function exportData(){const data={app:"My Diet Coke Addiction",version:"2.0.6",exportedAt:new Date().toISOString(),entries,beverages};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-diet-coke-addiction-backup.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);localStorage.setItem(LAST_BACKUP_KEY,new Date().toLocaleString());updateLastBackupDisplay()}function importDataFile(file){const reader=new FileReader();reader.onload=event=>{try{const parsed=JSON.parse(event.target.result),importedEntries=Array.isArray(parsed)?parsed:(parsed.entries||[]),importedBeverages=parsed.beverages||[],sigs={};entries.forEach(x=>sigs[`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`]=true);let added=0;importedEntries.map(normalizeEntry).forEach(x=>{const sig=`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`;if(!sigs[sig]){entries.push(x);sigs[sig]=true;added++}});const bevIds=new Set(beverages.map(b=>b.id));importedBeverages.forEach(b=>{if(b&&b.id&&!bevIds.has(b.id)){beverages.push(b);bevIds.add(b.id)}});saveAll();renderHome();renderReport();updateDataToolsStatus();alert(`Import complete. Added ${added} entries.`)}catch(e){alert("Could not import this file.")}};reader.readAsText(file)}
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle","bevCaffeinatedToggle","bevCarbonatedToggle","bevClearToggle"].forEach(setupToggle);
-
-document.querySelectorAll(".oz-btn").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    selectedOz = Number(btn.dataset.oz);
-    el("manualOz").value = "";
-    document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
-    btn.classList.add("selected");
-    updateCalculatedCaffeine();
-  });
-});
-el("manualOz").addEventListener("input",()=>{
-  if(el("manualOz").value){
-    selectedOz = null;
-    document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
-    updateCalculatedCaffeine();
-  }
-});
-el("entryDate").addEventListener("change",renderSelectedDatePanel);
-el("entryTime").addEventListener("change",()=>{});
-el("bevImage").addEventListener("change",event=>{
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e=>{ pendingBeverageImage = e.target.result; renderBeverageImagePreview(); };
-  reader.readAsDataURL(file);
-});
-
-el("viewReportsBtn").addEventListener("click",()=>showPage("reportsHomePage"));
-el("backToHomeFromReports").addEventListener("click",()=>showPage("homePage"));
-el("backToReportsHome").addEventListener("click",()=>showPage("reportsHomePage"));
-el("backToHomeFromEntry").addEventListener("click",()=>showPage("homePage"));
-el("backFromBeverageEdit").addEventListener("click",()=>showPage(currentPageBeforeBeverageEdit || "homePage"));
-el("saveEntryBtn").addEventListener("click",saveEntry);
-el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));
-el("toggleDateEntries").addEventListener("click",()=>{ entryDateEntriesExpanded=!entryDateEntriesExpanded; renderSelectedDatePanel(); });
-el("saveBeverageBtn").addEventListener("click",saveBeverage);
-el("deleteBeverageBtn").addEventListener("click",deleteBeverage);
-el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));
-el("openDataToolsFromHomeBtn").addEventListener("click",()=>{ updateDataToolsStatus(); showPage("dataToolsPage"); });
-el("openDataToolsBtn").addEventListener("click",()=>{ updateDataToolsStatus(); showPage("dataToolsPage"); });
-el("backToReportsFromDataTools").addEventListener("click",()=>showPage("reportsHomePage"));
-el("exportDataBtn").addEventListener("click",exportData);
-el("importDataInput").addEventListener("change",event=>{ const file=event.target.files[0]; if(file) importDataFile(file); });
-document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));
-el("toggleReportEntries").addEventListener("click",()=>{ reportEntriesExpanded=!reportEntriesExpanded; renderReport(); });
-el("customDayInput").addEventListener("change",renderReport);
-el("customWeekInput").addEventListener("change",renderReport);
-el("customMonthInput").addEventListener("change",renderReport);
-
-el("customDayInput").value = localDateString(getYesterday());
-el("customWeekInput").value = getWeekNumber(new Date());
-const now = new Date();
-el("customMonthInput").value = `${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-
-saveAll();
-renderHome();
-openReport("yesterday");
-showPage("homePage");
+document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",renderSelectedDatePanel);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingBeverageImage=e.target.result;renderBeverageImagePreview()};reader.readAsDataURL(file)});
+el("viewReportsBtn").addEventListener("click",()=>showPage("reportsHomePage"));el("backToHomeFromReports").addEventListener("click",()=>showPage("homePage"));el("backToReportsHome").addEventListener("click",()=>showPage("reportsHomePage"));el("backToHomeFromEntry").addEventListener("click",()=>showPage("homePage"));el("backFromBeverageEdit").addEventListener("click",()=>showPage(currentPageBeforeBeverageEdit||"homePage"));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("openDataToolsFromHomeBtn").addEventListener("click",()=>{updateDataToolsStatus();showPage("dataToolsPage")});el("openDataToolsBtn").addEventListener("click",()=>{updateDataToolsStatus();showPage("dataToolsPage")});el("backToReportsFromDataTools").addEventListener("click",()=>showPage("reportsHomePage"));el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
+el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+saveAll();renderHome();openReport("yesterday");showPage("homePage");
 </script>
 </body>
 </html>
