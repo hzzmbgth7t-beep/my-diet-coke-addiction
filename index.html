@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>My Diet Coke Addiction</title>
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b3262e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="My Diet Coke Addiction">
 <style>
@@ -51,7 +54,7 @@ input[type=file]{font-size:14px;padding:11px}
 <body>
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><h1>My Diet Coke Addiction</h1><div class="subtitle">Private drink tracker saved on this device</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><h1>My Diet Coke Addiction</h1><div class="subtitle">Private drink tracker saved on this device</div><div class="hint" style="margin-top:6px;">Version 2.0.7</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
 <div class="card"><div class="section-title">Today</div><div class="summary">
 <div class="summary-box"><strong id="homeCarbOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="homeEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="homeCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="homeCafOz">0</strong><span>caf oz</span></div>
@@ -151,6 +154,15 @@ document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",(
 el("viewReportsBtn").addEventListener("click",()=>showPage("reportsHomePage"));el("backToHomeFromReports").addEventListener("click",()=>showPage("homePage"));el("backToReportsHome").addEventListener("click",()=>showPage("reportsHomePage"));el("backToHomeFromEntry").addEventListener("click",()=>showPage("homePage"));el("backFromBeverageEdit").addEventListener("click",()=>showPage(currentPageBeforeBeverageEdit||"homePage"));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("openDataToolsFromHomeBtn").addEventListener("click",()=>{updateDataToolsStatus();showPage("dataToolsPage")});el("openDataToolsBtn").addEventListener("click",()=>{updateDataToolsStatus();showPage("dataToolsPage")});el("backToReportsFromDataTools").addEventListener("click",()=>showPage("reportsHomePage"));el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
 el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
 saveAll();renderHome();openReport("yesterday");showPage("homePage");
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js", { scope: "./" })
+      .catch(error => console.error("Service worker registration failed:", error));
+  });
+}
 </script>
 </body>
 </html>

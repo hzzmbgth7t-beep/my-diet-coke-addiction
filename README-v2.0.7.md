@@ -46,3 +46,19 @@ icon.png
 Upload the unzipped files to GitHub.
 
 Do not upload the ZIP itself.
+
+## PWA Release Packaging Completion
+
+This release package also includes:
+
+- linked `manifest.json`
+- registered `service-worker.js`
+- release-specific cache `my-diet-coke-addiction-v2.0.7-r1`
+- `apple-touch-icon.png`
+- `icons/icon-180.png`
+- `icons/icon-192.png`
+- `icons/icon-512.png`
+- visible Version 2.0.7 identifier on the Home screen
+
+These changes complete the installable/offline package without changing the
+accepted entry, beverage, report, import, export, or migration data model.

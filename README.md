@@ -1,48 +1,43 @@
-# My Diet Coke Addiction - Version 2.0.7
+# Quick Launch
 
-## Changes in V2.0.7
+**Live Application:** [https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/](https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/)
 
-- Improved Save Entry confirmation
-- After saving a new entry:
-  - App returns to the Home screen
-  - A larger “✓ Entry Saved” message appears near the top
-  - The message remains visible longer
-- Backup filename changed to:
+**Cache-Buster Launch:** [https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?v=2.0.7-r2](https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?v=2.0.7-r2)
 
-MDCA-backup-v2.0.7-YYYY-MM-DD.json
+Use the cache-buster link immediately after deployment or whenever the browser
+appears to be showing an older cached release.
 
-Example:
+---
 
-MDCA-backup-v2.0.7-2026-06-03.json
+# My Diet Coke Addiction — Version 2.0.7
 
-## Still Included
+This is the release-complete v2.0.7 package.
 
-- Clean V2 build foundation
-- Carbonated ounces summary
-- Beverage buttons
-- Quick Entry
-- Beverage setup/editing
+## Included
+
+- Accepted v2.0.7 application behavior
 - Entry Date and Entry Time
-- Historical date/time editing
-- Copy Entry
+- Historical entry editing
 - Caffeine scaling by ounces
-- Caffeine rounded to 2 decimal places
-- Import/Export backup
-- Safari vs Home Screen storage note
+- Two-decimal caffeine rounding
+- Visible save confirmations
+- Import and export
+- `MDCA-backup-v2.0.7-YYYY-MM-DD.json` backup naming
+- Web app manifest
+- Registered service worker
+- Complete 180, 192, and 512 pixel icon set
+- Versioned offline cache
 
-## Files
+## Deployment
 
-- index.html
-- README.md
-- README-v2.0.7.md
-- LOCKED-REQUIREMENTS-v2.0.6.md
+Upload the unzipped files and folders to the root of:
 
-Keep your icon file named:
-
-icon.png
-
-## Install
-
-Upload the unzipped files to GitHub.
+`hzzmbgth7t-beep/my-diet-coke-addiction`
 
 Do not upload the ZIP itself.
+
+The deployed page must be named:
+
+`index.html`
+
+After deployment, follow `DEPLOYMENT-v2.0.7.md`.
