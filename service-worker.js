@@ -1,15 +1,14 @@
 "use strict";
 
-const CACHE_NAME = "my-diet-coke-addiction-v2.0.7-r2";
+const CACHE_NAME = "MDCA-v2.0.8-r6";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon.png",
   "./apple-touch-icon.png",
-  "./icons/icon-180.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -72,4 +71,8 @@ self.addEventListener("fetch", event => {
       });
     })
   );
+});
+
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
