@@ -58,11 +58,12 @@ input[type=file]{font-size:14px;padding:11px}
 .update-banner.visible{display:block}.update-actions{display:flex;gap:8px;margin-top:10px}.update-actions button{flex:1;padding:11px;border:0;border-radius:12px;font-weight:800}.update-now{background:var(--blue);color:#fff}.update-later{background:#ececec;color:var(--dark)}
 #homePage .home-version{margin-top:6px}
 #homePage .home-summary{grid-template-columns:repeat(3,1fr)}
-#homePage .home-summary>.summary-box,#homePage .home-summary>.mg-card{min-height:92px}
-#homePage .home-summary>.mg-card{margin-top:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#homePage .home-summary>.mg-card div{white-space:nowrap}
+#homePage .home-summary>.summary-box,#homePage .home-summary>.mg-card{min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#homePage .home-summary .home-stat-label{display:block;font-size:16px;font-weight:800;line-height:1.15}
+#homePage .home-summary .home-stat-value{display:block;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);white-space:nowrap}
+#homePage .home-summary .summary-box .home-stat-label{color:var(--red)}
+#homePage .home-summary .summary-box .home-stat-value,#homePage .home-summary .mg-card .home-stat-value,#homePage .home-summary .home-stat-value span{color:var(--dark)}
 #homePage .home-action-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-#homePage .home-action-row .report-main{min-height:92px}
 #homePage .beverage-grid-empty{grid-column:1/-1}
 #settingsPage .settings-card .custom-btn:last-child{margin-bottom:0}
 </style>
@@ -81,14 +82,14 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.9-r2</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.9-r3</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
-<div class="card"><div class="section-title">Today</div><div class="summary home-summary">
-<div class="summary-box"><strong id="homeCarbOz">0</strong><span>Carbonated</span></div>
-<div class="summary-box"><strong id="homeCafOz">0</strong><span>Caffeinated</span></div>
-<div class="mg-card"><strong>Caffeine</strong><div><span id="homeMg">0</span> / 400 mg</div></div>
+<div class="card"><div class="summary home-summary">
+<div class="summary-box"><strong class="home-stat-label">Carbonated</strong><span class="home-stat-value" id="homeCarbOz">0</span></div>
+<div class="summary-box"><strong class="home-stat-label">Caffeinated</strong><span class="home-stat-value" id="homeCafOz">0</span></div>
+<div class="mg-card"><strong class="home-stat-label">Caffeine</strong><div class="home-stat-value"><span id="homeMg">0</span> / 400 mg</div></div>
 </div></div>
-<div class="card"><div class="section-title">Beverages</div><div id="beverageGrid" class="beverage-grid"></div><div class="hint">Tap a beverage to log it. Long-press a saved beverage to edit it.</div></div>
+<div class="card"><div id="beverageGrid" class="beverage-grid"></div></div>
 <div class="home-action-row"><button class="report-main" id="openSettingsBtn" type="button">Settings</button><button class="report-main" id="viewReportsBtn" type="button">Reports</button></div>
 </div></div>
 
@@ -160,7 +161,7 @@ input[type=file]{font-size:14px;padding:11px}
 
 <script>
 "use strict";
-const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup",MAX_BEVERAGE_SLOTS=6;
+const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup";
 let entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,editingOriginalTimestamp=null,editingOriginalDate="",editingOriginalTime="",selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",currentPageBeforeBeverageEdit="homePage",currentPageBeforeEntry="homePage",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false,statusTimer=null;
 function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function loadEntries(){for(const key of ENTRY_KEYS){try{const saved=JSON.parse(localStorage.getItem(key)||"[]");if(Array.isArray(saved)&&saved.length)return saved.map(normalizeEntry)}catch(e){}}return[]}function normalizeEntry(e){
@@ -223,7 +224,7 @@ el("entryCaffeineMg").value="";el("entryTitle").textContent="Log Beverage";el("e
 }
 function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=totals.carbOz;el("homeCafOz").textContent=totals.cafOz;el("homeMg").textContent=totals.mg;renderBeverageGrid()}
 function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
-function renderBeverageGrid(){let h="";beverages.slice(0,MAX_BEVERAGE_SLOTS).forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
+function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
 function openEntry(bev,existing=null,returnPage=null){if(returnPage)currentPageBeforeEntry=returnPage;else if(!el("entryPage").classList.contains("active"))currentPageBeforeEntry="homePage";
 activeBeverage=bev||null;editingEntryId=existing?existing.id:null;selectedOz=null;
 document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));el("manualOz").value="";
@@ -308,7 +309,7 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.9",releaseRevision:"r2",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.9",releaseRevision:"r3",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
 url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.9-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
@@ -374,7 +375,7 @@ renderHome();openReport("yesterday");showPage("homePage");
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.9-r2";
+  const reloadKey = "MDCA-sw-reload-v2.0.9-r3";
   let registration = null;
   let refreshing = false;
 
