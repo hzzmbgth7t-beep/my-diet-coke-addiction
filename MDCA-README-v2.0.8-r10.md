@@ -2,45 +2,70 @@
 
 **Document version:** v2.0.8-r10  
 **Application:** My Diet Coke Addiction  
-**Status:** Release candidate  
-**Active verified production baseline:** v2.0.8-r6  
-**Rollback baseline:** v2.0.7-r2  
-**Immediate build source:** `MDCA-v2.0.8-r9-RC.zip`  
-**Immediate build-source SHA-256:** `8b2e29b0a5ac227a846faee63906f8f6ee4fd499d2bd47ca1d204177e171e393`  
-**Canonical verified baseline archive:** `MDCA-v2.0.8-r6-VERIFIED.zip`  
-**Canonical baseline SHA-256:** `4eb09dbacf4b2620000ca0cd6baee0024a6ed5a4dd6fd4da84f90ff73b343d73`  
-**Baseline provenance:** RESOLVED — canonical operational baseline
+**Status:** Verified production release  
+**Active verified production baseline:** v2.0.8-r10  
+**Previous verified production baseline:** v2.0.8-r6  
+**Designated rollback baseline:** v2.0.7-r2  
+**Promotion source:** `MDCA-v2.0.8-r10-RC.zip`  
+**Promotion-source SHA-256:** `8f3ba1e81b127f856812f45995bb5ca6306dbefa1235643ffae9ccaca5fb122d`  
+**Verified archive:** `MDCA-v2.0.8-r10-VERIFIED.zip`  
+**Verified archive SHA-256:** Recorded in the external `.sha256` file  
+**Gate C:** PASS  
+**Owner promotion approval:** APPROVED  
+**Promotion timestamp:** 2026-07-31T22:38:00-05:00
 
 ## Quick Launch
 
 **Live application:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/
 
-**Candidate cache-buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?v=2.0.8-r10
+**Release cache-buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?v=2.0.8-r10
 
-The candidate URL becomes valid only after r10 is deployed. Until promotion is completed, v2.0.8-r6 remains the active verified production baseline.
+The deployed Safari page and Home Screen application were owner-confirmed as displaying v2.0.8-r10.
 
-## Approved Scope
+## Release Scope
 
-v2.0.8-r10 supersedes the undeployed r9 candidate and makes only these evidence-alignment changes:
+v2.0.8-r10 is the verified production culmination of the v2.0.8 maintenance line. It retains the approved maintenance corrections completed through r10:
 
-- D012: replace stale r9 provenance statements with the resolved canonical r6 baseline archive and checksum;
-- update visible, export, reload-key, cache, and current-version documentation identities from r9 to r10.
+- validated transactional import with rollback protection;
+- exact import added, duplicate, and rejected counts;
+- impossible ISO calendar-date rejection;
+- export feedback and release identity;
+- date/time validation and timestamp preservation;
+- ISO week boundaries;
+- safe previous-calendar-month boundaries;
+- Custom Day inclusion through `23:59:59.999`;
+- user-controlled service-worker activation;
+- MDCA-scoped cache cleanup;
+- resolved r6 provenance evidence;
+- consistent r10 visible, export, reload-key, cache, and documentation identities.
 
-All r7, r8, and r9 maintenance corrections are retained. No page-layout change, product feature, data-schema change, manifest change, icon change, report-logic change, import-logic change, or unrelated refactoring is included.
+No page-layout change, product feature, data-schema change, manifest change, icon change, or unrelated refactoring is included.
 
-## Baseline Provenance
+## Verification
 
-The controlling r6 operational baseline is:
+The exact r10 release candidate passed:
 
-- archive: `MDCA-v2.0.8-r6-VERIFIED.zip`;
-- SHA-256: `4eb09dbacf4b2620000ca0cd6baee0024a6ed5a4dd6fd4da84f90ff73b343d73`;
-- status: canonical verified operational baseline.
+- import suite: 10 of 10 tests and 91 of 91 observations;
+- remaining Gate B suite: 11 of 11 tests and 118 of 118 observations;
+- combined automated verification: 21 of 21 tests and 209 of 209 observations;
+- static, syntax, package, identity, preserved-file, and checksum controls.
 
-The canonical archive is a byte-for-byte filename copy of the uploaded r6 deployment-source archive. Its provenance resolution and per-file manifests are maintained as external evidence and are not included in the 10-file application root.
+Gate C passed based on:
+
+- live r10 deployment identity;
+- Safari update and activation;
+- Home Screen launch and persistence;
+- offline launch and persistence;
+- test-entry cleanup;
+- totals and data-integrity confirmation;
+- post-verification backup;
+- explicit owner approval.
+
+The deployment commit identifier was not included in the supplied evidence and remains **UNVERIFIED**. This does not alter the observed live identity or owner-confirmed Gate C result.
 
 ## Package
 
-The release candidate contains exactly 10 flat root-level files:
+The verified release contains exactly 10 flat root-level files:
 
 1. `README.md`
 2. `MDCA-README-v2.0.8-r10.md`
@@ -53,18 +78,19 @@ The release candidate contains exactly 10 flat root-level files:
 9. `icon-192.png`
 10. `icon-512.png`
 
-`README.md` and `MDCA-README-v2.0.8-r10.md` are byte-for-byte identical when packaged.
+`README.md` and `MDCA-README-v2.0.8-r10.md` are byte-for-byte identical.
 
-## Verification Status
+All operational and asset files are byte-for-byte identical to the tested r10 release candidate. Only the three current-version documentation files changed during promotion.
 
-The exact packaged r10 candidate passed:
+## Baseline and Recovery
 
-- the controlled import suite: 10 of 10 tests and 91 of 91 observations;
-- the remaining automated Gate B logic suite: 11 of 11 tests and 118 of 118 observations;
-- JavaScript syntax, flat-package, identity, source-scope, README-identity, preserved-file, and checksum controls.
+The active verified production baseline is v2.0.8-r10.
 
-The external r10 evidence bundle records the final candidate checksum and individual observations. No r9 test result is reused as r10 evidence.
+The previous verified production archive remains:
 
-r10 is authorized for controlled repository deployment. Production promotion remains blocked until update-from-r6, Safari, Home Screen, offline, production-data-preservation, and owner-approval checks pass against the exact deployed r10 state.
+- `MDCA-v2.0.8-r6-VERIFIED.zip`
+- SHA-256: `4eb09dbacf4b2620000ca0cd6baee0024a6ed5a4dd6fd4da84f90ff73b343d73`
 
-See `MDCA-RELEASE-v2.0.8-r10.md` for scope, deployment, promotion, and rollback controls.
+The designated rollback baseline remains v2.0.7-r2.
+
+Preserve the r10 release-candidate archive, r10 verified archive, r6 verified archive, checksums, Gate C record, and external verification evidence.

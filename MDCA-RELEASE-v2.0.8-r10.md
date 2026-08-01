@@ -2,80 +2,126 @@
 
 **Document version:** v2.0.8-r10  
 **Application:** My Diet Coke Addiction  
-**Release type:** Maintenance-only evidence-alignment revision  
-**Status:** Release candidate  
-**Build timestamp:** 2026-07-31T20:27:00-05:00  
-**Active verified production baseline:** v2.0.8-r6  
-**Rollback baseline:** v2.0.7-r2  
-**Immediate build source:** `MDCA-v2.0.8-r9-RC.zip`  
-**Immediate build-source SHA-256:** `8b2e29b0a5ac227a846faee63906f8f6ee4fd499d2bd47ca1d204177e171e393`  
-**Canonical verified baseline archive:** `MDCA-v2.0.8-r6-VERIFIED.zip`  
-**Canonical baseline SHA-256:** `4eb09dbacf4b2620000ca0cd6baee0024a6ed5a4dd6fd4da84f90ff73b343d73`  
-**Baseline provenance:** RESOLVED — canonical operational baseline  
-**Candidate archive:** `MDCA-v2.0.8-r10-RC.zip`
+**Release type:** Verified maintenance release  
+**Status:** Verified production release  
+**Promotion timestamp:** 2026-07-31T22:38:00-05:00  
+**Active verified production baseline:** v2.0.8-r10  
+**Previous verified production baseline:** v2.0.8-r6  
+**Designated rollback baseline:** v2.0.7-r2  
+**Candidate archive:** `MDCA-v2.0.8-r10-RC.zip`  
+**Candidate SHA-256:** `8f3ba1e81b127f856812f45995bb5ca6306dbefa1235643ffae9ccaca5fb122d`  
+**Verified archive:** `MDCA-v2.0.8-r10-VERIFIED.zip`  
+**Verified archive SHA-256:** Recorded in `MDCA-v2.0.8-r10-VERIFIED.zip.sha256`  
+**Gate C:** PASS  
+**Owner promotion approval:** APPROVED  
+**Deployment commit:** **UNVERIFIED** — not recorded in the supplied evidence
 
-## Reason for Revision
+## Promotion Summary
 
-The exact r9 candidate passed its automated suites, but its current-version documentation still stated that r6 baseline provenance was **UNVERIFIED**. Canonical r6 provenance was resolved after the r9 checksum was locked.
+The exact tested r10 candidate completed automated Gate B verification, was deployed, and passed owner-confirmed Gate C checks in Safari, from the Home Screen, and offline.
 
-Editing r9 would have invalidated its evidence and silently replaced an already tested candidate. r10 therefore supersedes r9 with current provenance statements and a new release identity.
+The candidate archive remains immutable. Promotion to the verified archive changes only the three current-version documentation files:
 
-## Approved Correction
-
-### D012 — Provenance evidence alignment
-
-- identify `MDCA-v2.0.8-r6-VERIFIED.zip` as the canonical r6 operational baseline;
-- record canonical r6 SHA-256 `4eb09dbacf4b2620000ca0cd6baee0024a6ed5a4dd6fd4da84f90ff73b343d73`;
-- remove stale claims that r6 provenance is unresolved;
-- retain r6 as the active verified production baseline until r10 completes Gate C and owner promotion.
-
-### Release identity
-
-- visible application label: `MDCA · Version 2.0.8-r10`;
-- export version: `2.0.8`;
-- export revision: `r10`;
-- reload key: `MDCA-sw-reload-v2.0.8-r10`;
-- service-worker cache: `MDCA-v2.0.8-r10`;
-- cache-buster: `?v=2.0.8-r10`.
-
-## Retained Corrections
-
-The r10 candidate retains:
-
-- the single validated transactional import path;
-- exact imported beverage added-count reporting;
-- impossible ISO calendar-date rejection;
-- persistence rollback protection;
-- file-read and storage-failure recovery;
-- ISO week validation and boundaries;
-- safe previous-calendar-month boundaries;
-- Custom Day inclusion through `23:59:59.999`;
-- user-controlled service-worker activation;
-- MDCA-scoped cache cleanup.
-
-## Changed Files
-
-Relative to the exact r9 candidate:
-
-- `index.html` — release identity only;
-- `service-worker.js` — cache identity only;
 - `README.md`;
 - `MDCA-README-v2.0.8-r10.md`;
 - `MDCA-RELEASE-v2.0.8-r10.md`.
 
-## Byte-Preserved Files
+The seven operational and asset files are byte-for-byte identical to the tested candidate.
 
-The following files are byte-for-byte identical to the exact r9 candidate:
+## Maintenance Corrections Included
 
+The verified release contains the approved v2.0.8 maintenance corrections completed through r10:
+
+### Persistence and recovery
+
+- transactional persistence;
+- rollback after storage failure;
+- import validation and recovery protection;
+- file-read failure handling;
+- non-blocking import and export feedback.
+
+### Import correctness
+
+- one active validated import implementation;
+- exact beverage and entry added counts;
+- duplicate and rejected-record accounting;
+- impossible ISO calendar-date rejection;
+- preservation of valid timestamps.
+
+### Date and report correctness
+
+- strict local date/time validation;
+- unchanged timestamp preservation;
+- ISO week boundaries and valid week 53 handling;
+- safe previous-calendar-month calculation at month end;
+- Custom Day end boundary of `23:59:59.999`.
+
+### Offline and release identity
+
+- user-controlled service-worker update activation;
+- exactly one activation reload in the confirmed device workflow;
+- MDCA-scoped cache cleanup;
+- aligned visible, export, reload-key, cache, and documentation identities;
+- resolved canonical r6 provenance.
+
+No page-layout work, product feature, data-schema change, manifest change, icon change, or unrelated refactoring is included.
+
+## Candidate Verification
+
+The exact candidate SHA-256 `8f3ba1e81b127f856812f45995bb5ca6306dbefa1235643ffae9ccaca5fb122d` passed:
+
+| Suite | Result |
+|---|---:|
+| Import tests | 10/10 PASS |
+| Import observations | 91/91 PASS |
+| Remaining Gate B tests | 11/11 PASS |
+| Remaining Gate B observations | 118/118 PASS |
+| Combined tests | 21/21 PASS |
+| Combined observations | 209/209 PASS |
+| Static and syntax controls | PASS |
+| Flat 10-file package | PASS |
+| README identity | PASS |
+| Preserved manifest and icons | PASS |
+
+No PASS result from a different candidate checksum was reused as final-candidate evidence.
+
+## Gate C Verification
+
+| Control | Result | Evidence |
+|---|---:|---|
+| Public application displays r10 | PASS | Live retrieval and owner confirmation |
+| Repository source identifies r10 | PASS | Raw-source retrieval |
+| Safari update prompt and activation | PASS | Owner screenshot and confirmation |
+| Home Screen launch and persistence | PASS | Owner confirmation |
+| Offline launch and persistence | PASS | Owner confirmation |
+| Test-entry cleanup | PASS | Owner confirmation |
+| Totals and data integrity | PASS | Owner confirmation |
+| Post-verification backup | PASS | Owner confirmation |
+| Owner promotion approval | PASS | Explicit owner confirmation |
+
+The external record `MDCA-GATE-C-RESULT-v2.0.8-r10-FINAL.md` is the controlling Gate C evidence artifact and is intentionally excluded from the 10-file release root.
+
+## Candidate-to-Verified Changes
+
+### Documentation changed
+
+- release status changed from Release candidate to Verified production release;
+- active verified production baseline changed from r6 to r10;
+- Gate C and owner approval recorded;
+- deployment and recovery language changed from pending to completed;
+- verified package identity added.
+
+### Operational files preserved byte-for-byte
+
+- `index.html`;
 - `manifest.json`;
+- `service-worker.js`;
 - `icon.png`;
 - `apple-touch-icon.png`;
 - `icon-192.png`;
 - `icon-512.png`.
 
-Except for required release-identity replacements, application logic in `index.html` is byte-for-byte inherited from r9.
-
-## Package Contents
+## Verified Package Contents
 
 Exactly 10 flat root-level files:
 
@@ -90,63 +136,25 @@ Exactly 10 flat root-level files:
 9. `icon-192.png`
 10. `icon-512.png`
 
-No folder, prior-version document, test fixture, development checklist, or redundant release record is included.
+No folder, prior-version document, test fixture, checklist, evidence file, or redundant release record is included.
 
-## Automated Verification Results
+## Production Status
 
-The exact final r10 archive passed:
+v2.0.8-r10 is the active verified production baseline.
 
-### Import suite
+The previous verified production baseline is v2.0.8-r6. The designated rollback baseline remains v2.0.7-r2.
 
-- 10 of 10 tests;
-- 91 of 91 observations;
-- IV-01 through IV-07;
-- exact import counts, impossible-date rejection, malformed-file recovery, unsupported-structure recovery, transactional rollback, and file-read failure recovery.
+The deployment commit identifier is **UNVERIFIED** because it was not supplied. All other promotion claims above are limited to recorded automated evidence, live-source retrieval, and owner-confirmed device observations.
 
-### Remaining Gate B logic suite
+## Recovery
 
-- 11 of 11 tests;
-- 118 of 118 observations;
-- PV-01 through PV-03;
-- EV-01 through EV-03;
-- DV-01 through DV-03;
-- GR-01 and GR-02.
+If a future release introduces a Blocking regression:
 
-### Static controls
-
-- exact flat 10-file package;
-- byte-identical README files;
-- JavaScript syntax PASS;
-- r10 operational identities PASS;
-- r9 logic retained except required release-identity replacements;
-- manifest and four icons preserved byte-for-byte;
-- resolved r6 provenance recorded without a stale current-state conflict.
-
-The external evidence bundle records the final candidate checksum and individual observations. No PASS from another candidate checksum is reused.
-
-## Controlled Deployment Gate
-
-The candidate is authorized only for controlled repository deployment. Production promotion still requires:
-
-1. export and checksum a current production-data backup;
-2. replace the repository root with the exact r10 10-file state;
-3. verify normal and cache-buster URLs serve r10;
-4. verify update-from-r6 behavior and exactly one activation reload;
-5. verify Safari browser and iOS/iPadOS Home Screen workflows;
-6. verify offline launch and persistence;
-7. verify production data remains intact;
-8. obtain owner approval;
-9. create `MDCA-v2.0.8-r10-VERIFIED.zip` from the verified deployed state.
-
-## Rollback
-
-If a Blocking deployment or runtime check fails:
-
-1. stop promotion;
+1. export and preserve the current production data when possible;
 2. preserve failure evidence;
-3. restore the canonical r6 10-file state from `MDCA-v2.0.8-r6-VERIFIED.zip`;
-4. verify visible r6 identity and existing data;
-5. retain v2.0.7-r2 as the designated rollback baseline;
-6. create a new revision for any additional correction.
+3. restore an approved known-good flat 10-file release;
+4. verify visible release identity and existing data;
+5. retain the immutable r10 verified archive and checksum;
+6. perform additional corrections under a new revision or version.
 
-Do not modify or silently replace the verified r6 archive or any already tested candidate.
+Do not modify or silently replace the r10 release-candidate archive, r10 verified archive, or prior verified archives.
