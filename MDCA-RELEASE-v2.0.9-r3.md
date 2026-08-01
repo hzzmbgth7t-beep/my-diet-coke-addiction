@@ -8,8 +8,11 @@
 **Promotion timestamp:** 2026-08-01T08:45:00-05:00  
 **Tested RC:** `MDCA-v2.0.9-r3-RC.zip`  
 **Tested RC SHA-256:** `c65910f3307d69a8a8f6c087cf66c9813c5748e45dce2c1ce697892349e0ed69`  
-**Verified archive:** `MDCA-v2.0.9-r3-VERIFIED.zip`  
-**Verified archive SHA-256:** Recorded externally in the matching `.sha256` file
+**Canonical verified archive:** `MDCA-v2.0.9-r3-VERIFIED-DOCFIX1.zip`  
+**Canonical archive SHA-256:** Recorded externally in the matching `.sha256` file  
+**Superseded archive:** `MDCA-v2.0.9-r3-VERIFIED.zip`  
+**Superseded archive SHA-256:** `6cc68ec6ae5356634b96e8c8510820f64f33300fe76ef64a2491e2bcd72a01f3`  
+**Documentation correction:** `DOCFIX1` at 2026-08-01T13:06:00-05:00
 
 ## Promotion Decision
 
@@ -19,6 +22,19 @@
 The owner reported that all Safari, Home Screen, unlimited-beverage,
 navigation, import/export, data-integrity, and offline tests completed
 successfully. Promotion was explicitly approved on 2026-08-01T08:45:00-05:00.
+
+## Documentation Correction
+
+`DOCFIX1` corrects a stale post-promotion paragraph that instructed
+the owner to perform a repository upload which had already been completed.
+
+This is a documentation-only correction. No runtime file, asset, release
+identity, verification result, baseline designation, or rollback designation
+changed.
+
+The original verified archive is superseded only as the canonical
+documentation package. Its seven operational and asset files remain the
+verified runtime files.
 
 ## Production Changes
 
@@ -69,10 +85,11 @@ remain byte-for-byte identical to the tested RC.
 
 v2.0.9-r1 and v2.0.9-r2 remain rejected candidates.
 
-## Repository Finalization
+## Repository Status
 
-The repository currently contains the tested r3 operational release with
-candidate-status documentation. Upload the exact 10 files from the repository
-sync package to replace those documents with verified-production records.
+The verified-production repository finalization upload was completed before
+this documentation correction.
 
-No operational code or asset change is introduced by that final sync.
+Upload of the corrected documentation package replaces the stale release
+record only. The supplied 10-file sync root preserves every operational file
+and asset byte-for-byte.

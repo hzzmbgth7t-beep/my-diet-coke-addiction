@@ -7,11 +7,15 @@
 **Immediate rollback baseline:** `v2.0.8-r10-VERIFIED`  
 **Previous verified archive:** `MDCA-v2.0.8-r10-VERIFIED.zip`  
 **Previous verified archive SHA-256:** `6e67e03b80e02658c2a6f33ec720146031e49a2f9110745a82e9b45dd6602144`  
-**Verified archive:** `MDCA-v2.0.9-r3-VERIFIED.zip`  
-**Verified archive SHA-256:** Recorded externally in `MDCA-v2.0.9-r3-VERIFIED.zip.sha256`  
+**Canonical verified archive:** `MDCA-v2.0.9-r3-VERIFIED-DOCFIX1.zip`  
+**Canonical archive SHA-256:** Recorded externally in `MDCA-v2.0.9-r3-VERIFIED-DOCFIX1.zip.sha256`  
+**Superseded archive:** `MDCA-v2.0.9-r3-VERIFIED.zip`  
+**Superseded archive SHA-256:** `6cc68ec6ae5356634b96e8c8510820f64f33300fe76ef64a2491e2bcd72a01f3`  
+**Supersession reason:** Documentation-only correction; runtime verification remains valid  
 **Tested release candidate:** `MDCA-v2.0.9-r3-RC.zip`  
 **Tested candidate SHA-256:** `c65910f3307d69a8a8f6c087cf66c9813c5748e45dce2c1ce697892349e0ed69`  
-**Promotion timestamp:** 2026-08-01T08:45:00-05:00
+**Promotion timestamp:** 2026-08-01T08:45:00-05:00  
+**Documentation correction:** `DOCFIX1` at 2026-08-01T13:06:00-05:00
 
 ## URLs
 
@@ -20,6 +24,19 @@
 **Live application:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/
 
 **Verified-release URL:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?v=2.0.9-r3
+
+## Documentation Correction
+
+`DOCFIX1` removes stale repository-finalization instructions from the
+release record after that upload had already been completed.
+
+This correction changes documentation only. The tested runtime, release
+identity, Gate C result, owner approval, active baseline, and rollback
+baseline are unchanged.
+
+The original `MDCA-v2.0.9-r3-VERIFIED.zip` archive is superseded as a
+canonical documentation artifact. It is not rejected as a tested runtime
+artifact.
 
 ## Verified Release Scope
 
@@ -109,8 +126,10 @@ The verified archive contains exactly 10 flat root files:
 
 `README.md` and `MDCA-README-v2.0.9-r3.md` are byte-for-byte identical.
 
-Only the three documentation files changed during promotion. The operational
-files and assets are byte-for-byte identical to the tested r3 RC.
+Only the three documentation files changed during promotion and this
+documentation correction. The seven operational and asset files are
+byte-for-byte identical to both the tested r3 RC and the superseded verified
+archive.
 
 ## Recovery
 
