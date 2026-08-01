@@ -66,6 +66,30 @@ input[type=file]{font-size:14px;padding:11px}
 #homePage .home-action-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 #homePage .beverage-grid-empty{grid-column:1/-1}
 #settingsPage .settings-card .custom-btn:last-child{margin-bottom:0}
+#entryPage .entry-header-row{position:relative;min-height:42px;display:flex;align-items:center;margin-bottom:14px}
+#entryPage .entry-header-row .back-btn{margin:0;position:relative;z-index:1}
+#entryPage .entry-header-row h1{position:absolute;left:50%;transform:translateX(-50%);margin:0;font-size:24px;white-space:nowrap}
+#entryPage .entry-summary{grid-template-columns:repeat(3,1fr)}
+#entryPage .entry-summary>.summary-box,#entryPage .entry-summary>.mg-card{min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#entryPage .entry-summary .entry-stat-label{display:block;font-size:16px;font-weight:800;line-height:1.15}
+#entryPage .entry-summary .entry-stat-value{display:block;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);white-space:nowrap}
+#entryPage .entry-summary .summary-box .entry-stat-label{color:var(--red)}
+#entryPage .entry-summary .summary-box .entry-stat-value,#entryPage .entry-summary .mg-card .entry-stat-value,#entryPage .entry-summary .entry-stat-value span{color:var(--dark)}
+#entryPage .entry-field-grid{display:grid;gap:8px;margin-bottom:14px}
+#entryPage .entry-field-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+#entryPage .entry-field-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+#entryPage .entry-field{min-width:0}
+#entryPage .entry-field label{font-size:13px;text-align:center;margin-bottom:6px}
+#entryPage .entry-field input{min-width:0;height:46px;margin-bottom:0;padding:11px 7px;font-size:16px}
+#entryPage .entry-field input[type=date],#entryPage .entry-field input[type=time]{text-align:center}
+#entryPage .input-with-suffix{position:relative}
+#entryPage .input-with-suffix input{padding-right:36px}
+#entryPage .input-with-suffix .input-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none}
+#entryPage .entry-toggle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
+#entryPage .entry-toggle-field{min-width:0}
+#entryPage .entry-toggle-field label{font-size:12px;text-align:center;margin-bottom:6px}
+#entryPage .entry-toggle-field .toggle{margin-bottom:0;border-radius:16px}
+#entryPage .entry-toggle-field .toggle button{min-width:0;padding:10px 0;border-radius:14px;font-size:13px}
 </style>
 </head>
 <body>
@@ -82,7 +106,7 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.9-r3</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.10-r1</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
 <div class="card"><div class="summary home-summary">
 <div class="summary-box"><strong class="home-stat-label">Carbonated</strong><span class="home-stat-value" id="homeCarbOz">0</span></div>
@@ -99,21 +123,29 @@ input[type=file]{font-size:14px;padding:11px}
 </div></div>
 
 <div id="entryPage" class="page"><div class="app">
-<button class="back-btn" id="backToHomeFromEntry">← Back</button><header><h1 id="entryTitle">Log Beverage</h1><div class="subtitle" id="entrySubtitle">Quick Entry</div></header>
+<header class="entry-header-row"><button class="back-btn" id="backToHomeFromEntry">← Back</button><h1 id="entryTitle">Log Beverage</h1></header>
 <div id="changesSavedNotice" class="card notice">✓ Changes Saved</div>
-<div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary">
-<div class="summary-box"><strong id="dateCarbOz">0</strong><span>carb oz</span></div><div class="summary-box"><strong id="dateEntries">0</strong><span>entries</span></div><div class="summary-box"><strong id="dateCaf">0</strong><span>caf</span></div><div class="summary-box"><strong id="dateCafOz">0</strong><span>caf oz</span></div>
-</div><div class="mg-card"><strong>Caffeine</strong><div><span id="dateMg">0</span> mg</div></div></div>
+<div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary entry-summary">
+<div class="summary-box"><strong class="entry-stat-label">Carbonated</strong><div class="entry-stat-value"><span id="dateCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="entry-stat-label">Caffeinated</strong><div class="entry-stat-value"><span id="dateCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="entry-stat-label">Caffeine</strong><div class="entry-stat-value"><span id="dateMg">0</span> mg</div></div>
+</div></div>
 <div class="card">
-<label for="entryDate">Entry Date</label><input id="entryDate" type="date" required>
-<label for="entryTime">Entry Time</label><input id="entryTime" type="time" required>
-<label for="entryName">Drink Name</label><input id="entryName" placeholder="Enter drink name">
+<div class="entry-field-grid entry-field-grid-three">
+<div class="entry-field"><label for="entryDate">Date</label><input id="entryDate" type="date" required></div>
+<div class="entry-field"><label for="entryTime">Time</label><input id="entryTime" type="time" required></div>
+<div class="entry-field"><label for="manualOz">Ounces</label><input id="manualOz" type="number" placeholder="Amount" min="0" step="0.1"></div>
+</div>
+<div class="entry-field-grid entry-field-grid-two">
+<div class="entry-field"><label for="entryName">Name</label><input id="entryName" placeholder="Enter name"></div>
+<div class="entry-field"><label for="entryCaffeineMg">Caffeine</label><div class="input-with-suffix"><input id="entryCaffeineMg" type="number" placeholder="Enter" min="0" step="0.01"><span class="input-suffix" aria-hidden="true">mg</span></div></div>
+</div>
 <label>Ounces</label><div class="button-row"><button class="oz-btn" data-oz="8">8 oz</button><button class="oz-btn" data-oz="12">12 oz</button><button class="oz-btn" data-oz="16">16 oz</button><button class="oz-btn" data-oz="20">20 oz</button></div>
-<label for="manualOz">Manual Ounces</label><input id="manualOz" type="number" placeholder="Or type a number" min="0" step="0.1">
-<label>Caffeinated?</label><div class="toggle" id="entryCaffeinatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
-<label>Carbonated?</label><div class="toggle" id="entryCarbonatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
-<label>Clear?</label><div class="toggle" id="entryClearToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
-<label for="entryCaffeineMg">Caffeine (mg)</label><input id="entryCaffeineMg" type="number" placeholder="Enter mg" min="0" step="0.01"><div class="hint">Auto-calculated from beverage default. You can edit it.</div>
+<div class="entry-toggle-grid">
+<div class="entry-toggle-field"><label>Carbonated</label><div class="toggle" id="entryCarbonatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+<div class="entry-toggle-field"><label>Caffeinated</label><div class="toggle" id="entryCaffeinatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+<div class="entry-toggle-field"><label>Clear</label><div class="toggle" id="entryClearToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+</div>
 <button class="primary" id="saveEntryBtn">Save Entry</button><button class="secondary" id="cancelEntryEditBtn" style="display:none;">Cancel Edit</button>
 </div>
 <div class="card"><div class="section-title"><span id="dateEntryListTitle">Entries for Selected Date</span><span id="dateEntryCount">(0)</span></div><button class="collapse-btn" id="toggleDateEntries">▶ Show Entries</button><div id="dateEntriesList" style="display:none;"></div></div>
@@ -220,7 +252,7 @@ activeBeverage=null;editingEntryId=null;editingOriginalTimestamp=null;editingOri
 el("entryDate").value=localDateString(new Date());el("entryTime").value=timeStringFromDate(new Date());el("entryName").value="";el("manualOz").value="";
 document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));
-el("entryCaffeineMg").value="";el("entryTitle").textContent="Log Beverage";el("entrySubtitle").textContent="Quick Entry";el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"
+el("entryCaffeineMg").value="";el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"
 }
 function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=totals.carbOz;el("homeCafOz").textContent=totals.cafOz;el("homeMg").textContent=totals.mg;renderBeverageGrid()}
 function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
@@ -239,7 +271,6 @@ setToggle("entryCaffeinatedToggle",existing?existing.caffeinated:(bev?bev.caffei
 setToggle("entryCarbonatedToggle",existing?existing.carbonated:(bev?bev.carbonated:""));
 setToggle("entryClearToggle",existing?existing.clear:(bev?bev.clear:""));
 el("entryCaffeineMg").value=existing?round2(existing.caffeineMg):(bev?calculateScaledCaffeine(bev,oz):"");
-el("entryTitle").textContent=existing?"Edit Entry":(bev?bev.name:"Quick Entry");el("entrySubtitle").textContent=bev?"Pre-populated from saved beverage":"One-time entry";
 el("saveEntryBtn").textContent=existing?"Save Changes":"Save Entry";el("cancelEntryEditBtn").style.display=existing?"block":"none";
 entryDateEntriesExpanded=false;renderSelectedDatePanel();showPage("entryPage")
 }
@@ -268,7 +299,7 @@ const nextEntries=entries.filter(e=>e.id!==id);
 if(!commitState(nextEntries,beverages))return;
 renderHome();renderSelectedDatePanel();renderReport();showStatus("Entry deleted.","success")
 }window.editEntry=editEntry;window.copyEntry=copyEntry;window.deleteEntry=deleteEntry;
-function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=totals.carbOz;el("dateEntries").textContent=totals.entries;el("dateCaf").textContent=totals.caf;el("dateCafOz").textContent=totals.cafOz;el("dateMg").textContent=totals.mg;el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
+function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=Math.round(totals.carbOz);el("dateCafOz").textContent=Math.round(totals.cafOz);el("dateMg").textContent=Math.round(totals.mg);el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
 function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg||0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div></div><div class="entry-actions"><button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button><button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button><button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button></div></div></div>`).join("")}
 function openBeverageEditor(bev){currentPageBeforeBeverageEdit=document.querySelector(".page.active").id||"homePage";editingBeverageId=bev?bev.id:null;pendingBeverageImage=bev?(bev.image||""):"";el("bevEditTitle").textContent=bev?"Edit Beverage":"Add Beverage";el("bevName").value=bev?bev.name:"";el("bevInitials").value=bev?(bev.initials||""):"";el("bevDefaultOz").value=bev?(bev.defaultOz||""):"";el("bevCaffeineMg").value=bev?(bev.caffeineMg||""):"";setToggle("bevCaffeinatedToggle",bev?bev.caffeinated:"");setToggle("bevCarbonatedToggle",bev?bev.carbonated:"");setToggle("bevClearToggle",bev?bev.clear:"");el("bevImage").value="";renderBeverageImagePreview();el("deleteBeverageBtn").style.display=bev?"block":"none";el("historicalUpdateOptions").style.display=bev?"block":"none";const future=document.querySelector('input[name="historicalUpdate"][value="future"]');if(future)future.checked=true;renderBeverageStats(bev);showPage("beverageEditPage")}function renderBeverageImagePreview(){el("bevImagePreview").innerHTML=pendingBeverageImage?`<img src="${pendingBeverageImage}" alt="">`:"No Image"}function saveBeverage(){
 const name=el("bevName").value.trim(),defaultOz=Number(el("bevDefaultOz").value||0),caffeine=Number(el("bevCaffeineMg").value||0);
@@ -309,8 +340,8 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.9",releaseRevision:"r3",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
-url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.9-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.10",releaseRevision:"r1",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.10-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
 }catch(error){showStatus("Backup could not be created. Your saved data was not changed. Please retry.","error")}
@@ -375,7 +406,7 @@ renderHome();openReport("yesterday");showPage("homePage");
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.9-r3";
+  const reloadKey = "MDCA-sw-reload-v2.0.10-r1";
   let registration = null;
   let refreshing = false;
 
