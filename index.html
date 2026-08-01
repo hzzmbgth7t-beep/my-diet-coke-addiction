@@ -56,11 +56,15 @@ input[type=file]{font-size:14px;padding:11px}
 .status-toast.warning{display:block;background:#fff7ed;border:1px solid #edc58e;color:#8a4a00}
 .update-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:999;width:min(92vw,500px);background:#fff;border:2px solid var(--blue);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.22);display:none}
 .update-banner.visible{display:block}.update-actions{display:flex;gap:8px;margin-top:10px}.update-actions button{flex:1;padding:11px;border:0;border-radius:12px;font-weight:800}.update-now{background:var(--blue);color:#fff}.update-later{background:#ececec;color:var(--dark)}
-.home-header{margin-bottom:14px}.home-header .logo{display:block;margin:0 auto}.home-version{margin-top:8px;font-size:13px;font-weight:800;color:var(--muted);line-height:1}
-.home-today-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.home-stat-card,.home-caffeine-card{min-height:94px;border-radius:16px;padding:10px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}.home-stat-card{background:#fafafa;border:1px solid var(--border)}.home-stat-card strong{display:block;font-size:20px;color:var(--red);line-height:1.15}.home-stat-card span{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.1}.home-caffeine-card{background:#fff7ed;border:1px solid #f0d1aa}.home-caffeine-card strong{font-size:12px;color:var(--orange);line-height:1.1}.home-caffeine-value{margin-top:6px;color:var(--dark);font-size:13px;white-space:nowrap;line-height:1.15}.home-caffeine-value span{font-size:20px;font-weight:800;color:var(--orange)}
-.home-action-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}.home-action-btn{min-height:94px;margin:0;padding:14px 10px;display:flex;align-items:center;justify-content:center;text-align:center}.beverage-grid-empty{grid-column:1/-1}.settings-card .custom-btn:last-child{margin-bottom:0}
-@media (min-width:700px){body{padding-left:24px;padding-right:24px}.app{max-width:620px}.beverage-grid{grid-template-columns:repeat(3,1fr)}}
-@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.logo{box-shadow:0 4px 12px rgba(0,0,0,.16)}}
+#homePage .home-version{margin-top:6px}
+#homePage .home-summary{grid-template-columns:repeat(3,1fr)}
+#homePage .home-summary>.summary-box,#homePage .home-summary>.mg-card{min-height:92px}
+#homePage .home-summary>.mg-card{margin-top:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#homePage .home-summary>.mg-card div{white-space:nowrap}
+#homePage .home-action-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#homePage .home-action-row .report-main{min-height:92px}
+#homePage .beverage-grid-empty{grid-column:1/-1}
+#settingsPage .settings-card .custom-btn:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -77,20 +81,20 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header class="home-header"><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="home-version">v2.0.9-r1</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.9-r2</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
-<div class="card"><div class="section-title">Today</div><div class="home-today-grid">
-<div class="home-stat-card"><strong id="homeCarbOz">0</strong><span>Carbonated</span></div>
-<div class="home-stat-card"><strong id="homeCafOz">0</strong><span>Caffeinated</span></div>
-<div class="home-caffeine-card"><strong>Caffeine</strong><div class="home-caffeine-value"><span id="homeMg">0</span> / 400 mg</div></div>
+<div class="card"><div class="section-title">Today</div><div class="summary home-summary">
+<div class="summary-box"><strong id="homeCarbOz">0</strong><span>Carbonated</span></div>
+<div class="summary-box"><strong id="homeCafOz">0</strong><span>Caffeinated</span></div>
+<div class="mg-card"><strong>Caffeine</strong><div><span id="homeMg">0</span> / 400 mg</div></div>
 </div></div>
 <div class="card"><div class="section-title">Beverages</div><div id="beverageGrid" class="beverage-grid"></div><div class="hint">Tap a beverage to log it. Long-press a saved beverage to edit it.</div></div>
-<div class="home-action-row"><button class="report-main home-action-btn" id="openSettingsBtn" type="button">Settings</button><button class="report-main home-action-btn" id="viewReportsBtn" type="button">Reports</button></div>
+<div class="home-action-row"><button class="report-main" id="openSettingsBtn" type="button">Settings</button><button class="report-main" id="viewReportsBtn" type="button">Reports</button></div>
 </div></div>
 
 <div id="settingsPage" class="page"><div class="app">
 <button class="back-btn" id="backToHomeFromSettings">← Back</button><header><h1>Settings</h1><div class="subtitle">Beverages, Quick Entry, and data tools</div></header>
-<div class="card settings-card"><button class="custom-btn" id="manageBeveragesBtn" type="button"><strong>Manage Beverages</strong><span>Add a beverage button</span></button><button class="custom-btn" id="quickEntryBtn" type="button"><strong>Quick Entry</strong><span>Log a drink without a saved beverage</span></button><button class="custom-btn" id="openDataToolsFromSettingsBtn" type="button"><strong>Data Tools</strong><span>Export or import your backup</span></button></div>
+<div class="card settings-card"><button class="custom-btn" id="manageBeveragesBtn" type="button"><strong>Manage Beverages</strong><span>Add a saved beverage button</span></button><button class="custom-btn" id="quickEntryBtn" type="button"><strong>Quick Entry</strong><span>Log a drink without a saved beverage</span></button><button class="custom-btn" id="openDataToolsFromSettingsBtn" type="button"><strong>Data Tools</strong><span>Export or import your backup</span></button></div>
 </div></div>
 
 <div id="entryPage" class="page"><div class="app">
@@ -281,7 +285,7 @@ renderHome();showPage(currentPageBeforeBeverageEdit||"homePage");showStatus("Bev
 if(!editingBeverageId||!confirm("Delete this beverage button? Existing logged entries will stay."))return;
 const nextBeverages=beverages.filter(b=>b.id!==editingBeverageId);
 if(!commitState(entries,nextBeverages))return;
-renderHome();showPage("homePage");showStatus("Beverage deleted. Existing entries were preserved.","success")
+renderHome();showPage(currentPageBeforeBeverageEdit||"homePage");showStatus("Beverage deleted. Existing entries were preserved.","success")
 }function renderBeverageStats(bev){if(!bev){el("beverageStatsCard").style.display="none";return}const list=entries.filter(e=>e.beverageId===bev.id||e.name===bev.name),totals=calculateTotals(list),sorted=[...list].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));el("beverageStatsCard").style.display="block";el("beverageStats").innerHTML=`<div class="breakdown-row"><strong>Total Entries</strong><span>${totals.entries}</span></div><div class="breakdown-row"><strong>Total Ounces</strong><span>${totals.oz} oz</span></div><div class="breakdown-row"><strong>Total Caffeine</strong><span>${totals.mg} mg</span></div><div class="breakdown-row"><strong>First Logged</strong><span>${sorted.length?new Date(sorted[0].createdAt).toLocaleDateString():"Never"}</span></div>`}
 function getStartOfWeekSunday(d){return getStartOfISOWeek(d)}
 function getStartOfISOWeek(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}function getEndOfWeekSunday(d){const s=getStartOfISOWeek(d),e=new Date(s);e.setDate(s.getDate()+6);e.setHours(23,59,59,999);return e}function getPreviousWeekRange(){const current=getStartOfISOWeek(new Date()),start=new Date(current);start.setDate(current.getDate()-7);const end=new Date(start);end.setDate(start.getDate()+6);end.setHours(23,59,59,999);return[start,end]}function getPreviousMonthRange(){const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-1,1),end=new Date(now.getFullYear(),now.getMonth(),0,23,59,59,999);return[start,end]}function getWeekNumber(date){
@@ -304,7 +308,7 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.9",releaseRevision:"r1",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.9",releaseRevision:"r2",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
 url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.9-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
@@ -370,7 +374,7 @@ renderHome();openReport("yesterday");showPage("homePage");
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.9-r1";
+  const reloadKey = "MDCA-sw-reload-v2.0.9-r2";
   let registration = null;
   let refreshing = false;
 
