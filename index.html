@@ -119,7 +119,7 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.11-r3</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.12-r1</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
 <div class="card"><div class="summary daily-summary home-summary">
 <div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="homeCarbOz">0</span> oz</div></div>
@@ -131,7 +131,7 @@ input[type=file]{font-size:14px;padding:11px}
 </div></div>
 
 <div id="settingsPage" class="page"><div class="app">
-<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Settings</h1><div class="page-nav-version">v2.0.11-r3</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Settings</h1><div class="page-nav-version">v2.0.12-r1</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
 <div class="card settings-card"><button class="custom-btn" id="manageBeveragesBtn" type="button"><strong>Manage Beverages</strong><span>Add a saved beverage button</span></button><button class="custom-btn" id="openDataToolsFromSettingsBtn" type="button"><strong>Data Tools</strong><span>Export or import your backup</span></button></div>
 </div></div>
 
@@ -183,6 +183,11 @@ input[type=file]{font-size:14px;padding:11px}
 
 <div id="reportsHomePage" class="page"><div class="app">
 <header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Reports</h1><div class="page-nav-subtitle">Quick totals and historical entries</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card reports-yesterday-summary-card"><div class="section-title">Yesterday’s Totals</div><div class="summary daily-summary reports-yesterday-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="reportsYesterdayCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="reportsYesterdayCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="reportsYesterdayMg">0</span> mg</div></div>
+</div></div>
 <div class="card"><div class="section-title">Quick Reports</div><div class="quick-grid"><button class="quick-btn" data-report="yesterday"><strong>Yesterday</strong><span>Day total for the previous day</span></button><button class="quick-btn" data-report="lastWeek"><strong>Last Week</strong><span>Totals for the previous week</span></button><button class="quick-btn" data-report="lastMonth"><strong>Last Month</strong><span>Totals for the previous month</span></button></div></div>
 <div class="card"><div class="section-title">Custom Reports</div><button class="custom-btn" data-report="customDay"><strong>Custom Day</strong><span>Pick any specific date</span></button><button class="custom-btn" data-report="customWeek"><strong>Custom Week</strong><span>Pick any week</span></button><button class="custom-btn" data-report="customMonth"><strong>Custom Month</strong><span>Pick any month</span></button></div>
 </div></div>
@@ -248,7 +253,7 @@ function setLastBackupSafely(value){
 try{localStorage.setItem(LAST_BACKUP_KEY,value);return true}catch(error){showStatus("Backup download started, but MDCA could not store the Last Backup time.","warning");return false}
 }
 function currentPageId(){return document.querySelector(".page.active")?.id||navigationStack[navigationStack.length-1]||"homePage"}
-function renderPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));el(id).classList.add("active");const showHome=id!=="homePage"&&navigationStack.length>2;document.querySelectorAll("[data-nav-home]").forEach(button=>{button.hidden=!showHome});window.scrollTo({top:0,behavior:"smooth"})}
+function renderPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));el(id).classList.add("active");const showHome=id!=="homePage"&&navigationStack.length>2;document.querySelectorAll("[data-nav-home]").forEach(button=>{button.hidden=!showHome});if(id==="reportsHomePage")renderReportsHome();window.scrollTo({top:0,behavior:"smooth"})}
 function navigateTo(id){if(currentPageId()!==id)navigationStack.push(id);renderPage(id)}
 function captureEntryFormState(){return JSON.stringify({date:el("entryDate").value,time:el("entryTime").value,name:el("entryName").value,manualOz:el("manualOz").value,selectedOz,caffeine:el("entryCaffeineMg").value,carbonated:getToggle("entryCarbonatedToggle"),caffeinated:getToggle("entryCaffeinatedToggle"),clear:getToggle("entryClearToggle")})}
 function captureBeverageFormState(){return JSON.stringify({name:el("bevName").value,initials:el("bevInitials").value,defaultOz:el("bevDefaultOz").value,caffeine:el("bevCaffeineMg").value,image:pendingBeverageImage,carbonated:getToggle("bevCarbonatedToggle"),caffeinated:getToggle("bevCaffeinatedToggle"),clear:getToggle("bevClearToggle"),historical:document.querySelector('input[name="historicalUpdate"]:checked')?.value||""})}
@@ -285,7 +290,7 @@ document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));
 el("entryCaffeineMg").value="";syncCaffeineFieldWidth();el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none";entryFormSnapshot=""
 }
-function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=Math.round(totals.carbOz);el("homeCafOz").textContent=Math.round(totals.cafOz);el("homeMg").textContent=Math.round(totals.mg);renderBeverageGrid()}
+function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=Math.round(totals.carbOz);el("homeCafOz").textContent=Math.round(totals.cafOz);el("homeMg").textContent=Math.round(totals.mg);renderBeverageGrid()}function renderReportsHome(){const totals=calculateTotals(entriesForDate(localDateString(getYesterday())));el("reportsYesterdayCarbOz").textContent=Math.round(totals.carbOz);el("reportsYesterdayCafOz").textContent=Math.round(totals.cafOz);el("reportsYesterdayMg").textContent=Math.round(totals.mg)}
 function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
 function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
 function openEntry(bev,existing=null){
@@ -315,7 +320,7 @@ if(!createdAt){showStatus("Please enter a valid Entry Date and Entry Time.","err
 const selectedDate=el("entryDate").value,entry={id:editingEntryId||Date.now(),beverageId:activeBeverage?activeBeverage.id:(existing?existing.beverageId:null),name,ounces:round2(oz),caffeinated:getToggle("entryCaffeinatedToggle")||"No",carbonated:getToggle("entryCarbonatedToggle")||"No",clear:getToggle("entryClearToggle")||"No",caffeineMg:round2(caffeine),createdAt};
 const nextEntries=existing?entries.map(e=>e.id===entry.id?entry:e):[...entries,entry];
 if(!commitState(nextEntries,beverages))return;
-renderHome();renderReport();
+renderHome();renderReportsHome();renderReport();
 if(existing){resetEntryForm();el("entryDate").value=selectedDate;syncEntryDateTimeDisplays();entryDateEntriesExpanded=true;renderSelectedDatePanel();markEntryFormClean();renderPage("entryPage");showNotice("changesSavedNotice")}
 else{resetEntryForm();renderSelectedDatePanel();navigateHome(true);setTimeout(()=>showNotice("saveCompleteNotice"),100)}
 }
@@ -323,12 +328,12 @@ function copyEntry(id){
 const entry=entries.find(e=>e.id===id);if(!entry)return;
 const copied={...entry,id:Date.now(),createdAt:new Date().toISOString()},nextEntries=[...entries,copied];
 if(!commitState(nextEntries,beverages))return;
-renderHome();renderReport();entryDateEntriesExpanded=true;openEntry(beverages.find(b=>b.id===copied.beverageId)||null,copied)
+renderHome();renderReportsHome();renderReport();entryDateEntriesExpanded=true;openEntry(beverages.find(b=>b.id===copied.beverageId)||null,copied)
 }function editEntry(id){const entry=entries.find(e=>e.id===id);if(entry)openEntry(beverages.find(b=>b.id===entry.beverageId)||null,entry)}function deleteEntry(id){
 if(!confirm("Delete this entry?"))return;
 const nextEntries=entries.filter(e=>e.id!==id);
 if(!commitState(nextEntries,beverages))return;
-renderHome();renderSelectedDatePanel();renderReport();showStatus("Entry deleted.","success")
+renderHome();renderReportsHome();renderSelectedDatePanel();renderReport();showStatus("Entry deleted.","success")
 }window.editEntry=editEntry;window.copyEntry=copyEntry;window.deleteEntry=deleteEntry;
 function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=Math.round(totals.carbOz);el("dateCafOz").textContent=Math.round(totals.cafOz);el("dateMg").textContent=Math.round(totals.mg);el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
 function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg||0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div></div><div class="entry-actions"><button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button><button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button><button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button></div></div></div>`).join("")}
@@ -375,8 +380,8 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.11",releaseRevision:"r3",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
-url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.11-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.12",releaseRevision:"r1",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.12-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
 }catch(error){showStatus("Backup could not be created. Your saved data was not changed. Please retry.","error")}
@@ -422,7 +427,7 @@ payload.entries.forEach((raw,index)=>{const checked=validateImportedEntry(raw,in
 const ids=new Set(beverages.map(b=>b.id)),nextBeverages=[...recovery.beverages];
 payload.beverages.forEach((raw,index)=>{const checked=validateImportedBeverage(raw,index);if(!checked.ok){rejected++;return}const b=checked.value;if(ids.has(b.id)){duplicates++;return}ids.add(b.id);nextBeverages.push(b);added++});
 if(!commitState(nextEntries,nextBeverages))return;
-renderHome();renderReport();updateDataToolsStatus();
+renderHome();renderReportsHome();renderReport();updateDataToolsStatus();
 showStatus(`Import complete: ${added} added, ${duplicates} duplicates skipped, ${rejected} rejected.`,rejected?"warning":"success",6500)
 }catch(error){showStatus(error instanceof SyntaxError?"This file is not valid JSON. Your data was not changed.":error.message||"Import failed. Your data was not changed.","error",6500)}
 finally{input.value=""}
@@ -434,14 +439,14 @@ document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",(
 el("viewReportsBtn").addEventListener("click",()=>navigateTo("reportsHomePage"));el("openSettingsBtn").addEventListener("click",()=>navigateTo("settingsPage"));el("quickEntryHomeBtn").addEventListener("click",()=>openEntry(null));document.querySelectorAll("[data-nav-back]").forEach(button=>button.addEventListener("click",()=>navigateBack()));document.querySelectorAll("[data-nav-home]").forEach(button=>button.addEventListener("click",()=>navigateHome()));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("openDataToolsFromSettingsBtn").addEventListener("click",()=>{updateDataToolsStatus();navigateTo("dataToolsPage")});el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
 window.__MDCA_TEST__={getRangeForWeekValue,getWeekNumber,isValidLocalDateTime,validateImportedEntry,parseImportPayload,persistState,showStatus};
 el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-renderHome();currentReportType="yesterday";renderReport();navigationStack=["homePage"];renderPage("homePage");
+renderHome();renderReportsHome();currentReportType="yesterday";renderReport();navigationStack=["homePage"];renderPage("homePage");
 </script>
 <script>
 "use strict";
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.11-r3";
+  const reloadKey = "MDCA-sw-reload-v2.0.12-r1";
   let registration = null;
   let refreshing = false;
 
