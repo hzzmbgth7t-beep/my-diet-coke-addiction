@@ -57,24 +57,19 @@ input[type=file]{font-size:14px;padding:11px}
 .update-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:999;width:min(92vw,500px);background:#fff;border:2px solid var(--blue);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.22);display:none}
 .update-banner.visible{display:block}.update-actions{display:flex;gap:8px;margin-top:10px}.update-actions button{flex:1;padding:11px;border:0;border-radius:12px;font-weight:800}.update-now{background:var(--blue);color:#fff}.update-later{background:#ececec;color:var(--dark)}
 #homePage .home-version{margin-top:6px}
-#homePage .home-summary{grid-template-columns:repeat(3,1fr)}
-#homePage .home-summary>.summary-box,#homePage .home-summary>.mg-card{min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#homePage .home-summary .home-stat-label{display:block;font-size:16px;font-weight:800;line-height:1.15}
-#homePage .home-summary .home-stat-value{display:block;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);white-space:nowrap}
-#homePage .home-summary .summary-box .home-stat-label{color:var(--red)}
-#homePage .home-summary .summary-box .home-stat-value,#homePage .home-summary .mg-card .home-stat-value,#homePage .home-summary .home-stat-value span{color:var(--dark)}
+.daily-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+.daily-summary>.summary-box,.daily-summary>.mg-card{min-width:0;min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.daily-summary .daily-stat-label{display:block;width:100%;font-size:clamp(13px,3.9vw,16px);font-weight:800;line-height:1.15;text-align:center;white-space:nowrap}
+.daily-summary .daily-stat-value{display:block;width:100%;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);text-align:center;white-space:nowrap}
+.daily-summary .daily-stat-value span{font:inherit;color:inherit}
+.daily-summary .summary-box .daily-stat-label{color:var(--red)}
+.daily-summary .mg-card .daily-stat-label{color:var(--orange)}
 #homePage .home-action-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 #homePage .beverage-grid-empty{grid-column:1/-1}
 #settingsPage .settings-card .custom-btn:last-child{margin-bottom:0}
 #entryPage .entry-header-row{position:relative;min-height:42px;display:flex;align-items:center;margin-bottom:14px}
 #entryPage .entry-header-row .back-btn{margin:0;position:relative;z-index:1}
 #entryPage .entry-header-row h1{position:absolute;left:50%;transform:translateX(-50%);margin:0;font-size:24px;white-space:nowrap}
-#entryPage .entry-summary{grid-template-columns:repeat(3,1fr)}
-#entryPage .entry-summary>.summary-box,#entryPage .entry-summary>.mg-card{min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#entryPage .entry-summary .entry-stat-label{display:block;font-size:16px;font-weight:800;line-height:1.15}
-#entryPage .entry-summary .entry-stat-value{display:block;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);white-space:nowrap}
-#entryPage .entry-summary .summary-box .entry-stat-label{color:var(--red)}
-#entryPage .entry-summary .summary-box .entry-stat-value,#entryPage .entry-summary .mg-card .entry-stat-value,#entryPage .entry-summary .entry-stat-value span{color:var(--dark)}
 #entryPage .entry-field-grid{display:grid;gap:8px;margin-bottom:14px}
 #entryPage .entry-field-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
 #entryPage .entry-field-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -110,12 +105,12 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.10-r2</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.10-r3</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
-<div class="card"><div class="summary home-summary">
-<div class="summary-box"><strong class="home-stat-label">Carbonated</strong><span class="home-stat-value" id="homeCarbOz">0</span></div>
-<div class="summary-box"><strong class="home-stat-label">Caffeinated</strong><span class="home-stat-value" id="homeCafOz">0</span></div>
-<div class="mg-card"><strong class="home-stat-label">Caffeine</strong><div class="home-stat-value"><span id="homeMg">0</span> / 400 mg</div></div>
+<div class="card"><div class="summary daily-summary home-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="homeCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="homeCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="homeMg">0</span> mg</div></div>
 </div></div>
 <div class="card"><div id="beverageGrid" class="beverage-grid"></div></div>
 <div class="home-action-row"><button class="report-main" id="openSettingsBtn" type="button">Settings</button><button class="report-main" id="viewReportsBtn" type="button">Reports</button></div>
@@ -129,10 +124,10 @@ input[type=file]{font-size:14px;padding:11px}
 <div id="entryPage" class="page"><div class="app">
 <header class="entry-header-row"><button class="back-btn" id="backToHomeFromEntry">← Back</button><h1 id="entryTitle">Log Beverage</h1></header>
 <div id="changesSavedNotice" class="card notice">✓ Changes Saved</div>
-<div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary entry-summary">
-<div class="summary-box"><strong class="entry-stat-label">Carbonated</strong><div class="entry-stat-value"><span id="dateCarbOz">0</span> oz</div></div>
-<div class="summary-box"><strong class="entry-stat-label">Caffeinated</strong><div class="entry-stat-value"><span id="dateCafOz">0</span> oz</div></div>
-<div class="mg-card"><strong class="entry-stat-label">Caffeine</strong><div class="entry-stat-value"><span id="dateMg">0</span> mg</div></div>
+<div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary daily-summary entry-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="dateCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="dateCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="dateMg">0</span> mg</div></div>
 </div></div>
 <div class="card">
 <div class="entry-field-grid entry-field-grid-three">
@@ -258,7 +253,7 @@ document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));
 el("entryCaffeineMg").value="";syncCaffeineFieldWidth();el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"
 }
-function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=totals.carbOz;el("homeCafOz").textContent=totals.cafOz;el("homeMg").textContent=totals.mg;renderBeverageGrid()}
+function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=Math.round(totals.carbOz);el("homeCafOz").textContent=Math.round(totals.cafOz);el("homeMg").textContent=Math.round(totals.mg);renderBeverageGrid()}
 function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
 function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
 function openEntry(bev,existing=null,returnPage=null){if(returnPage)currentPageBeforeEntry=returnPage;else if(!el("entryPage").classList.contains("active"))currentPageBeforeEntry="homePage";
@@ -344,7 +339,7 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.10",releaseRevision:"r2",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.10",releaseRevision:"r3",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
 url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.10-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
@@ -410,7 +405,7 @@ renderHome();openReport("yesterday");showPage("homePage");
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.10-r2";
+  const reloadKey = "MDCA-sw-reload-v2.0.10-r3";
   let registration = null;
   let refreshing = false;
 
