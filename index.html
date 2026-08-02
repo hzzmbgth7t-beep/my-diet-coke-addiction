@@ -78,13 +78,17 @@ input[type=file]{font-size:14px;padding:11px}
 #entryPage .entry-field-grid{display:grid;gap:8px;margin-bottom:14px}
 #entryPage .entry-field-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
 #entryPage .entry-field-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
-#entryPage .entry-field{min-width:0}
+#entryPage .entry-field{min-width:0;overflow:hidden}
 #entryPage .entry-field label{font-size:13px;text-align:center;margin-bottom:6px}
-#entryPage .entry-field input{min-width:0;height:46px;margin-bottom:0;padding:11px 7px;font-size:16px}
-#entryPage .entry-field input[type=date],#entryPage .entry-field input[type=time]{text-align:center}
-#entryPage .input-with-suffix{position:relative}
-#entryPage .input-with-suffix input{padding-right:36px}
-#entryPage .input-with-suffix .input-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none}
+#entryPage .entry-field>input{display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:10px 6px;font-size:16px;line-height:24px}
+#entryPage .entry-picker-shell{position:relative;width:100%;min-width:0;height:46px;overflow:hidden}
+#entryPage .entry-picker-shell .entry-display-input{display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:10px 4px;text-align:center;font-size:16px;line-height:24px;background:#fff}
+#entryPage .entry-picker-shell .entry-picker-input{position:absolute;inset:0;z-index:2;display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:0;border:0;border-radius:14px;opacity:0;cursor:pointer}
+#entryPage #manualOz,#entryPage #entryName{text-align:center}
+#entryPage .inline-unit-input{width:100%;min-width:0;height:46px;border:1px solid var(--border);border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden}
+#entryPage .inline-unit-input input{flex:0 0 auto;width:3ch;min-width:2ch;max-width:12ch;height:auto;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;text-align:right;font-size:16px;line-height:24px;-moz-appearance:textfield}
+#entryPage .inline-unit-input input::-webkit-inner-spin-button,#entryPage .inline-unit-input input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#entryPage .inline-unit-input .inline-unit{font-size:16px;line-height:24px;color:var(--dark);white-space:nowrap}
 #entryPage .entry-toggle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
 #entryPage .entry-toggle-field{min-width:0}
 #entryPage .entry-toggle-field label{font-size:12px;text-align:center;margin-bottom:6px}
@@ -106,7 +110,7 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.10-r1</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.10-r2</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
 <div class="card"><div class="summary home-summary">
 <div class="summary-box"><strong class="home-stat-label">Carbonated</strong><span class="home-stat-value" id="homeCarbOz">0</span></div>
@@ -132,13 +136,13 @@ input[type=file]{font-size:14px;padding:11px}
 </div></div>
 <div class="card">
 <div class="entry-field-grid entry-field-grid-three">
-<div class="entry-field"><label for="entryDate">Date</label><input id="entryDate" type="date" required></div>
-<div class="entry-field"><label for="entryTime">Time</label><input id="entryTime" type="time" required></div>
-<div class="entry-field"><label for="manualOz">Ounces</label><input id="manualOz" type="number" placeholder="Amount" min="0" step="0.1"></div>
+<div class="entry-field"><label for="entryDate">Date</label><div class="entry-picker-shell"><input id="entryDateDisplay" class="entry-display-input" type="text" readonly tabindex="-1" aria-hidden="true"><input id="entryDate" class="entry-picker-input" type="date" required aria-label="Date"></div></div>
+<div class="entry-field"><label for="entryTime">Time</label><div class="entry-picker-shell"><input id="entryTimeDisplay" class="entry-display-input" type="text" readonly tabindex="-1" aria-hidden="true"><input id="entryTime" class="entry-picker-input" type="time" required aria-label="Time"></div></div>
+<div class="entry-field"><label for="manualOz">Ounces</label><input id="manualOz" type="number" inputmode="decimal" placeholder="Amount" min="0" step="0.1"></div>
 </div>
 <div class="entry-field-grid entry-field-grid-two">
 <div class="entry-field"><label for="entryName">Name</label><input id="entryName" placeholder="Enter name"></div>
-<div class="entry-field"><label for="entryCaffeineMg">Caffeine</label><div class="input-with-suffix"><input id="entryCaffeineMg" type="number" placeholder="Enter" min="0" step="0.01"><span class="input-suffix" aria-hidden="true">mg</span></div></div>
+<div class="entry-field"><label for="entryCaffeineMg">Caffeine</label><div class="inline-unit-input"><input id="entryCaffeineMg" type="number" inputmode="decimal" placeholder="Enter" min="0" step="0.01" aria-describedby="entryCaffeineUnit"><span id="entryCaffeineUnit" class="inline-unit">mg</span></div></div>
 </div>
 <label>Ounces</label><div class="button-row"><button class="oz-btn" data-oz="8">8 oz</button><button class="oz-btn" data-oz="12">12 oz</button><button class="oz-btn" data-oz="16">16 oz</button><button class="oz-btn" data-oz="20">20 oz</button></div>
 <div class="entry-toggle-grid">
@@ -195,7 +199,7 @@ input[type=file]{font-size:14px;padding:11px}
 "use strict";
 const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup";
 let entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,editingOriginalTimestamp=null,editingOriginalDate="",editingOriginalTime="",selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",currentPageBeforeBeverageEdit="homePage",currentPageBeforeEntry="homePage",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false,statusTimer=null;
-function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function formatEntryDateDisplay(value){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||"");return match?`${match[2]}/${match[3]}/${match[1].slice(-2)}`:""}function formatEntryTimeDisplay(value){const match=/^(\d{2}):(\d{2})$/.exec(value||"");if(!match)return"";const hour=Number(match[1]),suffix=hour>=12?"PM":"AM",displayHour=hour%12||12;return`${displayHour}:${match[2]} ${suffix}`}function syncEntryDateTimeDisplays(){el("entryDateDisplay").value=formatEntryDateDisplay(el("entryDate").value);el("entryTimeDisplay").value=formatEntryTimeDisplay(el("entryTime").value)}function syncCaffeineFieldWidth(){const input=el("entryCaffeineMg"),text=String(input.value||input.placeholder||"");input.style.width=`${Math.max(2,Math.min(12,text.length+.5))}ch`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function loadEntries(){for(const key of ENTRY_KEYS){try{const saved=JSON.parse(localStorage.getItem(key)||"[]");if(Array.isArray(saved)&&saved.length)return saved.map(normalizeEntry)}catch(e){}}return[]}function normalizeEntry(e){
 const rawDate=e.createdAt||e.date;
 const validDate=rawDate&&!Number.isNaN(new Date(rawDate).getTime())?rawDate:new Date().toISOString();
@@ -246,13 +250,13 @@ function isValidLocalDateTime(date,time){
 if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))return false;
 const[y,m,d]=date.split("-").map(Number),[h,min]=time.split(":").map(Number),value=new Date(y,m-1,d,h,min,0,0);
 return value.getFullYear()===y&&value.getMonth()===m-1&&value.getDate()===d&&value.getHours()===h&&value.getMinutes()===min
-}function currentEntryOunces(){return el("manualOz").value?Number(el("manualOz").value):selectedOz}function calculateScaledCaffeine(bev,ounces){if(!bev||!bev.defaultOz||!bev.caffeineMg||!ounces)return round2(el("entryCaffeineMg").value||0);return round2((Number(ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg))}function updateCalculatedCaffeine(){if(!activeBeverage||!activeBeverage.defaultOz)return;const oz=currentEntryOunces();if(oz)el("entryCaffeineMg").value=calculateScaledCaffeine(activeBeverage,oz)}
+}function currentEntryOunces(){return el("manualOz").value?Number(el("manualOz").value):selectedOz}function calculateScaledCaffeine(bev,ounces){if(!bev||!bev.defaultOz||!bev.caffeineMg||!ounces)return round2(el("entryCaffeineMg").value||0);return round2((Number(ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg))}function updateCalculatedCaffeine(){if(!activeBeverage||!activeBeverage.defaultOz)return;const oz=currentEntryOunces();if(oz){el("entryCaffeineMg").value=calculateScaledCaffeine(activeBeverage,oz);syncCaffeineFieldWidth()}}
 function resetEntryForm(){
 activeBeverage=null;editingEntryId=null;editingOriginalTimestamp=null;editingOriginalDate="";editingOriginalTime="";selectedOz=null;
-el("entryDate").value=localDateString(new Date());el("entryTime").value=timeStringFromDate(new Date());el("entryName").value="";el("manualOz").value="";
+el("entryDate").value=localDateString(new Date());el("entryTime").value=timeStringFromDate(new Date());syncEntryDateTimeDisplays();el("entryName").value="";el("manualOz").value="";
 document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));
-el("entryCaffeineMg").value="";el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"
+el("entryCaffeineMg").value="";syncCaffeineFieldWidth();el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none"
 }
 function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=totals.carbOz;el("homeCafOz").textContent=totals.cafOz;el("homeMg").textContent=totals.mg;renderBeverageGrid()}
 function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
@@ -263,14 +267,14 @@ document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 const saved=existing?new Date(existing.createdAt):new Date();
 if(Number.isNaN(saved.getTime())){showStatus("This entry has an invalid saved date and cannot be edited safely.","error");return}
 editingOriginalTimestamp=existing?existing.createdAt:null;editingOriginalDate=localDateString(saved);editingOriginalTime=timeStringFromDate(saved);
-el("entryDate").value=editingOriginalDate;el("entryTime").value=editingOriginalTime;
+el("entryDate").value=editingOriginalDate;el("entryTime").value=editingOriginalTime;syncEntryDateTimeDisplays();
 el("entryName").value=existing?existing.name:(bev?bev.name:"");
 const oz=existing?Number(existing.ounces):(bev?Number(bev.defaultOz||0):0),ozBtn=document.querySelector(`.oz-btn[data-oz="${oz}"]`);
 if(ozBtn){ozBtn.classList.add("selected");selectedOz=oz}else if(oz){el("manualOz").value=oz}
 setToggle("entryCaffeinatedToggle",existing?existing.caffeinated:(bev?bev.caffeinated:""));
 setToggle("entryCarbonatedToggle",existing?existing.carbonated:(bev?bev.carbonated:""));
 setToggle("entryClearToggle",existing?existing.clear:(bev?bev.clear:""));
-el("entryCaffeineMg").value=existing?round2(existing.caffeineMg):(bev?calculateScaledCaffeine(bev,oz):"");
+el("entryCaffeineMg").value=existing?round2(existing.caffeineMg):(bev?calculateScaledCaffeine(bev,oz):"");syncCaffeineFieldWidth();
 el("saveEntryBtn").textContent=existing?"Save Changes":"Save Entry";el("cancelEntryEditBtn").style.display=existing?"block":"none";
 entryDateEntriesExpanded=false;renderSelectedDatePanel();showPage("entryPage")
 }
@@ -340,7 +344,7 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.10",releaseRevision:"r1",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.10",releaseRevision:"r2",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
 url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.10-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
@@ -395,7 +399,7 @@ finally{input.value=""}
 reader.readAsText(file)
 }
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle","bevCaffeinatedToggle","bevCarbonatedToggle","bevClearToggle"].forEach(setupToggle);
-document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",renderSelectedDatePanel);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingBeverageImage=e.target.result;renderBeverageImagePreview()};reader.readAsDataURL(file)});
+document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",()=>{syncEntryDateTimeDisplays();renderSelectedDatePanel()});el("entryTime").addEventListener("change",syncEntryDateTimeDisplays);el("entryCaffeineMg").addEventListener("input",syncCaffeineFieldWidth);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingBeverageImage=e.target.result;renderBeverageImagePreview()};reader.readAsDataURL(file)});
 el("viewReportsBtn").addEventListener("click",()=>showPage("reportsHomePage"));el("openSettingsBtn").addEventListener("click",()=>showPage("settingsPage"));el("backToHomeFromSettings").addEventListener("click",()=>showPage("homePage"));el("backToHomeFromReports").addEventListener("click",()=>showPage("homePage"));el("backToReportsHome").addEventListener("click",()=>showPage("reportsHomePage"));el("backToHomeFromEntry").addEventListener("click",()=>showPage(currentPageBeforeEntry||"homePage"));el("backFromBeverageEdit").addEventListener("click",()=>showPage(currentPageBeforeBeverageEdit||"homePage"));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("quickEntryBtn").addEventListener("click",()=>openEntry(null,null,"settingsPage"));el("openDataToolsFromSettingsBtn").addEventListener("click",()=>{updateDataToolsStatus();showPage("dataToolsPage")});el("backToSettingsFromDataTools").addEventListener("click",()=>showPage("settingsPage"));el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
 window.__MDCA_TEST__={getRangeForWeekValue,getWeekNumber,isValidLocalDateTime,validateImportedEntry,parseImportPayload,persistState,showStatus};
 el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
@@ -406,7 +410,7 @@ renderHome();openReport("yesterday");showPage("homePage");
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.10-r1";
+  const reloadKey = "MDCA-sw-reload-v2.0.10-r2";
   let registration = null;
   let refreshing = false;
 
