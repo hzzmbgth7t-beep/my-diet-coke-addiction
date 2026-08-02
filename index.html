@@ -1,8 +1,500 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>RGB Mileage v2.1.6l-wc10-f17</title>
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="RGB Mileage"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" href="styles.css?v=216lwc10f17">
-</head><body><div id="app"></div><script src="rgbm-home-layout.js?v=216lwc10f17"></script><script src="rgbm-data-v3.js?v=216lwc10f17"></script><script src="rgbm-wc10-evidence.js?v=216lwc10f17"></script><script src="app.js?v=216lwc10f17"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MDCA — My Diet Coke Addiction</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b3262e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MDCA">
+<style>
+:root{--red:#b30000;--blue:#075aaa;--dark:#222;--muted:#666;--border:#ddd;--bg:#f6f6f6;--card:#fff;--orange:#c96b00;--green:#087d36}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--dark);padding:18px 14px 40px}
+.app{max-width:520px;margin:0 auto}.page{display:none}.page.active{display:block}
+header{text-align:center;margin-bottom:14px}.logo{width:112px;height:112px;border-radius:28px;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+h1{margin:12px 0 4px;font-size:30px;color:var(--red);line-height:1.05}.subtitle,.hint{font-size:13px;color:var(--muted);line-height:1.35}
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+.notice{display:none;background:#eefaf1;border-color:#b9e4c5;color:var(--green);font-weight:800;text-align:center}
+.section-title{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.summary-box,.report-box{background:#fafafa;border:1px solid var(--border);border-radius:16px;padding:12px 4px;text-align:center;min-width:0}
+.summary-box strong{display:block;font-size:19px;color:var(--red)}.report-box strong{display:block;font-size:19px;color:var(--blue)}
+.summary-box span,.report-box span{font-size:10px;color:var(--muted)}
+.mg-card{margin-top:10px;background:#fff7ed;border:1px solid #f0d1aa;border-radius:16px;padding:12px}.mg-card strong{color:var(--orange)}
+.progress{height:10px;background:#eee;border-radius:99px;overflow:hidden;margin-top:8px}.progress>div{height:100%;background:var(--orange);width:0%}
+button,input{font-family:inherit}label{display:block;font-weight:800;margin-bottom:8px;font-size:15px}
+input{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--border);font-size:16px;margin-bottom:14px;background:#fff}
+input[type=file]{font-size:14px;padding:11px}
+.primary,.secondary,.report-main,.danger{width:100%;padding:15px;border:none;border-radius:16px;color:#fff;font-size:18px;font-weight:800;margin-top:4px}
+.primary{background:var(--red)}.secondary{background:#444}.report-main{background:var(--blue);margin-bottom:14px}.danger{background:#a40000}
+.back-btn{border:none;border-radius:12px;background:#444;color:#fff;padding:10px 14px;font-weight:800;margin-bottom:12px}
+.button-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.oz-btn{padding:11px 0;border:none;border-radius:13px;background:#ececec;font-weight:800;font-size:13px;color:var(--dark)}
+.selected{background:var(--red)!important;color:#fff!important}
+.toggle{display:flex;background:#ececec;border-radius:22px;padding:2px;margin-bottom:14px}.toggle button{flex:1;padding:11px 0;border:none;background:transparent;border-radius:20px;font-weight:800;font-size:15px}
+.beverage-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.bev-btn{min-height:92px;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-weight:900;color:var(--dark);overflow:hidden}
+.bev-btn img{width:46px;height:46px;object-fit:contain;border-radius:10px}.bev-btn.add{border:1.5px dashed var(--blue);color:var(--blue);flex-direction:column}.bev-btn.add .plus{font-size:36px;line-height:1}.bev-btn.quick{color:var(--blue)}
+.initials{width:46px;height:46px;border-radius:12px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--red);font-size:18px;flex-shrink:0}
+.quick-grid{display:grid;grid-template-columns:1fr;gap:10px}.quick-btn{width:100%;border:none;border-radius:16px;background:var(--blue);color:#fff;text-align:left;padding:15px 16px}.quick-btn strong{display:block;font-size:17px}.quick-btn span{display:block;font-size:12px;margin-top:4px;color:#e8f1ff}
+.custom-btn{width:100%;border:1px solid var(--border);border-radius:16px;background:#fff;text-align:left;padding:14px 16px;margin-bottom:10px}.custom-btn strong{display:block;font-size:16px}.custom-btn span{display:block;font-size:12px;margin-top:4px;color:var(--muted)}
+.entry{border-bottom:1px solid var(--border);padding:12px 0}.entry:last-child{border-bottom:none}
+.entry-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.entry-title{font-weight:900;font-size:16px}.entry-meta{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4}.entry-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
+.small-btn{padding:8px 10px;border:none;border-radius:10px;font-size:12px;font-weight:800}.edit-btn{background:#e8f1ff;color:#0652aa}.delete-btn{background:#ffe8e8;color:#a40000}
+.collapse-btn{width:100%;border:1px solid var(--border);background:#fafafa;border-radius:14px;padding:12px;font-weight:800;color:var(--dark)}
+.empty{text-align:center;color:var(--muted);padding:10px}.breakdown-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;padding:9px 0;font-size:14px}.breakdown-row:last-child{border-bottom:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}.update-options{background:#fff7ed;border:1px solid #f0d1aa;border-radius:16px;padding:12px;margin-bottom:14px}.radio-row{display:flex;gap:8px;align-items:center;margin:8px 0;font-size:14px}.radio-row input{width:auto;margin:0}
+.image-preview{width:74px;height:74px;border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;background:#fafafa;margin-bottom:14px;overflow:hidden}.image-preview img{width:100%;height:100%;object-fit:contain}
+
+.status-toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:1000;width:min(92vw,500px);padding:13px 16px;border-radius:14px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.22);display:none}
+.status-toast.success{display:block;background:#eefaf1;border:1px solid #9ed5ad;color:#075f2c}
+.status-toast.error{display:block;background:#fff0f0;border:1px solid #efaaaa;color:#8d0000}
+.status-toast.warning{display:block;background:#fff7ed;border:1px solid #edc58e;color:#8a4a00}
+.update-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:999;width:min(92vw,500px);background:#fff;border:2px solid var(--blue);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.22);display:none}
+.update-banner.visible{display:block}.update-actions{display:flex;gap:8px;margin-top:10px}.update-actions button{flex:1;padding:11px;border:0;border-radius:12px;font-weight:800}.update-now{background:var(--blue);color:#fff}.update-later{background:#ececec;color:var(--dark)}
+#homePage .home-version{margin-top:6px}
+.daily-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+.daily-summary>.summary-box,.daily-summary>.mg-card{min-width:0;min-height:68px;margin-top:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.daily-summary .daily-stat-label{display:block;width:100%;font-size:clamp(13px,3.9vw,16px);font-weight:800;line-height:1.15;text-align:center;white-space:nowrap}
+.daily-summary .daily-stat-value{display:block;width:100%;margin-top:4px;font-size:16px;font-weight:400;line-height:1.15;color:var(--dark);text-align:center;white-space:nowrap}
+.daily-summary .daily-stat-value span{font:inherit;color:inherit}
+.daily-summary .summary-box .daily-stat-label{color:var(--red)}
+.daily-summary .mg-card .daily-stat-label{color:var(--orange)}
+.report-summary-card .report-servings-title{margin-top:14px}
+#homePage .home-action-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#homePage .home-action-row .report-main{min-width:0;min-height:54px;margin:0;padding:8px 3px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;line-height:1.05}
+#homePage .home-action-label{display:block;min-width:0}
+#homePage .home-action-label span{display:block}
+#homePage .beverage-grid-empty{grid-column:1/-1}
+#settingsPage .settings-card .custom-btn:last-child{margin-bottom:0}
+.page-nav-header{display:grid;grid-template-columns:76px minmax(0,1fr) 76px;align-items:center;gap:6px;min-height:48px;margin-bottom:14px;text-align:center}
+.page-nav-header .back-btn{justify-self:start;margin:0;white-space:nowrap}
+.page-nav-center{min-width:0;text-align:center}
+.page-nav-center h1{margin:0;font-size:clamp(20px,6vw,24px);line-height:1.08;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-nav-subtitle,.page-nav-version{margin-top:4px;font-size:13px;line-height:1.25;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-nav-btn{justify-self:end;width:42px;height:42px;padding:0;border:0;border-radius:12px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center}
+.home-nav-btn svg{width:23px;height:23px;display:block;fill:currentColor}
+#entryPage .entry-field-grid{display:grid;gap:8px;margin-bottom:14px}
+#entryPage .entry-field-grid-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+#entryPage .entry-field-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+#entryPage .entry-field{min-width:0;overflow:hidden}
+#entryPage .entry-field label{font-size:13px;text-align:center;margin-bottom:6px}
+#entryPage .entry-field>input{display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:10px 6px;font-size:16px;line-height:24px}
+#entryPage .entry-picker-shell{position:relative;width:100%;min-width:0;height:46px;overflow:hidden}
+#entryPage .entry-picker-shell .entry-display-input{display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:10px 4px;text-align:center;font-size:16px;line-height:24px;background:#fff}
+#entryPage .entry-picker-shell .entry-picker-input{position:absolute;inset:0;z-index:2;display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:0;border:0;border-radius:14px;opacity:0;cursor:pointer}
+#entryPage #manualOz,#entryPage #entryName{text-align:center}
+#entryPage .inline-unit-input{width:100%;min-width:0;height:46px;border:1px solid var(--border);border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden}
+#entryPage .inline-unit-input input{flex:0 0 auto;width:3ch;min-width:2ch;max-width:12ch;height:auto;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;text-align:right;font-size:16px;line-height:24px;-moz-appearance:textfield}
+#entryPage .inline-unit-input input::-webkit-inner-spin-button,#entryPage .inline-unit-input input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#entryPage .inline-unit-input .inline-unit{font-size:16px;line-height:24px;color:var(--dark);white-space:nowrap}
+#entryPage .entry-toggle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
+#entryPage .entry-toggle-field{min-width:0}
+#entryPage .entry-toggle-field label{font-size:12px;text-align:center;margin-bottom:6px}
+#entryPage .entry-toggle-field .toggle{margin-bottom:0;border-radius:16px}
+#entryPage .entry-toggle-field .toggle button{min-width:0;padding:10px 0;border-radius:14px;font-size:13px}
+#customControls{overflow:hidden;padding:12px 16px}
+#customControls .custom-report-control{min-width:0;overflow:hidden;text-align:center}
+#customControls .custom-report-control label{font-size:15px;line-height:18px;text-align:center;margin-bottom:8px}
+#customControls .custom-report-picker-shell{position:relative;width:min(220px,100%);min-width:0;height:46px;margin:0 auto;overflow:hidden}
+#customControls .custom-report-display{display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:10px 4px;text-align:center;font-size:16px;line-height:24px;background:#fff}
+#customControls .custom-report-picker-input{position:absolute;inset:0;z-index:2;display:block;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:0;padding:0;border:0;border-radius:14px;opacity:0;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="appStatusNotice" class="status-toast" role="status" aria-live="polite"></div>
+<div id="updateNotice" class="update-banner" role="status" aria-live="polite">
+  <strong>MDCA Update Available</strong>
+  <div class="hint">A newer cached release is ready. Save any open work before updating.</div>
+  <div class="update-actions">
+    <button id="applyUpdateBtn" class="update-now" type="button">Update Now</button>
+    <button id="dismissUpdateBtn" class="update-later" type="button">Later</button>
+  </div>
+</div>
+
+
+<div id="homePage" class="page active"><div class="app">
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.11-r3</div></header>
+<div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
+<div class="card"><div class="summary daily-summary home-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="homeCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="homeCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="homeMg">0</span> mg</div></div>
+</div></div>
+<div class="card"><div id="beverageGrid" class="beverage-grid"></div></div>
+<div class="home-action-row"><button class="report-main" id="openSettingsBtn" type="button"><span class="home-action-label">Settings</span></button><button class="report-main" id="quickEntryHomeBtn" type="button"><span class="home-action-label"><span>Quick</span><span>Entry</span></span></button><button class="report-main" id="viewReportsBtn" type="button"><span class="home-action-label">Reports</span></button></div>
+</div></div>
+
+<div id="settingsPage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Settings</h1><div class="page-nav-version">v2.0.11-r3</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card settings-card"><button class="custom-btn" id="manageBeveragesBtn" type="button"><strong>Manage Beverages</strong><span>Add a saved beverage button</span></button><button class="custom-btn" id="openDataToolsFromSettingsBtn" type="button"><strong>Data Tools</strong><span>Export or import your backup</span></button></div>
+</div></div>
+
+<div id="entryPage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1 id="entryTitle">Log Beverage</h1></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div id="changesSavedNotice" class="card notice">✓ Changes Saved</div>
+<div class="card"><div class="section-title" id="selectedDateTotalsTitle">Selected Date Totals</div><div class="summary daily-summary entry-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="dateCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="dateCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="dateMg">0</span> mg</div></div>
+</div></div>
+<div class="card">
+<div class="entry-field-grid entry-field-grid-three">
+<div class="entry-field"><label for="entryDate">Date</label><div class="entry-picker-shell"><input id="entryDateDisplay" class="entry-display-input" type="text" readonly tabindex="-1" aria-hidden="true"><input id="entryDate" class="entry-picker-input" type="date" required aria-label="Date"></div></div>
+<div class="entry-field"><label for="entryTime">Time</label><div class="entry-picker-shell"><input id="entryTimeDisplay" class="entry-display-input" type="text" readonly tabindex="-1" aria-hidden="true"><input id="entryTime" class="entry-picker-input" type="time" required aria-label="Time"></div></div>
+<div class="entry-field"><label for="manualOz">Ounces</label><input id="manualOz" type="number" inputmode="decimal" placeholder="Amount" min="0" step="0.1"></div>
+</div>
+<div class="entry-field-grid entry-field-grid-two">
+<div class="entry-field"><label for="entryName">Name</label><input id="entryName" placeholder="Enter name"></div>
+<div class="entry-field"><label for="entryCaffeineMg">Caffeine</label><div class="inline-unit-input"><input id="entryCaffeineMg" type="number" inputmode="decimal" placeholder="Enter" min="0" step="0.01" aria-describedby="entryCaffeineUnit"><span id="entryCaffeineUnit" class="inline-unit">mg</span></div></div>
+</div>
+<label>Ounces</label><div class="button-row"><button class="oz-btn" data-oz="8">8 oz</button><button class="oz-btn" data-oz="12">12 oz</button><button class="oz-btn" data-oz="16">16 oz</button><button class="oz-btn" data-oz="20">20 oz</button></div>
+<div class="entry-toggle-grid">
+<div class="entry-toggle-field"><label>Carbonated</label><div class="toggle" id="entryCarbonatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+<div class="entry-toggle-field"><label>Caffeinated</label><div class="toggle" id="entryCaffeinatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+<div class="entry-toggle-field"><label>Clear</label><div class="toggle" id="entryClearToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div></div>
+</div>
+<button class="primary" id="saveEntryBtn">Save Entry</button><button class="secondary" id="cancelEntryEditBtn" style="display:none;">Cancel Edit</button>
+</div>
+<div class="card"><div class="section-title"><span id="dateEntryListTitle">Entries for Selected Date</span><span id="dateEntryCount">(0)</span></div><button class="collapse-btn" id="toggleDateEntries">▶ Show Entries</button><div id="dateEntriesList" style="display:none;"></div></div>
+</div></div>
+
+<div id="beverageEditPage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1 id="bevEditTitle">Beverage Setup</h1><div class="page-nav-subtitle">Preload fields for faster logging</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card">
+<label for="bevName">Beverage Name</label><input id="bevName" placeholder="Example: Diet Coke">
+<label for="bevImage">Button Image</label><input id="bevImage" type="file" accept="image/*"><div class="image-preview" id="bevImagePreview">No Image</div>
+<label for="bevInitials">Initials</label><input id="bevInitials" placeholder="Example: DC" maxlength="6">
+<label for="bevDefaultOz">Default Size / Ounces</label><input id="bevDefaultOz" type="number" placeholder="Example: 20" min="0" step="0.1">
+<label>Caffeinated?</label><div class="toggle" id="bevCaffeinatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
+<label for="bevCaffeineMg">Default Caffeine (mg)</label><input id="bevCaffeineMg" type="number" placeholder="Example: 68" min="0" step="0.01">
+<label>Carbonated?</label><div class="toggle" id="bevCarbonatedToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
+<label>Clear?</label><div class="toggle" id="bevClearToggle"><button type="button" data-value="Yes">Yes</button><button type="button" data-value="No">No</button></div>
+<div id="historicalUpdateOptions" class="update-options" style="display:none;"><strong>Update Historical Entries?</strong><label class="radio-row"><input type="radio" name="historicalUpdate" value="future" checked> Future entries only</label><label class="radio-row"><input type="radio" name="historicalUpdate" value="all"> All existing entries for this beverage</label></div>
+<button class="primary" id="saveBeverageBtn">Save Beverage</button><button class="danger" id="deleteBeverageBtn" style="display:none;">Delete Beverage</button>
+</div>
+<div id="beverageStatsCard" class="card" style="display:none;"><div class="section-title">Beverage Statistics</div><div id="beverageStats"></div></div>
+</div></div>
+
+<div id="reportsHomePage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Reports</h1><div class="page-nav-subtitle">Quick totals and historical entries</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card"><div class="section-title">Quick Reports</div><div class="quick-grid"><button class="quick-btn" data-report="yesterday"><strong>Yesterday</strong><span>Day total for the previous day</span></button><button class="quick-btn" data-report="lastWeek"><strong>Last Week</strong><span>Totals for the previous week</span></button><button class="quick-btn" data-report="lastMonth"><strong>Last Month</strong><span>Totals for the previous month</span></button></div></div>
+<div class="card"><div class="section-title">Custom Reports</div><button class="custom-btn" data-report="customDay"><strong>Custom Day</strong><span>Pick any specific date</span></button><button class="custom-btn" data-report="customWeek"><strong>Custom Week</strong><span>Pick any week</span></button><button class="custom-btn" data-report="customMonth"><strong>Custom Month</strong><span>Pick any month</span></button></div>
+</div></div>
+
+<div id="reportDetailPage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1 id="reportTitle">Report</h1><div class="page-nav-subtitle" id="reportSubtitle"></div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card" id="customControls" style="display:none;"><div id="customDayControl" class="custom-report-control" style="display:none;"><label for="customDayInput">Select Day</label><div class="custom-report-picker-shell"><input id="customDayDisplay" class="custom-report-display" type="text" readonly tabindex="-1" aria-hidden="true"><input id="customDayInput" class="custom-report-picker-input" type="date" aria-label="Select Day"></div></div><div id="customWeekControl" class="custom-report-control" style="display:none;"><label for="customWeekInput">Select Week</label><div class="custom-report-picker-shell"><input id="customWeekDisplay" class="custom-report-display" type="text" readonly tabindex="-1" aria-hidden="true"><input id="customWeekInput" class="custom-report-picker-input" type="week" aria-label="Select Week"></div></div><div id="customMonthControl" class="custom-report-control" style="display:none;"><label for="customMonthInput">Select Month</label><div class="custom-report-picker-shell"><input id="customMonthDisplay" class="custom-report-display" type="text" readonly tabindex="-1" aria-hidden="true"><input id="customMonthInput" class="custom-report-picker-input" type="month" aria-label="Select Month"></div></div></div>
+<div class="card report-summary-card"><div class="section-title">Totals</div><div class="summary daily-summary report-totals-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="reportCarbOz">0</span> oz</div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="reportCafOz">0</span> oz</div></div>
+<div class="mg-card"><strong class="daily-stat-label">Caffeine</strong><div class="daily-stat-value"><span id="reportMg">0</span> mg</div></div>
+</div><div class="section-title report-servings-title">Servings</div><div class="summary daily-summary report-servings-summary">
+<div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="reportCarbonatedServings">0</span></div></div>
+<div class="summary-box"><strong class="daily-stat-label">Caffeinated</strong><div class="daily-stat-value"><span id="reportCaffeinatedServings">0</span></div></div>
+<div class="summary-box"><strong class="daily-stat-label">Clear</strong><div class="daily-stat-value"><span id="reportClearServings">0</span></div></div>
+</div></div>
+<div class="card"><div class="section-title">Caffeine Stats</div><div class="breakdown-row"><strong>Average Daily Caffeine</strong><span id="averageDailyCaffeine">0 mg</span></div><div class="breakdown-row"><strong>Highest Caffeine Day</strong><span id="highestCaffeineDay">0 mg</span></div></div>
+<div class="card"><div class="section-title">Drink Breakdown</div><div id="drinkBreakdown"></div></div>
+<div class="card"><div class="section-title"><span>Report Entries</span><span id="reportEntryCount">(0)</span></div><button class="collapse-btn" id="toggleReportEntries">▶ Show Report Entries</button><div id="reportEntriesList" style="display:none;"></div></div>
+</div></div>
+
+<div id="dataToolsPage" class="page"><div class="app">
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Data Tools</h1><div class="page-nav-subtitle">Export a backup or import saved entries</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<div class="card"><div class="section-title">Storage Note</div><div class="hint">Safari and the Home Screen app may keep separate saved data on iPhone/iPad. If your entries appear in Safari but not from the Home Screen icon, export a backup from Safari, open the Home Screen app, then import that same backup there.</div></div>
+<div class="card"><div class="section-title">Export Data</div><div class="hint">Download a JSON backup of all saved entries and beverage buttons.</div><div class="breakdown-row"><strong>Last Backup</strong><span id="lastBackupDisplay">Never</span></div><button class="primary" id="exportDataBtn">Backup Now</button></div>
+<div class="card"><div class="section-title">Import Data</div><label for="importDataInput">Select Backup File</label><input id="importDataInput" type="file" accept="application/json,.json"><div class="hint">Import entries and beverages from a backup JSON file. Duplicate entries will be ignored when possible.</div></div>
+<div class="card"><div class="section-title">Current Data</div><div id="dataToolsStatus" class="empty">Checking saved data...</div></div>
+</div></div>
+
+<script>
+"use strict";
+const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup";
+let entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,editingOriginalTimestamp=null,editingOriginalDate="",editingOriginalTime="",selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",navigationStack=["homePage"],entryFormSnapshot="",beverageFormSnapshot="",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false,statusTimer=null;
+function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function formatEntryDateDisplay(value){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||"");return match?`${match[2]}/${match[3]}/${match[1].slice(-2)}`:""}function formatEntryTimeDisplay(value){const match=/^(\d{2}):(\d{2})$/.exec(value||"");if(!match)return"";const hour=Number(match[1]),suffix=hour>=12?"PM":"AM",displayHour=hour%12||12;return`${displayHour}:${match[2]} ${suffix}`}function syncEntryDateTimeDisplays(){el("entryDateDisplay").value=formatEntryDateDisplay(el("entryDate").value);el("entryTimeDisplay").value=formatEntryTimeDisplay(el("entryTime").value)}function syncCaffeineFieldWidth(){const input=el("entryCaffeineMg"),text=String(input.value||input.placeholder||"");input.style.width=`${Math.max(2,Math.min(12,text.length+.5))}ch`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function loadEntries(){for(const key of ENTRY_KEYS){try{const saved=JSON.parse(localStorage.getItem(key)||"[]");if(Array.isArray(saved)&&saved.length)return saved.map(normalizeEntry)}catch(e){}}return[]}function normalizeEntry(e){
+const rawDate=e.createdAt||e.date;
+const validDate=rawDate&&!Number.isNaN(new Date(rawDate).getTime())?rawDate:new Date().toISOString();
+return{id:e.id||Date.now()+Math.floor(Math.random()*1000000),beverageId:e.beverageId||null,name:String(e.name||e.drinkName||"Unnamed Drink"),ounces:round2(e.ounces||e.oz||0),caffeinated:e.caffeinated||e.caffeine||"No",caffeineMg:round2(e.caffeineMg||e.mg||0),carbonated:e.carbonated||"No",clear:e.clear||e.clearDrink||"No",createdAt:validDate}
+}function loadBeverages(){try{const saved=JSON.parse(localStorage.getItem(BEVERAGE_KEY)||"[]");if(Array.isArray(saved))return saved}catch(e){}return[]}function saveAll(){
+const result=persistState(entries,beverages);
+if(!result.ok)showStatus(storageFailureMessage(result),"error");
+return result.ok
+}
+function cloneState(value){return JSON.parse(JSON.stringify(value))}
+function storageFailureMessage(result){return result.rollbackSucceeded===false?"Could not save, and automatic recovery may be incomplete. Do not close MDCA; export a backup if possible.":"Could not save on this device. Your prior saved data was preserved. Free storage space or check browser settings, then retry."}
+function persistState(nextEntries,nextBeverages){
+const payloads={"dietCokeEntriesV2":JSON.stringify(nextEntries),"dietCokeTracker":JSON.stringify(nextEntries),"myDietCokeAddictionEntries":JSON.stringify(nextEntries),[BEVERAGE_KEY]:JSON.stringify(nextBeverages)},previous={};
+try{
+Object.keys(payloads).forEach(key=>previous[key]=localStorage.getItem(key));
+Object.entries(payloads).forEach(([key,value])=>localStorage.setItem(key,value));
+return{ok:true}
+}catch(error){
+let rollbackSucceeded=true;
+Object.entries(previous).forEach(([key,value])=>{try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}catch(e){rollbackSucceeded=false}});
+return{ok:false,error,rollbackSucceeded}
+}}
+function commitState(nextEntries,nextBeverages){
+const result=persistState(nextEntries,nextBeverages);
+if(!result.ok){showStatus(storageFailureMessage(result),"error");return false}
+entries=nextEntries;beverages=nextBeverages;return true
+}
+function setLastBackupSafely(value){
+try{localStorage.setItem(LAST_BACKUP_KEY,value);return true}catch(error){showStatus("Backup download started, but MDCA could not store the Last Backup time.","warning");return false}
+}
+function currentPageId(){return document.querySelector(".page.active")?.id||navigationStack[navigationStack.length-1]||"homePage"}
+function renderPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));el(id).classList.add("active");const showHome=id!=="homePage"&&navigationStack.length>2;document.querySelectorAll("[data-nav-home]").forEach(button=>{button.hidden=!showHome});window.scrollTo({top:0,behavior:"smooth"})}
+function navigateTo(id){if(currentPageId()!==id)navigationStack.push(id);renderPage(id)}
+function captureEntryFormState(){return JSON.stringify({date:el("entryDate").value,time:el("entryTime").value,name:el("entryName").value,manualOz:el("manualOz").value,selectedOz,caffeine:el("entryCaffeineMg").value,carbonated:getToggle("entryCarbonatedToggle"),caffeinated:getToggle("entryCaffeinatedToggle"),clear:getToggle("entryClearToggle")})}
+function captureBeverageFormState(){return JSON.stringify({name:el("bevName").value,initials:el("bevInitials").value,defaultOz:el("bevDefaultOz").value,caffeine:el("bevCaffeineMg").value,image:pendingBeverageImage,carbonated:getToggle("bevCarbonatedToggle"),caffeinated:getToggle("bevCaffeinatedToggle"),clear:getToggle("bevClearToggle"),historical:document.querySelector('input[name="historicalUpdate"]:checked')?.value||""})}
+function markEntryFormClean(){entryFormSnapshot=captureEntryFormState()}
+function markBeverageFormClean(){beverageFormSnapshot=captureBeverageFormState()}
+function currentPageHasUnsavedChanges(){const id=currentPageId();if(id==="entryPage")return entryFormSnapshot!==""&&captureEntryFormState()!==entryFormSnapshot;if(id==="beverageEditPage")return beverageFormSnapshot!==""&&captureBeverageFormState()!==beverageFormSnapshot;return false}
+function confirmNavigationAway(){return!currentPageHasUnsavedChanges()||confirm("Discard unsaved changes?")}
+function navigateBack(force=false){if(!force&&!confirmNavigationAway())return false;if(navigationStack.length>1)navigationStack.pop();else navigationStack=["homePage"];renderPage(navigationStack[navigationStack.length-1]||"homePage");return true}
+function navigateHome(force=false){if(!force&&!confirmNavigationAway())return false;navigationStack=["homePage"];renderPage("homePage");return true}function showNotice(id,callback){
+const n=el(id);if(!n){if(callback)callback();return}
+n.style.display="block";setTimeout(()=>{n.style.display="none";if(callback)callback()},2600)
+}
+function showStatus(message,type="success",duration=4200){
+const notice=el("appStatusNotice");if(!notice)return;
+clearTimeout(statusTimer);notice.textContent=message;notice.className=`status-toast ${type}`;
+statusTimer=setTimeout(()=>{notice.className="status-toast";notice.textContent=""},duration)
+}
+function setupToggle(id){document.querySelectorAll(`#${id} button`).forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected"));btn.classList.add("selected")}))}function setToggle(id,v){document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle("selected",b.dataset.value===v))}function getToggle(id){const s=document.querySelector(`#${id} button.selected`);return s?s.dataset.value:""}
+function calculateTotals(list){const caf=list.filter(e=>e.caffeinated==="Yes"),clear=list.filter(e=>e.clear==="Yes");return{oz:round2(list.reduce((s,e)=>s+Number(e.ounces),0)),carbOz:round2(list.filter(e=>e.carbonated==="Yes").reduce((s,e)=>s+Number(e.ounces),0)),entries:list.length,caf:caf.length,cafOz:round2(caf.reduce((s,e)=>s+Number(e.ounces),0)),mg:round2(list.reduce((s,e)=>s+Number(e.caffeineMg||0),0)),carbonated:list.filter(e=>e.carbonated==="Yes").length,clear:clear.length,clearOz:round2(clear.reduce((s,e)=>s+Number(e.ounces),0))}}function roundToHalf(value){return Math.round((Number(value||0)+Number.EPSILON)*2)/2}function formatHalfServing(value){const rounded=roundToHalf(value);return Number.isInteger(rounded)?String(rounded):rounded.toFixed(1)}function calculateReportServings(totals){return{carbonated:formatHalfServing(totals.carbOz/12),caffeinated:String(Math.round(Number(totals.mg||0)/53)),clear:formatHalfServing(totals.clearOz/12)}}function entriesForDate(v){const day=new Date(v+"T00:00:00").toLocaleDateString();return entries.filter(e=>new Date(e.createdAt).toLocaleDateString()===day)}function getEntryDateTime(existingAt){
+const date=el("entryDate").value,time=el("entryTime").value;
+if(!isValidLocalDateTime(date,time))return null;
+if(existingAt&&date===editingOriginalDate&&time===editingOriginalTime)return existingAt;
+return`${date}T${time}:00`
+}
+function isValidLocalDateTime(date,time){
+if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))return false;
+const[y,m,d]=date.split("-").map(Number),[h,min]=time.split(":").map(Number),value=new Date(y,m-1,d,h,min,0,0);
+return value.getFullYear()===y&&value.getMonth()===m-1&&value.getDate()===d&&value.getHours()===h&&value.getMinutes()===min
+}function currentEntryOunces(){return el("manualOz").value?Number(el("manualOz").value):selectedOz}function calculateScaledCaffeine(bev,ounces){if(!bev||!bev.defaultOz||!bev.caffeineMg||!ounces)return round2(el("entryCaffeineMg").value||0);return round2((Number(ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg))}function updateCalculatedCaffeine(){if(!activeBeverage||!activeBeverage.defaultOz)return;const oz=currentEntryOunces();if(oz){el("entryCaffeineMg").value=calculateScaledCaffeine(activeBeverage,oz);syncCaffeineFieldWidth()}}
+function resetEntryForm(){
+activeBeverage=null;editingEntryId=null;editingOriginalTimestamp=null;editingOriginalDate="";editingOriginalTime="";selectedOz=null;
+el("entryDate").value=localDateString(new Date());el("entryTime").value=timeStringFromDate(new Date());syncEntryDateTimeDisplays();el("entryName").value="";el("manualOz").value="";
+document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
+["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle"].forEach(id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.remove("selected")));
+el("entryCaffeineMg").value="";syncCaffeineFieldWidth();el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none";entryFormSnapshot=""
+}
+function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=Math.round(totals.carbOz);el("homeCafOz").textContent=Math.round(totals.cafOz);el("homeMg").textContent=Math.round(totals.mg);renderBeverageGrid()}
+function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
+function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
+function openEntry(bev,existing=null){
+activeBeverage=bev||null;editingEntryId=existing?existing.id:null;selectedOz=null;
+document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));el("manualOz").value="";
+const saved=existing?new Date(existing.createdAt):new Date();
+if(Number.isNaN(saved.getTime())){showStatus("This entry has an invalid saved date and cannot be edited safely.","error");return}
+editingOriginalTimestamp=existing?existing.createdAt:null;editingOriginalDate=localDateString(saved);editingOriginalTime=timeStringFromDate(saved);
+el("entryDate").value=editingOriginalDate;el("entryTime").value=editingOriginalTime;syncEntryDateTimeDisplays();
+el("entryName").value=existing?existing.name:(bev?bev.name:"");
+const oz=existing?Number(existing.ounces):(bev?Number(bev.defaultOz||0):0),ozBtn=document.querySelector(`.oz-btn[data-oz="${oz}"]`);
+if(ozBtn){ozBtn.classList.add("selected");selectedOz=oz}else if(oz){el("manualOz").value=oz}
+setToggle("entryCaffeinatedToggle",existing?existing.caffeinated:(bev?bev.caffeinated:""));
+setToggle("entryCarbonatedToggle",existing?existing.carbonated:(bev?bev.carbonated:""));
+setToggle("entryClearToggle",existing?existing.clear:(bev?bev.clear:""));
+el("entryCaffeineMg").value=existing?round2(existing.caffeineMg):(bev?calculateScaledCaffeine(bev,oz):"");syncCaffeineFieldWidth();
+el("saveEntryBtn").textContent=existing?"Save Changes":"Save Entry";el("cancelEntryEditBtn").style.display=existing?"block":"none";
+entryDateEntriesExpanded=false;renderSelectedDatePanel();markEntryFormClean();navigateTo("entryPage")
+}
+function saveEntry(){
+const name=el("entryName").value.trim(),oz=Number(currentEntryOunces()),caffeine=Number(el("entryCaffeineMg").value||0);
+if(!name){showStatus("Please enter a drink name.","error");return}
+if(!Number.isFinite(oz)||oz<=0){showStatus("Please select or enter valid ounces.","error");return}
+if(!Number.isFinite(caffeine)||caffeine<0){showStatus("Please enter a valid caffeine amount.","error");return}
+const existing=editingEntryId?entries.find(e=>e.id===editingEntryId):null,createdAt=getEntryDateTime(existing?existing.createdAt:null);
+if(!createdAt){showStatus("Please enter a valid Entry Date and Entry Time.","error");return}
+const selectedDate=el("entryDate").value,entry={id:editingEntryId||Date.now(),beverageId:activeBeverage?activeBeverage.id:(existing?existing.beverageId:null),name,ounces:round2(oz),caffeinated:getToggle("entryCaffeinatedToggle")||"No",carbonated:getToggle("entryCarbonatedToggle")||"No",clear:getToggle("entryClearToggle")||"No",caffeineMg:round2(caffeine),createdAt};
+const nextEntries=existing?entries.map(e=>e.id===entry.id?entry:e):[...entries,entry];
+if(!commitState(nextEntries,beverages))return;
+renderHome();renderReport();
+if(existing){resetEntryForm();el("entryDate").value=selectedDate;syncEntryDateTimeDisplays();entryDateEntriesExpanded=true;renderSelectedDatePanel();markEntryFormClean();renderPage("entryPage");showNotice("changesSavedNotice")}
+else{resetEntryForm();renderSelectedDatePanel();navigateHome(true);setTimeout(()=>showNotice("saveCompleteNotice"),100)}
+}
+function copyEntry(id){
+const entry=entries.find(e=>e.id===id);if(!entry)return;
+const copied={...entry,id:Date.now(),createdAt:new Date().toISOString()},nextEntries=[...entries,copied];
+if(!commitState(nextEntries,beverages))return;
+renderHome();renderReport();entryDateEntriesExpanded=true;openEntry(beverages.find(b=>b.id===copied.beverageId)||null,copied)
+}function editEntry(id){const entry=entries.find(e=>e.id===id);if(entry)openEntry(beverages.find(b=>b.id===entry.beverageId)||null,entry)}function deleteEntry(id){
+if(!confirm("Delete this entry?"))return;
+const nextEntries=entries.filter(e=>e.id!==id);
+if(!commitState(nextEntries,beverages))return;
+renderHome();renderSelectedDatePanel();renderReport();showStatus("Entry deleted.","success")
+}window.editEntry=editEntry;window.copyEntry=copyEntry;window.deleteEntry=deleteEntry;
+function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=Math.round(totals.carbOz);el("dateCafOz").textContent=Math.round(totals.cafOz);el("dateMg").textContent=Math.round(totals.mg);el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
+function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg||0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div></div><div class="entry-actions"><button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button><button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button><button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button></div></div></div>`).join("")}
+function openBeverageEditor(bev){editingBeverageId=bev?bev.id:null;pendingBeverageImage=bev?(bev.image||""):"";el("bevEditTitle").textContent=bev?"Edit Beverage":"Add Beverage";el("bevName").value=bev?bev.name:"";el("bevInitials").value=bev?(bev.initials||""):"";el("bevDefaultOz").value=bev?(bev.defaultOz||""):"";el("bevCaffeineMg").value=bev?(bev.caffeineMg||""):"";setToggle("bevCaffeinatedToggle",bev?bev.caffeinated:"");setToggle("bevCarbonatedToggle",bev?bev.carbonated:"");setToggle("bevClearToggle",bev?bev.clear:"");el("bevImage").value="";renderBeverageImagePreview();el("deleteBeverageBtn").style.display=bev?"block":"none";el("historicalUpdateOptions").style.display=bev?"block":"none";const future=document.querySelector('input[name="historicalUpdate"][value="future"]');if(future)future.checked=true;renderBeverageStats(bev);markBeverageFormClean();navigateTo("beverageEditPage")}function renderBeverageImagePreview(){el("bevImagePreview").innerHTML=pendingBeverageImage?`<img src="${pendingBeverageImage}" alt="">`:"No Image"}function saveBeverage(){
+const name=el("bevName").value.trim(),defaultOz=Number(el("bevDefaultOz").value||0),caffeine=Number(el("bevCaffeineMg").value||0);
+if(!name){showStatus("Please enter a beverage name.","error");return}
+if(!Number.isFinite(defaultOz)||defaultOz<0||!Number.isFinite(caffeine)||caffeine<0){showStatus("Please enter valid beverage ounces and caffeine values.","error");return}
+const existing=editingBeverageId?beverages.find(b=>b.id===editingBeverageId):null,bev={id:existing?existing.id:"bev_"+Date.now(),name,image:pendingBeverageImage,initials:el("bevInitials").value.trim(),defaultOz:round2(defaultOz),caffeinated:getToggle("bevCaffeinatedToggle")||"No",caffeineMg:round2(caffeine),carbonated:getToggle("bevCarbonatedToggle")||"No",clear:getToggle("bevClearToggle")||"No"};
+let nextBeverages=existing?beverages.map(b=>b.id===bev.id?bev:b):[...beverages,bev],nextEntries=entries;
+if(existing){
+const mode=document.querySelector('input[name="historicalUpdate"]:checked')?.value||"future";
+if(mode==="all")nextEntries=entries.map(e=>{if(e.beverageId!==bev.id)return e;const scaled=bev.defaultOz?round2((Number(e.ounces)/Number(bev.defaultOz))*Number(bev.caffeineMg||0)):e.caffeineMg;return{...e,name:bev.name,caffeinated:bev.caffeinated,caffeineMg:scaled,carbonated:bev.carbonated,clear:bev.clear}})
+}
+if(!commitState(nextEntries,nextBeverages))return;
+renderHome();markBeverageFormClean();navigateBack(true);showStatus("Beverage saved.","success")
+}function deleteBeverage(){
+if(!editingBeverageId||!confirm("Delete this beverage button? Existing logged entries will stay."))return;
+const nextBeverages=beverages.filter(b=>b.id!==editingBeverageId);
+if(!commitState(entries,nextBeverages))return;
+renderHome();markBeverageFormClean();navigateBack(true);showStatus("Beverage deleted. Existing entries were preserved.","success")
+}function renderBeverageStats(bev){if(!bev){el("beverageStatsCard").style.display="none";return}const list=entries.filter(e=>e.beverageId===bev.id||e.name===bev.name),totals=calculateTotals(list),sorted=[...list].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));el("beverageStatsCard").style.display="block";el("beverageStats").innerHTML=`<div class="breakdown-row"><strong>Total Entries</strong><span>${totals.entries}</span></div><div class="breakdown-row"><strong>Total Ounces</strong><span>${totals.oz} oz</span></div><div class="breakdown-row"><strong>Total Caffeine</strong><span>${totals.mg} mg</span></div><div class="breakdown-row"><strong>First Logged</strong><span>${sorted.length?new Date(sorted[0].createdAt).toLocaleDateString():"Never"}</span></div>`}
+function getStartOfWeekSunday(d){return getStartOfISOWeek(d)}
+function getStartOfISOWeek(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}function getEndOfWeekSunday(d){const s=getStartOfISOWeek(d),e=new Date(s);e.setDate(s.getDate()+6);e.setHours(23,59,59,999);return e}function getPreviousWeekRange(){const current=getStartOfISOWeek(new Date()),start=new Date(current);start.setDate(current.getDate()-7);const end=new Date(start);end.setDate(start.getDate()+6);end.setHours(23,59,59,999);return[start,end]}function getPreviousMonthRange(){const now=new Date(),start=new Date(now.getFullYear(),now.getMonth()-1,1),end=new Date(now.getFullYear(),now.getMonth(),0,23,59,59,999);return[start,end]}function getWeekNumber(date){
+const value=new Date(date);value.setHours(0,0,0,0);
+value.setDate(value.getDate()+3-((value.getDay()+6)%7));
+const isoYear=value.getFullYear(),week1=new Date(isoYear,0,4);
+week1.setHours(0,0,0,0);week1.setDate(week1.getDate()-((week1.getDay()+6)%7));
+const week=1+Math.round((value-week1)/604800000);
+return`${isoYear}-W${pad(week)}`
+}function getRangeForWeekValue(v){
+const match=/^(\d{4})-W(\d{2})$/.exec(v||"");if(!match)return null;
+const year=Number(match[1]),week=Number(match[2]);if(week<1||week>53)return null;
+const jan4=new Date(year,0,4);jan4.setHours(0,0,0,0);
+const start=new Date(jan4);start.setDate(jan4.getDate()-((jan4.getDay()+6)%7)+(week-1)*7);
+if(getWeekNumber(start)!==v)return null;
+const end=new Date(start);end.setDate(start.getDate()+6);end.setHours(23,59,59,999);return[start,end]
+}function formatRange(s,e){return s.toDateString()===e.toDateString()?s.toLocaleDateString():`${s.toLocaleDateString()} - ${e.toLocaleDateString()}`}function openReport(type){currentReportType=type;reportEntriesExpanded=false;renderReport();navigateTo("reportDetailPage")}function getDailyCaffeineStats(list){const byDay={};list.forEach(e=>{const day=new Date(e.createdAt).toLocaleDateString();byDay[day]=(byDay[day]||0)+Number(e.caffeineMg||0)});const days=Object.keys(byDay);if(!days.length)return{average:0,highest:"0 mg"};const total=Object.values(byDay).reduce((s,v)=>s+v,0),highestDay=days.sort((a,b)=>byDay[b]-byDay[a])[0];return{average:round2(total/days.length),highest:`${round2(byDay[highestDay])} mg on ${highestDay}`}}
+function formatCustomDayDisplay(value){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value);if(!match)return"";const date=new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));return date.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+function formatCustomWeekDisplay(value){const match=/^(\d{4})-W(\d{2})$/.exec(value);return match?`Week ${Number(match[2])}, ${match[1]}`:""}
+function formatCustomMonthDisplay(value){const match=/^(\d{4})-(\d{2})$/.exec(value);if(!match)return"";const date=new Date(Number(match[1]),Number(match[2])-1,1);return date.toLocaleDateString(undefined,{month:"long",year:"numeric"})}
+function syncCustomReportPickerDisplays(){el("customDayDisplay").value=formatCustomDayDisplay(el("customDayInput").value);el("customWeekDisplay").value=formatCustomWeekDisplay(el("customWeekInput").value);el("customMonthDisplay").value=formatCustomMonthDisplay(el("customMonthInput").value)}
+function renderReport(){let start,end,title,subtitle;el("customControls").style.display="none";el("customDayControl").style.display="none";el("customWeekControl").style.display="none";el("customMonthControl").style.display="none";if(currentReportType==="yesterday"){const y=getYesterday();start=startOfDay(y);end=endOfDay(y);title="Yesterday";subtitle=start.toLocaleDateString()}else if(currentReportType==="lastWeek"){[start,end]=getPreviousWeekRange();title="Last Week";subtitle=formatRange(start,end)}else if(currentReportType==="lastMonth"){[start,end]=getPreviousMonthRange();title="Last Month";subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"})}else if(currentReportType==="customDay"){el("customControls").style.display="block";el("customDayControl").style.display="block";const v=el("customDayInput").value||localDateString(getYesterday());el("customDayInput").value=v;start=new Date(v+"T00:00:00");end=new Date(v+"T23:59:59.999");title="Custom Day";subtitle=start.toLocaleDateString()}else if(currentReportType==="customWeek"){el("customControls").style.display="block";el("customWeekControl").style.display="block";const v=el("customWeekInput").value||getWeekNumber(new Date());el("customWeekInput").value=v;const range=getRangeForWeekValue(v);if(!range){showStatus("Please select a valid ISO week.","error");return}[start,end]=range;title="Custom Week";subtitle=formatRange(start,end)}else{el("customControls").style.display="block";el("customMonthControl").style.display="block";const now=new Date(),def=`${now.getFullYear()}-${pad(now.getMonth()+1)}`,v=el("customMonthInput").value||def;el("customMonthInput").value=v;const [year,month]=v.split("-").map(Number);start=new Date(year,month-1,1);end=new Date(year,month,0,23,59,59,999);title="Custom Month";subtitle=start.toLocaleDateString(undefined,{month:"long",year:"numeric"})}syncCustomReportPickerDisplays();const list=entries.filter(e=>{const d=new Date(e.createdAt);return d>=start&&d<=end}).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),servings=calculateReportServings(totals),dailyStats=getDailyCaffeineStats(list);el("reportTitle").textContent=title;el("reportSubtitle").textContent=subtitle;el("reportCarbOz").textContent=Math.round(totals.carbOz);el("reportCafOz").textContent=Math.round(totals.cafOz);el("reportMg").textContent=Math.round(totals.mg);el("reportCarbonatedServings").textContent=servings.carbonated;el("reportCaffeinatedServings").textContent=servings.caffeinated;el("reportClearServings").textContent=servings.clear;el("averageDailyCaffeine").textContent=`${dailyStats.average} mg`;el("highestCaffeineDay").textContent=dailyStats.highest;el("reportEntryCount").textContent=`(${list.length})`;el("reportEntriesList").innerHTML=renderEntryList(list);el("reportEntriesList").style.display=reportEntriesExpanded?"block":"none";el("toggleReportEntries").textContent=reportEntriesExpanded?"▼ Hide Report Entries":"▶ Show Report Entries";const byDrink={};list.forEach(e=>{if(!byDrink[e.name])byDrink[e.name]={oz:0,entries:0,mg:0};byDrink[e.name].oz+=Number(e.ounces);byDrink[e.name].entries+=1;byDrink[e.name].mg+=Number(e.caffeineMg||0)});const rows=Object.entries(byDrink).sort((a,b)=>b[1].oz-a[1].oz);el("drinkBreakdown").innerHTML=rows.length?rows.map(([name,v])=>`<div class="breakdown-row"><strong>${escapeHtml(name)}</strong><span>${round2(v.oz)} oz · ${v.entries} entries · ${round2(v.mg)} mg</span></div>`).join(""):'<div class="empty">No drink data for this report.</div>'}
+function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStorage.getItem(LAST_BACKUP_KEY)||"Never"}function updateDataToolsStatus(){updateLastBackupDisplay();el("dataToolsStatus").innerHTML=`<div class="breakdown-row"><strong>Total Entries</strong><span>${entries.length}</span></div><div class="breakdown-row"><strong>Saved Beverages</strong><span>${beverages.length}</span></div>`}function backupDateStamp(){return localDateString(new Date());}
+function exportData(){
+let url=null;
+try{
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.11",releaseRevision:"r3",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.11-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
+const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
+showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
+}catch(error){showStatus("Backup could not be created. Your saved data was not changed. Please retry.","error")}
+finally{if(url)setTimeout(()=>URL.revokeObjectURL(url),0)}
+}
+function parseImportPayload(parsed){
+if(Array.isArray(parsed))return{entries:parsed,beverages:[]};
+if(!parsed||typeof parsed!=="object"||!Array.isArray(parsed.entries))throw new Error("Unsupported backup structure. Select an MDCA backup or legacy entry-array backup.");
+return{entries:parsed.entries,beverages:Array.isArray(parsed.beverages)?parsed.beverages:[]}
+}
+function isValidImportedDateTime(value){
+if(!value||Number.isNaN(new Date(value).getTime()))return false;
+if(typeof value!=="string")return true;
+const match=value.trim().match(/^(\d{4})-(\d{2})-(\d{2})(?:T|$)/);
+if(!match)return true;
+const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]),leap=year%4===0&&(year%100!==0||year%400===0),days=[31,leap?29:28,31,30,31,30,31,31,30,31,30,31];
+return month>=1&&month<=12&&day>=1&&day<=days[month-1]
+}
+function validateImportedEntry(raw,index){
+if(!raw||typeof raw!=="object")return{ok:false,reason:`Entry ${index+1} is not an object.`};
+const name=String(raw.name||raw.drinkName||"").trim(),ounces=Number(raw.ounces??raw.oz),caffeine=Number(raw.caffeineMg??raw.mg??0),dateValue=raw.createdAt||raw.date;
+if(!name)return{ok:false,reason:`Entry ${index+1} has no drink name.`};
+if(!Number.isFinite(ounces)||ounces<=0)return{ok:false,reason:`Entry ${index+1} has invalid ounces.`};
+if(!Number.isFinite(caffeine)||caffeine<0)return{ok:false,reason:`Entry ${index+1} has invalid caffeine.`};
+if(!isValidImportedDateTime(dateValue))return{ok:false,reason:`Entry ${index+1} has an invalid date/time.`};
+return{ok:true,value:{id:raw.id||Date.now()+index+Math.floor(Math.random()*100000),beverageId:raw.beverageId||null,name,ounces:round2(ounces),caffeinated:raw.caffeinated||raw.caffeine||"No",caffeineMg:round2(caffeine),carbonated:raw.carbonated||"No",clear:raw.clear||raw.clearDrink||"No",createdAt:dateValue}}
+}
+function validateImportedBeverage(raw,index){
+if(!raw||typeof raw!=="object")return{ok:false};
+const name=String(raw.name||"").trim(),defaultOz=Number(raw.defaultOz||0),caffeine=Number(raw.caffeineMg||0);
+if(!name||!Number.isFinite(defaultOz)||defaultOz<0||!Number.isFinite(caffeine)||caffeine<0)return{ok:false};
+return{ok:true,value:{...raw,id:raw.id||`bev_import_${Date.now()}_${index}`,name,defaultOz:round2(defaultOz),caffeineMg:round2(caffeine)}}
+}
+function importDataFile(file){
+const input=el("importDataInput"),reader=new FileReader();
+reader.onerror=()=>{showStatus("The selected backup file could not be read. Your data was not changed.","error");input.value=""};
+reader.onload=event=>{
+try{
+const parsed=JSON.parse(String(event.target.result||"")),payload=parseImportPayload(parsed),recovery={entries:cloneState(entries),beverages:cloneState(beverages)},signatures=new Set(entries.map(x=>`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`));
+let added=0,duplicates=0,rejected=0;
+const nextEntries=[...recovery.entries];
+payload.entries.forEach((raw,index)=>{const checked=validateImportedEntry(raw,index);if(!checked.ok){rejected++;return}const x=checked.value,sig=`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`;if(signatures.has(sig)){duplicates++;return}signatures.add(sig);nextEntries.push(x);added++});
+const ids=new Set(beverages.map(b=>b.id)),nextBeverages=[...recovery.beverages];
+payload.beverages.forEach((raw,index)=>{const checked=validateImportedBeverage(raw,index);if(!checked.ok){rejected++;return}const b=checked.value;if(ids.has(b.id)){duplicates++;return}ids.add(b.id);nextBeverages.push(b);added++});
+if(!commitState(nextEntries,nextBeverages))return;
+renderHome();renderReport();updateDataToolsStatus();
+showStatus(`Import complete: ${added} added, ${duplicates} duplicates skipped, ${rejected} rejected.`,rejected?"warning":"success",6500)
+}catch(error){showStatus(error instanceof SyntaxError?"This file is not valid JSON. Your data was not changed.":error.message||"Import failed. Your data was not changed.","error",6500)}
+finally{input.value=""}
+};
+reader.readAsText(file)
+}
+["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle","bevCaffeinatedToggle","bevCarbonatedToggle","bevClearToggle"].forEach(setupToggle);
+document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",()=>{syncEntryDateTimeDisplays();renderSelectedDatePanel()});el("entryTime").addEventListener("change",syncEntryDateTimeDisplays);el("entryCaffeineMg").addEventListener("input",syncCaffeineFieldWidth);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingBeverageImage=e.target.result;renderBeverageImagePreview()};reader.readAsDataURL(file)});
+el("viewReportsBtn").addEventListener("click",()=>navigateTo("reportsHomePage"));el("openSettingsBtn").addEventListener("click",()=>navigateTo("settingsPage"));el("quickEntryHomeBtn").addEventListener("click",()=>openEntry(null));document.querySelectorAll("[data-nav-back]").forEach(button=>button.addEventListener("click",()=>navigateBack()));document.querySelectorAll("[data-nav-home]").forEach(button=>button.addEventListener("click",()=>navigateHome()));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("openDataToolsFromSettingsBtn").addEventListener("click",()=>{updateDataToolsStatus();navigateTo("dataToolsPage")});el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
+window.__MDCA_TEST__={getRangeForWeekValue,getWeekNumber,isValidLocalDateTime,validateImportedEntry,parseImportPayload,persistState,showStatus};
+el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+renderHome();currentReportType="yesterday";renderReport();navigationStack=["homePage"];renderPage("homePage");
+</script>
+<script>
+"use strict";
+(() => {
+  if (!("serviceWorker" in navigator)) return;
+
+  const reloadKey = "MDCA-sw-reload-v2.0.11-r3";
+  let registration = null;
+  let refreshing = false;
+
+  function hideUpdateNotice() {
+    el("updateNotice")?.classList.remove("visible");
+  }
+
+  function showUpdateNotice(reg) {
+    registration = reg;
+    el("updateNotice")?.classList.add("visible");
+  }
+
+  window.__MDCA_SHOW_UPDATE__ = () => showUpdateNotice(registration);
+
+  el("dismissUpdateBtn")?.addEventListener("click", hideUpdateNotice);
+  el("applyUpdateBtn")?.addEventListener("click", () => {
+    if (!registration?.waiting) {
+      showStatus("The update is still downloading. Try again in a moment.", "warning");
+      return;
+    }
+    registration.waiting.postMessage({ type: "SKIP_WAITING" });
+  });
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (refreshing || sessionStorage.getItem(reloadKey) === "1") return;
+    refreshing = true;
+    sessionStorage.setItem(reloadKey, "1");
+    window.location.reload();
+  });
+
+  window.addEventListener("load", async () => {
+    sessionStorage.removeItem(reloadKey);
+    try {
+      registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
+
+      if (registration.waiting) showUpdateNotice(registration);
+
+      registration.addEventListener("updatefound", () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener("statechange", () => {
+          if (worker.state === "installed" && navigator.serviceWorker.controller) {
+            showUpdateNotice(registration);
+          }
+        });
+      });
+
+      window.setInterval(() => registration.update().catch(() => {}), 60 * 60 * 1000);
+    } catch (error) {
+      showStatus("Offline support could not start. MDCA will continue online.", "warning");
+    }
+  });
+})();
+</script>
+</body>
+</html>
