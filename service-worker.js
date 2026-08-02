@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "MDCA-v2.0.10-r3";
+const CACHE_NAME = "MDCA-v2.0.10-r4";
 const APP_SHELL = [
   "./",
   "./index.html",
