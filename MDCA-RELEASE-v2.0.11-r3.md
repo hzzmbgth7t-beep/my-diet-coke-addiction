@@ -1,52 +1,51 @@
-# MDCA Release Record v2.0.11-r3
+# MDCA Release Record v2.0.11-r3-VERIFIED
 
 **Application:** My Diet Coke Addiction  
 **Release:** v2.0.11-r3  
-**Status:** Release candidate  
-**Scope:** Compact custom-report selectors  
-**Active verified baseline:** `v2.0.10-r4-VERIFIED`  
-**Canonical baseline archive:** `MDCA-v2.0.10-r4-VERIFIED.zip`  
-**Canonical baseline SHA-256:** `7af7c4b8872f69133d2a99b9ca0caf11978d67d9500bcd84807d26492183df82`  
-**Rejected candidates:** `v2.0.11-r1`, `v2.0.11-r2`  
-**Candidate archive:** `MDCA-v2.0.11-r3-RC.zip`  
-**Candidate SHA-256:** Recorded externally  
-**Build timestamp:** 2026-08-02T14:15:00-05:00
+**Baseline designation:** `v2.0.11-r3-VERIFIED`  
+**Status:** Verified production baseline  
+**Scope:** Report Totals, Servings, and compact custom selectors  
+**Canonical archive:** `MDCA-v2.0.11-r3-VERIFIED.zip`  
+**Canonical SHA-256:** Recorded externally  
+**Source candidate:** `MDCA-v2.0.11-r3-RC.zip`  
+**Source candidate SHA-256:** `bd247c67e2c70ea5106c82182a5ae26e8444ed11969a4752f9c73dd9fcfc3637`  
+**Immediate rollback baseline:** `v2.0.10-r4-VERIFIED`  
+**Immediate rollback archive:** `MDCA-v2.0.10-r4-VERIFIED.zip`  
+**Immediate rollback SHA-256:** `7af7c4b8872f69133d2a99b9ca0caf11978d67d9500bcd84807d26492183df82`  
+**Owner approval:** 2026-08-02T14:49:00-05:00
 
-## Reason for Revision
+## Promotion Decision
 
-r2 removed selector overflow, but device review found the native selector
-field and its card substantially larger than their content required.
+The owner approved `v2.0.11-r3` after physical-device review.
 
-r3 replaces the visible native rendering with a compact display field and a
-transparent native picker overlay.
+The candidate is promoted to the active verified production baseline:
+`v2.0.11-r3-VERIFIED`.
 
-## Selector Configuration
+## Verified Changes
 
-Custom Day, Custom Week, and Custom Month now share:
+### Report Totals
 
-- 220-pixel maximum width;
-- responsive width up to 100 percent of available content space;
-- 46-pixel field height;
-- centered 16-pixel display text;
-- compact card padding;
-- content-driven card height;
-- native picker input covering the visible field.
+All six report types use equal Carbonated, Caffeinated, and Caffeine cards
+with rounded values and inline units.
 
-The platform controls retain their native input types:
+### Servings
 
-- `date`;
-- `week`;
-- `month`.
+All six report types show Carbonated, Caffeinated, and Clear servings using
+the approved 12-ounce and 53-milligram formulas.
 
-## Preserved Release Scope
+### Compact Selectors
 
-The report Totals and Servings design and formulas remain unchanged across
-all six report types.
+Custom Day, Custom Week, and Custom Month use centered 220-pixel maximum-width
+fields, exact 46-pixel heights, compact cards, formatted visible values, and
+transparent native picker overlays.
 
-No report range, calculation, entry-list, navigation, storage, import/export,
-or offline behavior was intentionally changed.
+## Verification
 
-## Release Identity
+Automated candidate verification: **181/181 PASS**.
+
+Owner physical-device review and approval: **PASS**.
+
+## Runtime Identity
 
 - visible version: `v2.0.11-r3`;
 - export version: `2.0.11`;
@@ -55,26 +54,13 @@ or offline behavior was intentionally changed.
 - service-worker cache: `MDCA-v2.0.11-r3`;
 - reload key: `MDCA-sw-reload-v2.0.11-r3`.
 
-## Changed Files
+## Promotion Changes
+
+Documentation changed:
 
 - `README.md`;
 - `MDCA-README-v2.0.11-r3.md`;
-- `MDCA-RELEASE-v2.0.11-r3.md`;
-- `index.html`;
-- `service-worker.js`.
+- `MDCA-RELEASE-v2.0.11-r3.md`.
 
-## Preserved Files
-
-These remain byte-for-byte identical to r2:
-
-- `manifest.json`;
-- `icon.png`;
-- `apple-touch-icon.png`;
-- `icon-192.png`;
-- `icon-512.png`.
-
-## Device Verification Required
-
-Verify compact sizing, all three native pickers, all six reports, Totals,
-Servings, Caffeine Stats, Drink Breakdown, Report Entries, navigation,
-offline behavior, data integrity, and owner approval.
+Runtime and assets remain byte-for-byte identical to the approved r3
+candidate.
