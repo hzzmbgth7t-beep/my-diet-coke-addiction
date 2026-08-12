@@ -119,7 +119,7 @@ input[type=file]{font-size:14px;padding:11px}
 
 
 <div id="homePage" class="page active"><div class="app">
-<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.12-r1</div></header>
+<header><img src="icon.png" class="logo" alt="My Diet Coke Addiction icon"><div class="hint home-version">v2.0.12-r2</div></header>
 <div id="saveCompleteNotice" class="card notice" style="font-size:20px;padding:18px;">✓ Entry Saved</div>
 <div class="card"><div class="summary daily-summary home-summary">
 <div class="summary-box"><strong class="daily-stat-label">Carbonated</strong><div class="daily-stat-value"><span id="homeCarbOz">0</span> oz</div></div>
@@ -131,7 +131,7 @@ input[type=file]{font-size:14px;padding:11px}
 </div></div>
 
 <div id="settingsPage" class="page"><div class="app">
-<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Settings</h1><div class="page-nav-version">v2.0.12-r1</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
+<header class="page-nav-header"><button class="back-btn" type="button" data-nav-back>← Back</button><div class="page-nav-center"><h1>Settings</h1><div class="page-nav-version">v2.0.12-r2</div></div><button class="home-nav-btn" type="button" data-nav-home aria-label="Home" title="Home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.5 11.4l1.9 2.2L5 12.2V21h5.2v-5.8h3.6V21H19v-8.8l1.6 1.4 1.9-2.2L12 2.5Z"></path></svg></button></header>
 <div class="card settings-card"><button class="custom-btn" id="manageBeveragesBtn" type="button"><strong>Manage Beverages</strong><span>Add a saved beverage button</span></button><button class="custom-btn" id="openDataToolsFromSettingsBtn" type="button"><strong>Data Tools</strong><span>Export or import your backup</span></button></div>
 </div></div>
 
@@ -220,18 +220,65 @@ input[type=file]{font-size:14px;padding:11px}
 <script>
 "use strict";
 const ENTRY_KEYS=["dietCokeEntriesV2","dietCokeTracker","myDietCokeAddictionEntries"],BEVERAGE_KEY="dietCokeBeveragesV2",LAST_BACKUP_KEY="myDietCokeLastBackup";
-let entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,editingOriginalTimestamp=null,editingOriginalDate="",editingOriginalTime="",selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",navigationStack=["homePage"],entryFormSnapshot="",beverageFormSnapshot="",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false,statusTimer=null;
+const MAX_IMAGE_FILE_SIZE=500*1024,MAX_IMAGE_WIDTH=1024,MAX_IMAGE_HEIGHT=1024,MAX_IMAGE_DATA_URL_SIZE=700*1024;
+let startupWarnings=[],entries=loadEntries(),beverages=loadBeverages(),activeBeverage=null,editingEntryId=null,editingBeverageId=null,editingOriginalTimestamp=null,editingOriginalDate="",editingOriginalTime="",selectedOz=null,entryDateEntriesExpanded=false,reportEntriesExpanded=false,currentReportType="yesterday",navigationStack=["homePage"],entryFormSnapshot="",beverageFormSnapshot="",pendingBeverageImage="",longPressTimer=null,longPressTriggered=false,statusTimer=null;
 function el(id){return document.getElementById(id)}function pad(n){return String(n).padStart(2,"0")}function round2(v){return Math.round((Number(v||0)+Number.EPSILON)*100)/100}function localDateString(d){return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}function timeStringFromDate(d){return`${pad(d.getHours())}:${pad(d.getMinutes())}`}function formatEntryDateDisplay(value){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||"");return match?`${match[2]}/${match[3]}/${match[1].slice(-2)}`:""}function formatEntryTimeDisplay(value){const match=/^(\d{2}):(\d{2})$/.exec(value||"");if(!match)return"";const hour=Number(match[1]),suffix=hour>=12?"PM":"AM",displayHour=hour%12||12;return`${displayHour}:${match[2]} ${suffix}`}function syncEntryDateTimeDisplays(){el("entryDateDisplay").value=formatEntryDateDisplay(el("entryDate").value);el("entryTimeDisplay").value=formatEntryTimeDisplay(el("entryTime").value)}function syncCaffeineFieldWidth(){const input=el("entryCaffeineMg"),text=String(input.value||input.placeholder||"");input.style.width=`${Math.max(2,Math.min(12,text.length+.5))}ch`}function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function endOfDay(d){const x=new Date(d);x.setHours(23,59,59,999);return x}function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d}function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function loadEntries(){for(const key of ENTRY_KEYS){try{const saved=JSON.parse(localStorage.getItem(key)||"[]");if(Array.isArray(saved)&&saved.length)return saved.map(normalizeEntry)}catch(e){}}return[]}function normalizeEntry(e){
-const rawDate=e.createdAt||e.date;
-const validDate=rawDate&&!Number.isNaN(new Date(rawDate).getTime())?rawDate:new Date().toISOString();
-return{id:e.id||Date.now()+Math.floor(Math.random()*1000000),beverageId:e.beverageId||null,name:String(e.name||e.drinkName||"Unnamed Drink"),ounces:round2(e.ounces||e.oz||0),caffeinated:e.caffeinated||e.caffeine||"No",caffeineMg:round2(e.caffeineMg||e.mg||0),carbonated:e.carbonated||"No",clear:e.clear||e.clearDrink||"No",createdAt:validDate}
-}function loadBeverages(){try{const saved=JSON.parse(localStorage.getItem(BEVERAGE_KEY)||"[]");if(Array.isArray(saved))return saved}catch(e){}return[]}function saveAll(){
-const result=persistState(entries,beverages);
-if(!result.ok)showStatus(storageFailureMessage(result),"error");
-return result.ok
+function isSafeRecordId(value){return typeof value==="number"?Number.isFinite(value):typeof value==="string"&&value.trim().length>0&&value.length<=128}
+function makeRecordId(prefix,index=0){if(globalThis.crypto?.randomUUID)return`${prefix}_${crypto.randomUUID()}`;return`${prefix}_${Date.now()}_${index}_${Math.floor(Math.random()*1000000)}`}
+function canonicalYesNo(value,fallback="No"){if(value===undefined||value===null||value==="")return fallback;if(typeof value!=="string")return null;const normalized=value.trim().toLowerCase();if(normalized==="yes")return"Yes";if(normalized==="no")return"No";return null}
+function recordIdKey(value){return`${typeof value}:${String(value)}`}
+function validateEntryRecord(raw,index=0){
+if(!raw||typeof raw!=="object"||Array.isArray(raw))return{ok:false,reason:`Entry ${index+1} is not an object.`};
+const name=String(raw.name??raw.drinkName??"").trim(),ounces=Number(raw.ounces??raw.oz),caffeine=Number(raw.caffeineMg??raw.mg??0),dateValue=raw.createdAt??raw.date,caffeinated=canonicalYesNo(raw.caffeinated??raw.caffeine),carbonated=canonicalYesNo(raw.carbonated),clear=canonicalYesNo(raw.clear??raw.clearDrink);
+if(!name)return{ok:false,reason:`Entry ${index+1} has no drink name.`};
+if(!Number.isFinite(ounces)||ounces<=0)return{ok:false,reason:`Entry ${index+1} has invalid ounces.`};
+if(!Number.isFinite(caffeine)||caffeine<0)return{ok:false,reason:`Entry ${index+1} has invalid caffeine.`};
+if(!isValidImportedDateTime(dateValue))return{ok:false,reason:`Entry ${index+1} has an invalid date/time.`};
+if(!caffeinated||!carbonated||!clear)return{ok:false,reason:`Entry ${index+1} has an invalid Yes/No value.`};
+const id=isSafeRecordId(raw.id)?raw.id:makeRecordId("entry",index),beverageId=raw.beverageId===null||raw.beverageId===undefined||raw.beverageId===""?null:(isSafeRecordId(raw.beverageId)?raw.beverageId:null);
+return{ok:true,value:{id,beverageId,name,ounces:round2(ounces),caffeinated,caffeineMg:round2(caffeine),carbonated,clear,createdAt:dateValue}}
 }
-function cloneState(value){return JSON.parse(JSON.stringify(value))}
+function validateEntryArray(saved){
+if(!Array.isArray(saved))return{ok:false};
+const values=[],ids=new Set();
+for(let index=0;index<saved.length;index++){const checked=validateEntryRecord(saved[index],index);if(!checked.ok)return{ok:false};const key=recordIdKey(checked.value.id);if(ids.has(key))return{ok:false};ids.add(key);values.push(checked.value)}
+return{ok:true,value:values}
+}
+function loadEntries(){
+let emptyFallback=null,foundInvalid=false;
+for(const key of ENTRY_KEYS){
+const raw=localStorage.getItem(key);if(raw===null)continue;
+try{const checked=validateEntryArray(JSON.parse(raw));if(!checked.ok){foundInvalid=true;continue}if(checked.value.length){if(foundInvalid)startupWarnings.push("Some saved entry data could not be read. MDCA left stored data unchanged and used a valid compatibility copy.");return checked.value}if(emptyFallback===null)emptyFallback=checked.value}catch(error){foundInvalid=true}
+}
+if(foundInvalid)startupWarnings.push("Some saved entry data could not be read. MDCA left the stored values unchanged; restore from a backup if entries are missing.");
+return emptyFallback||[]
+}
+function imageDataUrlInfo(value){
+if(value==="")return{ok:true,bytes:0};
+if(typeof value!=="string"||value.length>MAX_IMAGE_DATA_URL_SIZE*2)return{ok:false};
+const match=/^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})$/i.exec(value);
+if(!match)return{ok:false};
+const base64=match[2],padding=(base64.endsWith("==")?2:base64.endsWith("=")?1:0),bytes=Math.floor(base64.length*3/4)-padding;
+return{ok:bytes<=MAX_IMAGE_DATA_URL_SIZE,bytes}
+}
+function validateStoredBeverage(raw,index=0){
+if(!raw||typeof raw!=="object"||Array.isArray(raw))return{ok:false};
+const name=String(raw.name??"").trim(),defaultOz=Number(raw.defaultOz??0),caffeine=Number(raw.caffeineMg??0),caffeinated=canonicalYesNo(raw.caffeinated),carbonated=canonicalYesNo(raw.carbonated),clear=canonicalYesNo(raw.clear),id=isSafeRecordId(raw.id)?raw.id:makeRecordId("bev",index);
+if(!name||!Number.isFinite(defaultOz)||defaultOz<0||!Number.isFinite(caffeine)||caffeine<0||!caffeinated||!carbonated||!clear)return{ok:false};
+const rawImage=raw.image??"",imageInfo=imageDataUrlInfo(rawImage),image=imageInfo.ok?rawImage:"";
+return{ok:true,imageRejected:rawImage!==""&&!imageInfo.ok,value:{id,name,image,initials:String(raw.initials??"").trim(),defaultOz:round2(defaultOz),caffeinated,caffeineMg:round2(caffeine),carbonated,clear}}
+}
+function loadBeverages(){
+const raw=localStorage.getItem(BEVERAGE_KEY);if(raw===null)return[];
+try{
+const saved=JSON.parse(raw);if(!Array.isArray(saved))throw new Error("invalid");
+const values=[],ids=new Set();let imageRejected=false;
+for(let index=0;index<saved.length;index++){const checked=validateStoredBeverage(saved[index],index);if(!checked.ok)throw new Error("invalid");const key=recordIdKey(checked.value.id);if(ids.has(key))throw new Error("invalid");ids.add(key);imageRejected=imageRejected||checked.imageRejected;values.push(checked.value)}
+if(imageRejected)startupWarnings.push("One or more saved beverage images were blocked because they were not safe local image data. Stored data was not changed.");
+return values
+}catch(error){startupWarnings.push("Saved beverage data could not be validated. MDCA left it unchanged; restore from a backup if beverages are missing.");return[]}
+}
+function saveAll(){ const result=persistState(entries,beverages); if(!result.ok)showStatus(storageFailureMessage(result),"error"); return result.ok } function cloneState(value){return JSON.parse(JSON.stringify(value))}
 function storageFailureMessage(result){return result.rollbackSucceeded===false?"Could not save, and automatic recovery may be incomplete. Do not close MDCA; export a backup if possible.":"Could not save on this device. Your prior saved data was preserved. Free storage space or check browser settings, then retry."}
 function persistState(nextEntries,nextBeverages){
 const payloads={"dietCokeEntriesV2":JSON.stringify(nextEntries),"dietCokeTracker":JSON.stringify(nextEntries),"myDietCokeAddictionEntries":JSON.stringify(nextEntries),[BEVERAGE_KEY]:JSON.stringify(nextBeverages)},previous={};
@@ -291,8 +338,8 @@ document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));
 el("entryCaffeineMg").value="";syncCaffeineFieldWidth();el("saveEntryBtn").textContent="Save Entry";el("cancelEntryEditBtn").style.display="none";entryFormSnapshot=""
 }
 function renderHome(){const totals=calculateTotals(entriesForDate(localDateString(new Date())));el("homeCarbOz").textContent=Math.round(totals.carbOz);el("homeCafOz").textContent=Math.round(totals.cafOz);el("homeMg").textContent=Math.round(totals.mg);renderBeverageGrid()}function renderReportsHome(){const totals=calculateTotals(entriesForDate(localDateString(getYesterday())));el("reportsYesterdayCarbOz").textContent=Math.round(totals.carbOz);el("reportsYesterdayCafOz").textContent=Math.round(totals.cafOz);el("reportsYesterdayMg").textContent=Math.round(totals.mg)}
-function beverageHTML(bev){if(bev.image)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
-function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${bev.id}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev;btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(beverages.find(b=>b.id===id))})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>b.id===id))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
+function beverageHTML(bev){if(bev.image&&imageDataUrlInfo(bev.image).ok)return`<img src="${bev.image}" alt=""><span>${escapeHtml(bev.name)}</span>`;if(bev.name.length>12&&bev.initials)return`<span class="initials">${escapeHtml(bev.initials)}</span><span>${escapeHtml(bev.initials)}</span>`;return`<span>${escapeHtml(bev.name)}</span>`}
+function renderBeverageGrid(){let h="";beverages.forEach(bev=>h+=`<button class="bev-btn" data-bev="${escapeHtml(String(bev.id))}" type="button">${beverageHTML(bev)}</button>`);if(!h)h='<div class="empty beverage-grid-empty">No beverages saved. Add one in Settings.</div>';el("beverageGrid").innerHTML=h;document.querySelectorAll("[data-bev]").forEach(btn=>{const id=btn.dataset.bev,findBeverage=()=>beverages.find(b=>String(b.id)===id);btn.addEventListener("touchstart",()=>startLongPress(id),{passive:true});btn.addEventListener("touchend",endLongPress);btn.addEventListener("touchcancel",cancelLongPress);btn.addEventListener("mousedown",()=>startLongPress(id));btn.addEventListener("mouseup",endLongPress);btn.addEventListener("mouseleave",cancelLongPress);btn.addEventListener("click",e=>{if(longPressTriggered){e.preventDefault();longPressTriggered=false;return}openEntry(findBeverage())})})}function startLongPress(id){longPressTriggered=false;clearTimeout(longPressTimer);longPressTimer=setTimeout(()=>{longPressTriggered=true;openBeverageEditor(beverages.find(b=>String(b.id)===String(id)))},650)}function endLongPress(){clearTimeout(longPressTimer)}function cancelLongPress(){clearTimeout(longPressTimer)}
 function openEntry(bev,existing=null){
 activeBeverage=bev||null;editingEntryId=existing?existing.id:null;selectedOz=null;
 document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));el("manualOz").value="";
@@ -334,10 +381,22 @@ if(!confirm("Delete this entry?"))return;
 const nextEntries=entries.filter(e=>e.id!==id);
 if(!commitState(nextEntries,beverages))return;
 renderHome();renderReportsHome();renderSelectedDatePanel();renderReport();showStatus("Entry deleted.","success")
-}window.editEntry=editEntry;window.copyEntry=copyEntry;window.deleteEntry=deleteEntry;
+}
 function renderSelectedDatePanel(){const v=el("entryDate").value||localDateString(new Date()),list=entriesForDate(v).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),totals=calculateTotals(list),label=new Date(v+"T00:00:00").toLocaleDateString();el("selectedDateTotalsTitle").textContent=`Totals for ${label}`;el("dateCarbOz").textContent=Math.round(totals.carbOz);el("dateCafOz").textContent=Math.round(totals.cafOz);el("dateMg").textContent=Math.round(totals.mg);el("dateEntryListTitle").textContent=`Entries for ${label}`;el("dateEntryCount").textContent=`(${list.length})`;el("dateEntriesList").innerHTML=renderEntryList(list);el("dateEntriesList").style.display=entryDateEntriesExpanded?"block":"none";el("toggleDateEntries").textContent=entryDateEntriesExpanded?"▼ Hide Entries":"▶ Show Entries"}
-function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${new Date(e.createdAt).toLocaleString()}<br>Caf: ${e.caffeinated} · ${e.caffeineMg||0} mg · Carb: ${e.carbonated} · Clear: ${e.clear}</div></div><div class="entry-actions"><button class="small-btn edit-btn" onclick="editEntry(${e.id})">Edit</button><button class="small-btn edit-btn" onclick="copyEntry(${e.id})">Copy</button><button class="small-btn delete-btn" onclick="deleteEntry(${e.id})">Delete</button></div></div></div>`).join("")}
-function openBeverageEditor(bev){editingBeverageId=bev?bev.id:null;pendingBeverageImage=bev?(bev.image||""):"";el("bevEditTitle").textContent=bev?"Edit Beverage":"Add Beverage";el("bevName").value=bev?bev.name:"";el("bevInitials").value=bev?(bev.initials||""):"";el("bevDefaultOz").value=bev?(bev.defaultOz||""):"";el("bevCaffeineMg").value=bev?(bev.caffeineMg||""):"";setToggle("bevCaffeinatedToggle",bev?bev.caffeinated:"");setToggle("bevCarbonatedToggle",bev?bev.carbonated:"");setToggle("bevClearToggle",bev?bev.clear:"");el("bevImage").value="";renderBeverageImagePreview();el("deleteBeverageBtn").style.display=bev?"block":"none";el("historicalUpdateOptions").style.display=bev?"block":"none";const future=document.querySelector('input[name="historicalUpdate"][value="future"]');if(future)future.checked=true;renderBeverageStats(bev);markBeverageFormClean();navigateTo("beverageEditPage")}function renderBeverageImagePreview(){el("bevImagePreview").innerHTML=pendingBeverageImage?`<img src="${pendingBeverageImage}" alt="">`:"No Image"}function saveBeverage(){
+function renderEntryList(list){if(!list.length)return'<div class="empty">No entries found.</div>';return list.map(e=>{const id=escapeHtml(String(e.id));return`<div class="entry"><div class="entry-top"><div><div class="entry-title">${escapeHtml(e.name)} — ${e.ounces} oz</div><div class="entry-meta">${escapeHtml(new Date(e.createdAt).toLocaleString())}<br>Caf: ${escapeHtml(e.caffeinated)} · ${e.caffeineMg||0} mg · Carb: ${escapeHtml(e.carbonated)} · Clear: ${escapeHtml(e.clear)}</div></div><div class="entry-actions"><button class="small-btn edit-btn" type="button" data-entry-action="edit" data-entry-id="${id}">Edit</button><button class="small-btn edit-btn" type="button" data-entry-action="copy" data-entry-id="${id}">Copy</button><button class="small-btn delete-btn" type="button" data-entry-action="delete" data-entry-id="${id}">Delete</button></div></div></div>`}).join("")}
+function findEntryByActionId(id){return entries.find(entry=>String(entry.id)===id)}
+function handleEntryActionClick(event){const button=event.target.closest("[data-entry-action][data-entry-id]");if(!button)return;const entry=findEntryByActionId(button.dataset.entryId);if(!entry){showStatus("That entry is no longer available. Refresh the view and try again.","warning");return}if(button.dataset.entryAction==="edit")editEntry(entry.id);else if(button.dataset.entryAction==="copy")copyEntry(entry.id);else if(button.dataset.entryAction==="delete")deleteEntry(entry.id)}
+function openBeverageEditor(bev){editingBeverageId=bev?bev.id:null;pendingBeverageImage=bev?(bev.image||""):"";el("bevEditTitle").textContent=bev?"Edit Beverage":"Add Beverage";el("bevName").value=bev?bev.name:"";el("bevInitials").value=bev?(bev.initials||""):"";el("bevDefaultOz").value=bev?(bev.defaultOz||""):"";el("bevCaffeineMg").value=bev?(bev.caffeineMg||""):"";setToggle("bevCaffeinatedToggle",bev?bev.caffeinated:"");setToggle("bevCarbonatedToggle",bev?bev.carbonated:"");setToggle("bevClearToggle",bev?bev.clear:"");el("bevImage").value="";renderBeverageImagePreview();el("deleteBeverageBtn").style.display=bev?"block":"none";el("historicalUpdateOptions").style.display=bev?"block":"none";const future=document.querySelector('input[name="historicalUpdate"][value="future"]');if(future)future.checked=true;renderBeverageStats(bev);markBeverageFormClean();navigateTo("beverageEditPage")}function renderBeverageImagePreview(){const preview=el("bevImagePreview");preview.replaceChildren();if(!pendingBeverageImage){preview.textContent="No Image";return}if(!imageDataUrlInfo(pendingBeverageImage).ok){preview.textContent="No Image";return}const image=document.createElement("img");image.src=pendingBeverageImage;image.alt="";preview.appendChild(image)}
+function validateImageDimensions(dataUrl){return new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image.naturalWidth>0&&image.naturalHeight>0&&image.naturalWidth<=MAX_IMAGE_WIDTH&&image.naturalHeight<=MAX_IMAGE_HEIGHT);image.onerror=()=>resolve(false);image.src=dataUrl})}
+async function validateImageDataUrl(dataUrl){const info=imageDataUrlInfo(dataUrl);if(!info.ok)return false;if(dataUrl==="")return true;return validateImageDimensions(dataUrl)}
+function handleBeverageImageFile(file,input){
+if(!["image/jpeg","image/png","image/webp"].includes(file.type)){showStatus("Choose a JPEG, PNG, or WebP image. Your saved beverage was not changed.","error");input.value="";return}
+if(file.size>MAX_IMAGE_FILE_SIZE){showStatus("That image is too large. Choose an image under 500 KB. Your saved beverage was not changed.","error");input.value="";return}
+const reader=new FileReader();
+reader.onerror=()=>{showStatus("The image could not be read. Your saved beverage was not changed.","error");input.value=""};
+reader.onload=async event=>{const dataUrl=String(event.target.result||"");if(!imageDataUrlInfo(dataUrl).ok||!(await validateImageDimensions(dataUrl))){showStatus("That image is unsupported or exceeds 1024 × 1024 pixels. Your saved beverage was not changed.","error");input.value="";return}pendingBeverageImage=dataUrl;renderBeverageImagePreview()};
+reader.readAsDataURL(file)
+}function saveBeverage(){
 const name=el("bevName").value.trim(),defaultOz=Number(el("bevDefaultOz").value||0),caffeine=Number(el("bevCaffeineMg").value||0);
 if(!name){showStatus("Please enter a beverage name.","error");return}
 if(!Number.isFinite(defaultOz)||defaultOz<0||!Number.isFinite(caffeine)||caffeine<0){showStatus("Please enter valid beverage ounces and caffeine values.","error");return}
@@ -380,7 +439,7 @@ function updateLastBackupDisplay(){el("lastBackupDisplay").textContent=localStor
 function exportData(){
 let url=null;
 try{
-const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.12",releaseRevision:"r1",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+const data={app:"MDCA",applicationName:"My Diet Coke Addiction",version:"2.0.12",releaseRevision:"r2",exportedAt:new Date().toISOString(),entries,beverages},blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
 url=URL.createObjectURL(blob);a.href=url;a.download=`MDCA-backup-v2.0.12-${backupDateStamp()}.json`;document.body.appendChild(a);a.click();a.remove();
 const backupTime=new Date().toLocaleString(),stored=setLastBackupSafely(backupTime);updateLastBackupDisplay();
 showStatus(stored?`Backup started: ${a.download}`:`Backup started: ${a.download}. Last Backup time could not be stored.`,stored?"success":"warning")
@@ -389,8 +448,8 @@ finally{if(url)setTimeout(()=>URL.revokeObjectURL(url),0)}
 }
 function parseImportPayload(parsed){
 if(Array.isArray(parsed))return{entries:parsed,beverages:[]};
-if(!parsed||typeof parsed!=="object"||!Array.isArray(parsed.entries))throw new Error("Unsupported backup structure. Select an MDCA backup or legacy entry-array backup.");
-return{entries:parsed.entries,beverages:Array.isArray(parsed.beverages)?parsed.beverages:[]}
+if(!parsed||typeof parsed!=="object"||!Array.isArray(parsed.entries)||("beverages"in parsed&&!Array.isArray(parsed.beverages)))throw new Error("Unsupported backup structure. Select an MDCA backup or legacy entry-array backup.");
+return{entries:parsed.entries,beverages:parsed.beverages||[]}
 }
 function isValidImportedDateTime(value){
 if(!value||Number.isNaN(new Date(value).getTime()))return false;
@@ -400,32 +459,23 @@ if(!match)return true;
 const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]),leap=year%4===0&&(year%100!==0||year%400===0),days=[31,leap?29:28,31,30,31,30,31,31,30,31,30,31];
 return month>=1&&month<=12&&day>=1&&day<=days[month-1]
 }
-function validateImportedEntry(raw,index){
-if(!raw||typeof raw!=="object")return{ok:false,reason:`Entry ${index+1} is not an object.`};
-const name=String(raw.name||raw.drinkName||"").trim(),ounces=Number(raw.ounces??raw.oz),caffeine=Number(raw.caffeineMg??raw.mg??0),dateValue=raw.createdAt||raw.date;
-if(!name)return{ok:false,reason:`Entry ${index+1} has no drink name.`};
-if(!Number.isFinite(ounces)||ounces<=0)return{ok:false,reason:`Entry ${index+1} has invalid ounces.`};
-if(!Number.isFinite(caffeine)||caffeine<0)return{ok:false,reason:`Entry ${index+1} has invalid caffeine.`};
-if(!isValidImportedDateTime(dateValue))return{ok:false,reason:`Entry ${index+1} has an invalid date/time.`};
-return{ok:true,value:{id:raw.id||Date.now()+index+Math.floor(Math.random()*100000),beverageId:raw.beverageId||null,name,ounces:round2(ounces),caffeinated:raw.caffeinated||raw.caffeine||"No",caffeineMg:round2(caffeine),carbonated:raw.carbonated||"No",clear:raw.clear||raw.clearDrink||"No",createdAt:dateValue}}
-}
-function validateImportedBeverage(raw,index){
-if(!raw||typeof raw!=="object")return{ok:false};
-const name=String(raw.name||"").trim(),defaultOz=Number(raw.defaultOz||0),caffeine=Number(raw.caffeineMg||0);
-if(!name||!Number.isFinite(defaultOz)||defaultOz<0||!Number.isFinite(caffeine)||caffeine<0)return{ok:false};
-return{ok:true,value:{...raw,id:raw.id||`bev_import_${Date.now()}_${index}`,name,defaultOz:round2(defaultOz),caffeineMg:round2(caffeine)}}
+function validateImportedEntry(raw,index){return validateEntryRecord(raw,index)}
+async function validateImportedBeverage(raw,index){
+const checked=validateStoredBeverage(raw,index);if(!checked.ok)return{ok:false,reason:`Beverage ${index+1} is invalid.`};
+if((raw.image??"")!==""&&!(await validateImageDataUrl(String(raw.image))))return{ok:false,reason:`Beverage ${index+1} has an unsupported or oversized image.`};
+return{ok:true,value:checked.value}
 }
 function importDataFile(file){
 const input=el("importDataInput"),reader=new FileReader();
 reader.onerror=()=>{showStatus("The selected backup file could not be read. Your data was not changed.","error");input.value=""};
-reader.onload=event=>{
+reader.onload=async event=>{
 try{
 const parsed=JSON.parse(String(event.target.result||"")),payload=parseImportPayload(parsed),recovery={entries:cloneState(entries),beverages:cloneState(beverages)},signatures=new Set(entries.map(x=>`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`));
 let added=0,duplicates=0,rejected=0;
 const nextEntries=[...recovery.entries];
-payload.entries.forEach((raw,index)=>{const checked=validateImportedEntry(raw,index);if(!checked.ok){rejected++;return}const x=checked.value,sig=`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`;if(signatures.has(sig)){duplicates++;return}signatures.add(sig);nextEntries.push(x);added++});
-const ids=new Set(beverages.map(b=>b.id)),nextBeverages=[...recovery.beverages];
-payload.beverages.forEach((raw,index)=>{const checked=validateImportedBeverage(raw,index);if(!checked.ok){rejected++;return}const b=checked.value;if(ids.has(b.id)){duplicates++;return}ids.add(b.id);nextBeverages.push(b);added++});
+for(let index=0;index<payload.entries.length;index++){const checked=validateImportedEntry(payload.entries[index],index);if(!checked.ok){rejected++;continue}const x=checked.value,sig=`${x.createdAt}|${x.name}|${x.ounces}|${x.caffeineMg}`;if(signatures.has(sig)){duplicates++;continue}signatures.add(sig);nextEntries.push(x);added++}
+const ids=new Set(beverages.map(b=>recordIdKey(b.id))),nextBeverages=[...recovery.beverages];
+for(let index=0;index<payload.beverages.length;index++){const checked=await validateImportedBeverage(payload.beverages[index],index);if(!checked.ok){rejected++;continue}const b=checked.value,key=recordIdKey(b.id);if(ids.has(key)){duplicates++;continue}ids.add(key);nextBeverages.push(b);added++}
 if(!commitState(nextEntries,nextBeverages))return;
 renderHome();renderReportsHome();renderReport();updateDataToolsStatus();
 showStatus(`Import complete: ${added} added, ${duplicates} duplicates skipped, ${rejected} rejected.`,rejected?"warning":"success",6500)
@@ -435,18 +485,18 @@ finally{input.value=""}
 reader.readAsText(file)
 }
 ["entryCaffeinatedToggle","entryCarbonatedToggle","entryClearToggle","bevCaffeinatedToggle","bevCarbonatedToggle","bevClearToggle"].forEach(setupToggle);
-document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",()=>{syncEntryDateTimeDisplays();renderSelectedDatePanel()});el("entryTime").addEventListener("change",syncEntryDateTimeDisplays);el("entryCaffeineMg").addEventListener("input",syncCaffeineFieldWidth);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingBeverageImage=e.target.result;renderBeverageImagePreview()};reader.readAsDataURL(file)});
+document.querySelectorAll(".oz-btn").forEach(btn=>btn.addEventListener("click",()=>{selectedOz=Number(btn.dataset.oz);el("manualOz").value="";document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");updateCalculatedCaffeine()}));el("manualOz").addEventListener("input",()=>{if(el("manualOz").value){selectedOz=null;document.querySelectorAll(".oz-btn").forEach(b=>b.classList.remove("selected"));updateCalculatedCaffeine()}});el("entryDate").addEventListener("change",()=>{syncEntryDateTimeDisplays();renderSelectedDatePanel()});el("entryTime").addEventListener("change",syncEntryDateTimeDisplays);el("entryCaffeineMg").addEventListener("input",syncCaffeineFieldWidth);el("bevImage").addEventListener("change",event=>{const file=event.target.files[0];if(file)handleBeverageImageFile(file,event.target)});document.addEventListener("click",handleEntryActionClick);
 el("viewReportsBtn").addEventListener("click",()=>navigateTo("reportsHomePage"));el("openSettingsBtn").addEventListener("click",()=>navigateTo("settingsPage"));el("quickEntryHomeBtn").addEventListener("click",()=>openEntry(null));document.querySelectorAll("[data-nav-back]").forEach(button=>button.addEventListener("click",()=>navigateBack()));document.querySelectorAll("[data-nav-home]").forEach(button=>button.addEventListener("click",()=>navigateHome()));el("saveEntryBtn").addEventListener("click",saveEntry);el("cancelEntryEditBtn").addEventListener("click",()=>openEntry(activeBeverage));el("toggleDateEntries").addEventListener("click",()=>{entryDateEntriesExpanded=!entryDateEntriesExpanded;renderSelectedDatePanel()});el("saveBeverageBtn").addEventListener("click",saveBeverage);el("deleteBeverageBtn").addEventListener("click",deleteBeverage);el("manageBeveragesBtn").addEventListener("click",()=>openBeverageEditor(null));el("openDataToolsFromSettingsBtn").addEventListener("click",()=>{updateDataToolsStatus();navigateTo("dataToolsPage")});el("exportDataBtn").addEventListener("click",exportData);el("importDataInput").addEventListener("change",event=>{const file=event.target.files[0];if(file)importDataFile(file)});document.querySelectorAll("[data-report]").forEach(btn=>btn.addEventListener("click",()=>openReport(btn.dataset.report)));el("toggleReportEntries").addEventListener("click",()=>{reportEntriesExpanded=!reportEntriesExpanded;renderReport()});el("customDayInput").addEventListener("change",renderReport);el("customWeekInput").addEventListener("change",renderReport);el("customMonthInput").addEventListener("change",renderReport);
-window.__MDCA_TEST__={getRangeForWeekValue,getWeekNumber,isValidLocalDateTime,validateImportedEntry,parseImportPayload,persistState,showStatus};
+window.__MDCA_TEST__={getRangeForWeekValue,getWeekNumber,isValidLocalDateTime,validateImportedEntry,validateStoredBeverage,imageDataUrlInfo,parseImportPayload,persistState,showStatus};
 el("customDayInput").value=localDateString(getYesterday());el("customWeekInput").value=getWeekNumber(new Date());const now=new Date();el("customMonthInput").value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-renderHome();renderReportsHome();currentReportType="yesterday";renderReport();navigationStack=["homePage"];renderPage("homePage");
+renderHome();renderReportsHome();currentReportType="yesterday";renderReport();navigationStack=["homePage"];renderPage("homePage");if(startupWarnings.length)showStatus(startupWarnings.join(" "),"warning",10000);
 </script>
 <script>
 "use strict";
 (() => {
   if (!("serviceWorker" in navigator)) return;
 
-  const reloadKey = "MDCA-sw-reload-v2.0.12-r1";
+  const reloadKey = "MDCA-sw-reload-v2.0.12-r2";
   let registration = null;
   let refreshing = false;
 

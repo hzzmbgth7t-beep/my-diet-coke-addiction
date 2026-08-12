@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "MDCA-v2.0.12-r1";
+const CACHE_NAME = "MDCA-v2.0.12-r2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -41,10 +41,16 @@ self.addEventListener("fetch", event => {
     event.respondWith(
       fetch(request)
         .then(response => {
+          const responseOrigin = new URL(response.url || request.url).origin;
+          if (!response.ok || responseOrigin !== self.location.origin) {
+            return response;
+          }
+
           const copy = response.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => cache.put("./index.html", copy));
-          return response;
+          return caches.open(CACHE_NAME)
+            .then(cache => cache.put("./index.html", copy))
+            .then(() => response)
+            .catch(() => response);
         })
         .catch(() => caches.match("./index.html"))
     );
