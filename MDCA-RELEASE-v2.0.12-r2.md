@@ -1,51 +1,52 @@
 # MDCA Release Record v2.0.12-r2-RC
 
 **Application:** My Diet Coke Addiction  
-**Release:** v2.0.12-r2  
-**Status:** Release candidate — not verified  
-**Scope:** Security, external-boundary, storage, image, and service-worker hardening  
+**Status:** Release candidate — not verified production  
 **Source baseline:** `v2.0.12-r1-VERIFIED`  
-**Source archive SHA-256:** `32c744c80a648d27ef1419c68ca7319e1a5e6f06f0cde70f292a7b3ab22007e9`  
+**Source SHA-256:** `32c744c80a648d27ef1419c68ca7319e1a5e6f06f0cde70f292a7b3ab22007e9`  
 **Candidate archive:** `MDCA-v2.0.12-r2-RC.zip`  
-**Candidate SHA-256:** Recorded in `MDCA-v2.0.12-r2-RC.zip.sha256`  
-**Immediate rollback baseline:** `v2.0.11-r3-VERIFIED`  
-**Owner approval:** Pending
+**Candidate SHA-256:** Recorded externally in `MDCA-v2.0.12-r2-RC.zip.sha256`  
+**Immediate rollback:** `v2.0.11-r3-VERIFIED`  
+**Built:** 2026-08-12
 
-## Decision
+## URLs
 
-This package is an RC only. `v2.0.12-r1-VERIFIED` remains the active
-verified production baseline until all acceptance gates and explicit owner
-approval pass.
+**Repository:** https://github.com/hzzmbgth7t-beep/my-diet-coke-addiction
 
-## Runtime Identity
+**Live application:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/
 
-- visible version: `v2.0.12-r2`
-- export version: `2.0.12`
-- export revision: `r2`
-- service-worker cache: `MDCA-v2.0.12-r2`
-- reload key: `MDCA-sw-reload-v2.0.12-r2`
+**Cache Buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?cb=v2.0.12-r2-RC
 
-## Changed Runtime Files
+## Scope
 
-- `index.html`
-- `service-worker.js`
+Behavior-preserving hardening only:
 
-## Preserved Runtime Assets
+- safe dynamic entry action dispatch;
+- entry/beverage validation at external boundaries;
+- storage mirror integrity and recovery behavior;
+- transactional import/persistence protection;
+- bounded local-only beverage image handling;
+- service-worker navigation cache integrity.
 
-- `manifest.json`
-- `icon.png`
-- `apple-touch-icon.png`
-- `icon-192.png`
-- `icon-512.png`
+## Preserved
 
-## Documentation
+- report/date/calculation algorithms;
+- user-visible application architecture and navigation;
+- storage keys and compatible backup structures;
+- `manifest.json`;
+- `icon.png`;
+- `apple-touch-icon.png`;
+- `icon-192.png`;
+- `icon-512.png`;
+- flat 10-file deployment topology.
 
-- `README.md`
-- `MDCA-README-v2.0.12-r2.md`
-- `MDCA-RELEASE-v2.0.12-r2.md`
+## Promotion Status
 
-## Verification
+This is an RC. Repository verification, deployed cache-buster verification,
+physical Safari/Home Screen tests, offline/update tests, and explicit owner
+approval remain required before `-VERIFIED` promotion.
 
-Local automated verification and checksums are supplied as external build
-evidence. Repository verification and physical-device acceptance remain
-required and UNVERIFIED.
+## Recovery
+
+`v2.0.12-r1-VERIFIED` remains the active verified baseline.
+Immediate rollback remains `v2.0.11-r3-VERIFIED`.
