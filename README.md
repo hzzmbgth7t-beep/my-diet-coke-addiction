@@ -1,4 +1,4 @@
-# MDCA README v2.0.12-r4-RC
+# MDCA README v2.0.12-r4
 
 ## URLs
 
@@ -6,26 +6,27 @@
 
 **Live application:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/
 
-**Cache Buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?cb=v2.0.12-r4-RC
+**Cache Buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?cb=v2.0.12-r4
 
-**Document version:** v2.0.12-r4-RC  
+**Document version:** v2.0.12-r4  
 **Application:** My Diet Coke Addiction  
-**Status:** Release candidate — deployment/device testing and owner approval required  
+**Status:** Approved production release  
 **Scope:** Reports page Quick/Custom two-column layout  
-**Active verified baseline:** `v2.0.12-r3-VERIFIED`  
-**Canonical baseline archive:** `MDCA-v2.0.12-r3-VERIFIED.zip`  
-**Canonical baseline SHA-256:** `e3e66b174ad4877b2be17f51fa22061646311558200331d40d9491e59b6d64cf`  
-**Immediate rollback baseline:** `v2.0.12-r2-VERIFIED`  
-**Immediate rollback SHA-256:** `5945ca62bfae7170bc99b44c5789be06b3cda777f010d5ccffa98a54b09db27d`  
-**Candidate:** `v2.0.12-r4-RC`  
-**Candidate archive:** `MDCA-v2.0.12-r4-RC.zip`  
-**Candidate SHA-256:** Recorded externally in `MDCA-v2.0.12-r4-RC.zip.sha256`  
-**Built:** 2026-08-12  
-**Owner approval:** Pending
+**Active production baseline:** `v2.0.12-r4`  
+**Canonical archive:** `MDCA-v2.0.12-r4.zip`  
+**Canonical SHA-256:** Recorded externally in `MDCA-v2.0.12-r4.zip.sha256`  
+**Source candidate:** `v2.0.12-r4-RC`  
+**Source candidate SHA-256:** `43cfc938765dfeac750b149c9f923b3ffc4be3c3df8cc5c4f8957fe27597600d`  
+**Immediate rollback baseline:** `v2.0.12-r3-VERIFIED`  
+**Immediate rollback archive:** `MDCA-v2.0.12-r3-VERIFIED.zip`  
+**Immediate rollback SHA-256:** `e3e66b174ad4877b2be17f51fa22061646311558200331d40d9491e59b6d64cf`  
+**Previous rollback baseline:** `v2.0.12-r2-VERIFIED`  
+**Owner approval:** Accepted after complete owner testing on 2026-08-13  
+**Promoted:** 2026-08-13
 
-## Candidate Scope
+## Production Scope
 
-The Reports page now uses one paired two-column report-selection section:
+The Reports page uses a paired two-column report-selection layout:
 
 | Quick Reports | Custom Reports |
 |---|---|
@@ -33,45 +34,52 @@ The Reports page now uses one paired two-column report-selection section:
 | Last Week | Custom Week |
 | Last Month | Custom Month |
 
-Each button occupies one half of its row. The previous standalone Custom Reports
+Each button occupies one half of its row. The prior standalone Custom Reports
 section is removed.
 
-All six existing report destinations and their report logic remain unchanged.
+All six report destinations and report logic remain unchanged.
 
-## Preserved Behavior
+## Acceptance Record
 
-- Yesterday's Totals section
-- Reports Entries section
-- Report date/range calculations
-- Serving formulas and Drink Breakdown
-- Entry CRUD and shared Entries scrolling
-- Storage/import/export contracts
-- Beverage behavior
-- Service-worker behavior except required r4 cache identity
-- Manifest and icon assets
-- Dependency-free static PWA architecture
+The owner reported complete testing and accepted `v2.0.12-r4-RC` on 2026-08-13.
 
-## Version Identity
+## Version Identity Convention
 
-This RC displays `v2.0.12-r4-RC` in-app, including Data Tools.
+Any non-production build must display its complete suffix or descriptor in-app.
 
-Verified production will display `v2.0.12-r4` with no `-VERIFIED` suffix.
+Approved production releases use only the version/revision with no status
+suffix. Therefore this release displays `v2.0.12-r4`.
 
-## Verification Status
+The `-VERIFIED` designation is not used for new production release identities,
+filenames, README titles, or normal release terminology. Historical releases
+retain their original historical names.
 
-Still required before promotion:
+Data Tools displays the same complete visible identity.
 
-- fresh live repository verification after upload;
-- Cache Buster deployment verification;
-- Home Screen layout testing at device width;
-- all six Reports navigation targets;
-- Entries/offline smoke testing;
-- explicit owner approval.
+## Promotion Integrity
+
+Promotion changes documentation plus the specifically authorized visible
+identity only:
+
+- `v2.0.12-r4-RC` → `v2.0.12-r4`
+
+The tested Reports layout, report logic, calculations, storage behavior,
+Entries behavior, service-worker behavior, manifest, and icons are otherwise
+unchanged from the accepted RC.
+
+Runtime identities:
+
+- visible production version: `v2.0.12-r4`
+- export version: `2.0.12`
+- export revision: `r4`
+- backup prefix: `MDCA-backup-v2.0.12-`
+- service-worker cache: `MDCA-v2.0.12-r4`
+- reload key: `MDCA-sw-reload-v2.0.12-r4`
 
 ## Package
 
-The RC contains exactly 10 complete flat production files.
+The production archive contains exactly 10 complete flat production files.
 
 ## Recovery
 
-The active verified baseline remains `v2.0.12-r3-VERIFIED`.
+Immediate rollback remains the historical `v2.0.12-r3-VERIFIED` package.
