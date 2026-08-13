@@ -1,13 +1,14 @@
-# MDCA Release Record v2.0.12-r3-RC
+# MDCA Release Record v2.0.12-r3-VERIFIED
 
 **Application:** My Diet Coke Addiction  
-**Status:** Release candidate — not verified production  
-**Source baseline:** `v2.0.12-r2-VERIFIED`  
-**Source baseline SHA-256:** `5945ca62bfae7170bc99b44c5789be06b3cda777f010d5ccffa98a54b09db27d`  
-**Candidate archive:** `MDCA-v2.0.12-r3-RC.zip`  
-**Candidate SHA-256:** Recorded externally in `MDCA-v2.0.12-r3-RC.zip.sha256`  
-**Immediate rollback:** `v2.0.12-r1-VERIFIED`  
-**Built:** 2026-08-12
+**Status:** Verified production baseline  
+**Runtime identity:** `v2.0.12-r3`  
+**Verified designation:** `v2.0.12-r3-VERIFIED`  
+**Source candidate:** `v2.0.12-r3-RC`  
+**Source candidate SHA-256:** `73706f95d243e84df78e5f45a9e6c1b0d58111f4f038e3447cc6a0eb15227df6`  
+**Immediate rollback:** `v2.0.12-r2-VERIFIED`  
+**Rollback SHA-256:** `5945ca62bfae7170bc99b44c5789be06b3cda777f010d5ccffa98a54b09db27d`  
+**Owner approval:** Approved 2026-08-12
 
 ## URLs
 
@@ -15,35 +16,16 @@
 
 **Live application:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/
 
-**Cache Buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?cb=v2.0.12-r3-RC
+**Cache Buster:** https://hzzmbgth7t-beep.github.io/my-diet-coke-addiction/?cb=v2.0.12-r3-VERIFIED
 
-## Scope
+## Verification
 
-- Home Entries shows today's local-calendar entries.
-- Reports Entries shows yesterday's local-calendar entries.
-- Both new sections reuse the existing Entries bar/list presentation.
-- Existing Selected Date and Report Entries controls use the same shared
-  toggle/render/scroll functions.
-- Show Entries scrolls the expanded section fully into view when possible;
-  oversized sections align the Entries bar with the top of the viewport.
-- Hide Entries collapses and scrolls to page top.
+Home Screen r3 acceptance: **8/8 PASS**.
 
-## Preserved
+Promotion removes the `-RC` suffix from visible in-app identity. No
+`-VERIFIED` suffix is displayed in production. All other runtime feature logic
+remains identical to the approved RC.
 
-Calculation/date-range functions were preserved unchanged from
-`v2.0.12-r2-VERIFIED`. Storage/import/export schemas, manifest, icons,
-service-worker behavior, and PWA architecture are unchanged except for required
-r3 release/cache identity.
+## Recovery
 
-## Promotion Status
-
-Repository deployment verification, Home Screen device testing, offline smoke
-testing, and explicit owner approval remain required.
-
-## Version Identity Convention
-
-Visible in-app version identity must include any non-production suffix or
-descriptor. Release candidates therefore display `-RC`. A verified production
-release displays only its actual version/revision with no `-VERIFIED` suffix.
-The Data Tools page displays the same complete visible identity in place of its
-descriptive subtitle.
+Immediate rollback: `v2.0.12-r2-VERIFIED`.
