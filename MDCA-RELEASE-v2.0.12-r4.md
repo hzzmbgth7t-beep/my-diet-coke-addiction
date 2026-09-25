@@ -43,3 +43,23 @@ logic remains unchanged from the accepted RC.
 ## Recovery
 
 Immediate rollback: `v2.0.12-r3-VERIFIED`.
+
+## Artifact Filename and Full-Update Standard
+
+Every newly created backup, save, archive, handoff, evidence, checksum, export,
+snapshot, and other generated artifact filename must include `YYYY-MM-DD-HHMM`.
+`HHMM` is 24-hour U.S. Eastern Time. The current date and Eastern Time must be
+obtained from a live/system time source each time an artifact is created; never
+guess, infer, or reuse the date/time from conversation history or an earlier
+artifact. The timezone is defined by governance, so `-ET` is not appended.
+
+Existing historical filenames remain unchanged.
+
+No update may be treated as complete when only part of the applicable
+documentation or governed artifact set has been updated. Every change to a
+requirement, standard, release fact, naming convention, workflow rule, or other
+governed behavior requires one synchronized full update of every applicable
+item. This includes the production README, versioned README, release record,
+affected governance standards, Current Status, Decision/Change Log, Handoff,
+and any other document or artifact to which the change applies. Cross-document
+consistency must be verified before the update is declared complete.
